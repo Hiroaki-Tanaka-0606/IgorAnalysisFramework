@@ -1,0 +1,2 @@
+# IgorAnalysisFramework
+Igor上で、生データからグラフまでの処理をフローチャート的に構築する。
