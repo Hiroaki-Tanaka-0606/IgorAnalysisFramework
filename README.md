@@ -106,5 +106,6 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **Execute(FunctionName)**: 関数を実行する。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
-- **CallSocket1D(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
+- **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
 - **CallUtility(UtilityName)** Utility Functionを実行する。実行前に**TempData**に引数を整備しておくこと。
+- **Initialize()**: **CopyConstants**, **ConfigureDependency**, **ConfigureChart**, **ExecuteAll()** を実行する。
