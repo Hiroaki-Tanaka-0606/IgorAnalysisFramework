@@ -67,8 +67,8 @@ Igor上で、生データからグラフまでの処理をフローチャート�
   - \[0\]: 引数の数**n**
   - \[1-n\]: 引数が入力であれば"0"、入力受け付けソケットであれば"2"(リスト内に1つ)。出力("1")はない。
   - \[n+1-2n\]: 引数の型
-- **IAFm\_** ***ModuleName*** **(arguments)** : 実行される関数。入力受付ソケットの部分は実際の値、それ以外は**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータの名前が文字列リストで入力される。値を```return```で返す。
-- **IAFm\_** ***ModuleName*** **\_Format(arguments)** (任意): 入力引数から想定される、出力Waveのスケール(size, offset, delta)を返す関数。ソケットからWaveを生成する際に有用となる。 ***FuncName*** = ***ModuleName*** \_FormatのFunctionなので **\_Format_Definition()** も必要であることに注意(出力は必ずWave2Dになる)。
+- **IAFm\_** ***ModuleName*** **(argumentList)** : 実行される関数。入力受付ソケットの部分は実際の値、それ以外は**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータの名前が文字列リストで入力される。値を```return```で返す。
+- **IAFm\_** ***ModuleName*** **\_Format(argumentList)** (任意): 入力引数から想定される、出力Waveのスケール(size, offset, delta)を返す関数。ソケットからWaveを生成する際に有用となる。 ***FuncName*** = ***ModuleName*** \_FormatのFunctionなので **\_Format_Definition()** も必要であることに注意(出力は必ずWave2Dになる)。
 
 #### Panel
 (under construction)
