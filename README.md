@@ -101,7 +101,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 フローを管理するための関数群。関数名は**IAFc\_** ***CoreFuntionName*** **(arguments)** となる。Core Functionで使われるユーティリティ関数は**IAFcu\_** ***CoreUtilityFunctionName*** **(arguments)** とする。
 - **SetUp()**: 必要なフォルダ・Waveを作成する。
 - **CopyConstants()**: **Constants**から**Data**に値を移動する。
-- **ConfigureDependency()**: **Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。ソケットが値を受け渡すモジュール名を**Diagrams**フォルダ内のWave(4行目)に記述する。
+- **ConfigureDependency()**: 部品の名前に重複がないか確認し、名前がなければ生成する。引数の型をチェックし、ソケットが値を受け渡すモジュール名を**Diagrams**フォルダ内のWave(4行目)に記述する。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。
 - **Execute(FunctionName)**: 関数を実行する。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
