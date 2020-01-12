@@ -19,10 +19,10 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 ### 部品の種類
 #### Data(データ)
 以下の型を持つ。プロパティはない。
-- Variable: 数
-- String: 文字列
-- Wave1D, Wave2D, Wave3D: 1, 2, 3次元Wave(Double Precision)
-- TextWave: 1次元Text Wave
+- **Variable**: 数
+- **String**: 文字列
+- **Wave1D**, **Wave2D**, **Wave3D**: 1, 2, 3次元Wave(Double Precision)
+- **TextWave**: 1次元Text Wave
 
 #### Function(関数)
 - いくつかのデータを入力しいくつかのデータを出力する。
@@ -40,8 +40,8 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 #### Socket(ソケット)
 - 2つのモジュールをつなげ、一方のモジュールからもう一方に値を渡し処理を行わせる。
 - 引数として渡す値の種類によって以下の型に分類される。すべてのソケットで、返す値は数になる。
-  - Coordinate1D, Coordinate2D, Coordinate3D: 1, 2, 3次元座標(x, y, z)入力
-  - Index1D, Index2D, Index3D: 1, 2, 3次元インデックス(p, q, r)入力
+  - **Coordinate1D**, **Coordinate2D**, **Coordinate3D**: 1, 2, 3次元座標(x, y, z)入力
+  - **Index1D**, **Index2D**, **Index3D**: 1, 2, 3次元インデックス(p, q, r)入力
 - 3行目は入力を渡すモジュール名を記述する。
 - 4行目は値を受け渡すモジュール名となるが、初期化時に入力されるのであらかじめ入力しておく必要はない。
 
