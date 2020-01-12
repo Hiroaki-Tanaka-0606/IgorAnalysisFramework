@@ -55,7 +55,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 
 #### Function
 以下のProcedure Functionとして存在する。***FuncName***は各関数の型に対応する。
-- **IAFf\_** ***FuncName*** **\_Definition()**: 引数データの情報を文字列リストで返す。
+- **IAFf\_** ***FuncName*** **\_Definition()**: 引数データ（またはソケット）の情報を文字列リストで返す。
   - \[0\]: 引数の数**n**
   - \[1-n\]: 引数が入力であれば"0"、出力であれば"1"。入力受け付けソケット("1")はない。出力引数データが他の関数の出力にもなることはできない(他の関数の入力になることはある)。
   - \[n+1-2n\]: 引数の型
@@ -63,11 +63,11 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 
 #### Module
 以下のProcedure Functionとして存在する。***ModuleName***は各モジュールの型に対応する。
-- **IAFm\_** ***ModuleName*** **\_Definition()** : 引数データの情報を文字列リストで返す。
+- **IAFm\_** ***ModuleName*** **\_Definition()** : 引数データ（またはソケット）の情報を文字列リストで返す。
   - \[0\]: 引数の数**n**
   - \[1-n\]: 引数が入力であれば"0"、入力受け付けソケットであれば"2"(リスト内に1つ)。出力("1")はない。
   - \[n+1-2n\]: 引数の型
-- **IAFm\_** ***ModuleName*** **(arguments)** : 実行される関数。入力受付ソケットの部分は実際の値、それ以外は**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータの名前(String)が入力される。値を```return```で返す。
+- **IAFm\_** ***ModuleName*** **(arguments)** : 実行される関数。入力受付ソケットの部分は実際の値（の文字列リスト）、それ以外は**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータの名前(String)が入力される。値を```return```で返す。
 - **IAFm\_** ***ModuleName*** **\_Format(arguments)** (任意): 入力引数から想定される、出力Waveのスケール(size, offset, delta)を返す関数。ソケットからWaveを生成する際に有用となる。 ***FuncName*** = ***ModuleName*** \_FormatのFunctionなので **\_Format_Definition()** も必要であることに注意(出力は必ずWave2Dになる)。
 
 #### Panel
@@ -101,7 +101,8 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 フローを管理するための関数群。関数名は**IAFc\_** ***CoreFuntionName*** **(arguments)** となる。Core Functionで使われるユーティリティ関数は**IAFcu\_** ***CoreUtilityFunctionName*** **(arguments)** とする。
 - **SetUp()**: 必要なフォルダ・Waveを作成する。
 - **CopyConstants()**: **Constants**から**Data**に値を移動する。
-- **ConfigureDependency()**: 部品の名前に重複がないか確認し、名前がなければ生成する。引数の型をチェックし、ソケットが値を受け渡すモジュール名を**Diagrams**フォルダ内のWave(4行目)に記述する。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
+- **ConfigureNames()**: 部品の名前に重複がないか確認し、名前がなければ生成する。
+- **ConfigureDependency()**: 引数の型をチェックし、ソケットが値を受け渡すモジュール名を**Diagrams**フォルダ内のWave(4行目)に記述する。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。すでに生成されている部分を保ちつつ更新する。
 - **Execute(FunctionName)**: 関数を実行する。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
