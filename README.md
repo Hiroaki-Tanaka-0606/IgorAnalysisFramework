@@ -94,9 +94,11 @@ Igor上で、生データからグラフまでの処理をフローチャート�
   - \[i\]\[1\]: データの更新によって再実行する必要がある関数の文字列リスト
 - **ChartIndex(Text1D)** : フローチャートを図示する際のインデックス
   - \[i\]: i番目の部品の名前
-- **ChartPosition(Variable2D)** : フローチャート上での座標。**ChartIndex**と対応する。
-  - \[i\]\[0\]: x座標
-  - \[i\]\[1\]: y座標
+- **ChartPosition(Variable2D)** : フローチャート上での座標と図形の大きさ。**ChartIndex**と対応する。
+  - \[i\]\[0\]: 中心のx座標
+  - \[i\]\[1\]: 中心のy座標
+  - \[i\]\[2\]: 横幅
+  - \[i\]\[3\]: 縦幅
   
 #### Core Functions
 フローを管理するための関数群。関数名は**IAFc\_** ***CoreFuntionName*** **(arguments)** となる。Core Functionで使われるユーティリティ関数は**IAFcu\_** ***CoreUtilityFunctionName*** **(arguments)** とする。
