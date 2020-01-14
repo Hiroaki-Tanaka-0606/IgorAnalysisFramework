@@ -112,3 +112,6 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
 - **CallUtility(UtilityName)** Utility Functionを実行する。実行前に**TempData**に引数を整備しておくこと。
+
+#### フローチャート
+パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
