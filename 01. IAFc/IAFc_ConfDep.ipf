@@ -97,7 +97,11 @@ Function IAFc_ConfigureDependency()
 			Endif
 		Endfor
 	Endfor
-	cd $currentFolder
+	cd $currentFolder	
+	If(!DataFolderExists("Configurations"))
+		Print("Error: folder Configurations does not exist")
+		return 0
+	Endif
 	cd Configurations
 	Make/O/T/N=(numData,3) DataOrigin
 	Wave/T DataOrigin=DataOrigin
