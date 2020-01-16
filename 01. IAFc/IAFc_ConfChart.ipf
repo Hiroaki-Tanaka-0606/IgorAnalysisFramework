@@ -78,16 +78,23 @@ Function IAFc_ConfigureChart()
 	
 	//add remaining Parts
 	Variable remainingNumParts=ItemsInList(remainingPartsList)
+	
+	//also see IAFc_DrawChart()
+	Variable offsetX=10
+	Variable offsetY=(IAFcu_CalcCHartHeight(1)+10)*2
+	
 	For(i=0;i<remainingNumParts;i+=1)
 		PartName=StringFromList(i,remainingPartsList)
 		Variable index=WhichListItem(PartName,NameList)
 		String TypeName=StringFromList(index,TypeList)
 		newChartIndex[newIndex]=PartName
 		Variable LetterLength=max(strlen(PartName),strlen(TypeName))
-		newChartPosition[newIndex][0]=0
-		newChartPosition[newIndex][1]=0
-		newChartPosition[newIndex][2]=IAFcu_CalcChartWidth(LetterLength)
-		newChartPosition[newIndex][3]=IAFcu_CalcChartHeight(2)
+		Variable width=IAFcu_CalcChartWidth(LetterLength)
+		Variable height=IAFcu_CalcChartHeight(2)
+		newChartPosition[newIndex][0]=offsetX+width/2
+		newChartPosition[newIndex][1]=offsetY+height/2
+		newChartPosition[newIndex][2]=width
+		newChartPosition[newIndex][3]=height
 		newIndex+=1
 	Endfor
 	
