@@ -110,6 +110,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **Function_Definition(FunctionType)**: 関数の定義を返す。
 - **Module_Definition(ModuleType)**: 関数の定義を返す。
 - **Execute(FunctionName)**: 関数を実行する。
+- **ExecuteList(FunctionList)**: リストに挙げられた関数を実行する。順序は依存関係に基づく。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
