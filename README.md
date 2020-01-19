@@ -107,6 +107,8 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **ConfigureNames()**: 部品の名前に重複がないか確認し、名前がなければ生成する。
 - **ConfigureDependency()**: 引数の型をチェックする。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。すでに生成されている部分を保ちつつ更新する。
+- **Function_Definition(FunctionType)**: 関数の定義を返す。
+- **Module_Definition(ModuleType)**: 関数の定義を返す。
 - **Execute(FunctionName)**: 関数を実行する。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
