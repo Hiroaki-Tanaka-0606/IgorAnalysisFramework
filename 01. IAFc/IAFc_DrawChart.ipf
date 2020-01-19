@@ -88,7 +88,7 @@ Function IAFcu_Flowchart_Hook(s)
 	STRUCT WMWinHookStruct &s
 	STRUCT Point mouseLoc
 	mouseLoc=s.mouseLoc
-	GetWindow kwTopWin,title
+	Execute "GetWindow kwTopWin,title"
 	SVAR winTitle=S_value
 	If(!SVAR_exists(winTitle))
 		return 0
@@ -178,7 +178,7 @@ Function IAFc_UpdateChart(updateControl)
 	
 	String currentFolder=GetDataFolder(1)
 	
-	GetWindow kwTopWin,title
+	Execute "GetWindow kwTopWin,title"
 	SVAR winTitle=S_value
 	If(!SVAR_exists(winTitle))
 		return 0
@@ -312,10 +312,10 @@ Function IAFc_UpdateChart(updateControl)
 			//no connection
 			break
 		Case "Function":
-			Definition=IAFf_Execute_Definition(partType)
+			Definition=IAFc_Function_Definition(partType)
 		Case "Module":
 			If(cmpstr(Definition,"")==0)
-				Definition=IAFm_Execute_Definition(partType)
+				Definition=IAFc_Module_Definition(partType)
 			Endif
 			Variable numArgs=str2num(StringFromList(0,Definition))
 			Variable j

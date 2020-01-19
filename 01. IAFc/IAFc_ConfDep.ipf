@@ -148,7 +148,7 @@ Function IAFc_ConfigureDependency()
 					break
 				Case "Function":
 					numFunctions+=1
-					String FuncDef=IAFf_Execute_Definition(Type_ij)
+					String FuncDef=IAFc_Function_Definition(Type_ij)
 					//Verify Definition of the Function
 					If(IAFcu_VerifyFunctionDefinition(FuncDef)==0)
 						//ill-defined
@@ -236,7 +236,7 @@ Function IAFc_ConfigureDependency()
 					Endfor
 					break
 				Case "Module":
-					String ModuleDef=IAFm_Execute_Definition(Type_ij)
+					String ModuleDef=IAFc_Module_Definition(Type_ij)
 					//Verify Definition of the Module
 					If(IAFcu_VerifyModuleDefinition(ModuleDef)==0)
 						//ill-defined
@@ -475,7 +475,7 @@ Function/S IAFcu_GetSocketType(name)
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Name_ij,name)==0)
-				String ModuleDef=IAFm_Execute_definition(Type_ij)
+				String ModuleDef=IAFc_Module_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,ModuleDef))
 				Variable k
 				For(k=0;k<numArgs;k+=1)
@@ -507,7 +507,7 @@ Function/S IAFcu_InputParts_Function(name)
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function")==0)
-				String FuncDef=IAFf_Execute_definition(Type_ij)
+				String FuncDef=IAFc_Function_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,FuncDef))
 				For(k=0;k<numArgs;k+=1)
 					If(cmpstr(Diagram_i[j][k+3],name)==0 && cmpstr(StringFromList(k+1,FuncDef),"0")==0)
@@ -538,7 +538,7 @@ Function/S IAFcu_InputParts_Module(name)
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Module")==0)
-				String ModuleDef=IAFm_Execute_definition(Type_ij)
+				String ModuleDef=IAFc_Module_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,ModuleDef))
 				For(k=0;k<numArgs;k+=1)
 					If(cmpstr(Diagram_i[j][k+3],name)==0 && cmpstr(StringFromList(k+1,ModuleDef),"0")==0)
@@ -569,7 +569,7 @@ Function/S IAFcu_OutputParts(name)
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function")==0 && cmpstr(Name_ij,name)==0)
-				String FuncDef=IAFf_Execute_definition(Type_ij)
+				String FuncDef=IAFc_Function_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,FuncDef))
 				For(k=0;k<numArgs;k+=1)
 					If(cmpstr(StringFromList(k+1,FuncDef),"1")==0)
