@@ -48,37 +48,43 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 #### Panel(パネル)
 - いくつかのデータを入力し、グラフなどを出力する。
 - VariableやStringの型をもつデータを入力欄に表示し、値を変化させることもできる。
+- 3行目以降は、引数となるデータの名前を並べる。
 
 ### Igorファイル上での実体
 #### Data
 **Data**フォルダ内に存在する。Variable, StringはNVAR, SVARとして取得することになる。
 
 #### Function
-以下のProcedure Functionとして存在する。***FuncName***は各関数の型に対応する。
-- **IAFf\_** ***FuncName*** **\_Definition()**: 引数データ（またはソケット接続するモジュール）の情報を文字列リストで返す。
+以下のProcedure Functionとして存在する。***FuncType***は各関数の型に対応する。
+- **IAFf\_** ***FuncType*** **\_Definition()**: 引数データ（またはソケット接続するモジュール）の情報を文字列リストで返す。
   - \[0\]: 引数の数**n**
   - \[1-n\]: 引数が入力であれば"0"、出力であれば"1"。入力受け付けソケット("2")はない。出力引数データが他の関数の出力にもなることはできない(他の関数の入力になることはある)。
   - \[n+1-2n\]: 引数の型
-- **IAFf\_** ***FuncName*** **(argumentList)** : 実行される関数。**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータ・モジュールの名前が文字列リストで入力されるので、処理を行う。データを更新することで出力とするので、```return```で値を返すことはない。
+- **IAFf\_** ***FuncType*** **(argumentList)** : 実行される関数。**IAF\_** ***FuncType*** **\_Definition()** のリストに従ったデータ・モジュールの名前が文字列リストで入力されるので、処理を行う。データを更新することで出力とするので、```return```で値を返すことはない。
 
 #### Module
-以下のProcedure Functionとして存在する。***ModuleName***は各モジュールの型に対応する。
-- **IAFm\_** ***ModuleName*** **\_Definition()** : 引数データ（またはソケット接続するモジュール）の情報を文字列リストで返す。
+以下のProcedure Functionとして存在する。***ModuleType***は各モジュールの型に対応する。
+- **IAFm\_** ***ModuleType*** **\_Definition()** : 引数データ（またはソケット接続するモジュール）の情報を文字列リストで返す。
   - \[0\]: 引数の数**n**
   - \[1-n\]: 引数が入力であれば"0"、入力受け付けソケットであれば"2"(リスト内に1つ)。出力("1")はない。
   - \[n+1-2n\]: 引数の型
-- **IAFm\_** ***ModuleName*** **(argumentList)** : 実行される関数。入力受付ソケットの部分は実際の値、それ以外は**IAF\_** ***FuncName*** **\_Definition()** のリストに従ったデータの名前が文字列リストで入力される。値を```return```で返す。
-- **IAFm\_** ***ModuleName*** **\_Format(argumentList)** (任意): 入力引数から想定される、出力Waveのスケール(size, offset, delta)を返す関数。ソケットからWaveを生成する際に有用となる。 ***FuncName*** = ***ModuleName*** \_FormatのFunctionなので **\_Format_Definition()** も必要であることに注意(出力は必ずWave2Dになる)。
+- **IAFm\_** ***ModuleType*** **(argumentList)** : 実行される関数。入力受付ソケットの部分は実際の値、それ以外は**IAF\_** ***FuncType*** **\_Definition()** のリストに従ったデータの名前が文字列リストで入力される。値を```return```で返す。
+- **IAFm\_** ***ModuleType*** **\_Format(argumentList)** (任意): 入力引数から想定される、出力Waveのスケール(size, offset, delta)を返す関数。ソケットからWaveを生成する際に有用となる。 ***FuncType*** = ***ModuleType*** \_FormatのFunctionなので **\_Format_Definition()** も必要であることに注意(出力は必ずWave2Dになる)。
 
 #### Panel
-(under construction)
+以下のProcedure Functionとして存在する。***PanelType***は各パネルの型に対応する。
+- **IAFp\_** ***PanelType*** **\_Definition()** : 引数データの情報を文字列リストで返す。
+  - \[0\]: 引数の数**n**
+  - \[1-n\]: すべての引数が入力なので"0"が並ぶ。出力("1")、入力受け付けソケット("2")はない。
+  - \[n+1-2n\]: 引数の型
+- **IAFp\_** ***PanelType*** **(argumentList)** : 描画時に実行される関数。パネル（またはグラフ）のウィンドウを作り、グラフや入力欄を設置していく。
 
 #### Temporary Data
-処理の途中でWaveを生成する場合、ユーティリティ関数に値を渡す場合はそのデータを**TempData**フォルダに入れる。
+処理の途中でWaveを生成する場合はそのデータを**TempData**フォルダに入れる。
 
 #### Utility Functions
-複数の関数やモジュールで頻繁に使われる処理を行うもの。引数なしのProcedure Functionとして存在する(名称は**IFAu\_** ***UtilityFuncName*** **()**)。
-**TempData**から必要な値を引いて処理を行い**TempData**に反映する。**TempData**の整備は関数やモジュール内で適切に行う。
+複数の関数やモジュールで頻繁に使われる処理を行うもの。Procedure Functionとして存在する(名称は**IFAu\_** ***UtilityFuncName*** **(arguments)**)。
+Waveを参照する場合は**TempData**に用意する。
 
 #### Configurations
 以下のような設定情報が保存される。
@@ -100,6 +106,16 @@ Igor上で、生データからグラフまでの処理をフローチャート�
   - \[i\]\[2\]: 横幅
   - \[i\]\[3\]: 縦幅
   
+#### Variables for Panels
+パネル操作時の情報がカレントフォルダ直下にGlobal Variables / Strings として保存されている。
+- **IAF_Flowchart_ChartLeft**, **IAF_Flowchart_ChartTop**: クリックされている部品の初期位置
+- **IAF_Flowchart_Clicked**: 部品がクリックされていれば1、そうでなければ0
+- **IAF_Flowchart_MouseLeft**, **IAF_Flowchart_MouseTop**: 部品をクリックしたときのカーソルの初期位置
+- **IAF_Flowchart_Name**: フローチャートのパネル名（表示されているタイトルではない）。
+- **IAF_Flowchart_Selected**: クリックした部品の、**ChartIndex**上でのインデックス。
+- **IAF_Flowchart_Zoom**: フローチャートの拡大率。
+- **IAF\_** ***PanelName*** **\_Name**: パネルの名前。
+  
 #### Core Functions
 フローを管理するための関数群。関数名は**IAFc\_** ***CoreFuntionName*** **(arguments)** となる。Core Functionで使われるユーティリティ関数は**IAFcu\_** ***CoreUtilityFunctionName*** **(arguments)** とする。
 - **SetUp()**: 必要なフォルダ・Waveを作成する。
@@ -107,6 +123,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **ConfigureNames()**: 部品の名前に重複がないか確認し、名前がなければ生成する。
 - **ConfigureDependency()**: 引数の型をチェックする。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。すでに生成されている部分を保ちつつ更新する。
+- **CallChart()**: フローチャートパネルを呼び出す。なければ新規作成する。
 - **Function_Definition(FunctionType)**: 関数の定義を返す。
 - **Module_Definition(ModuleType)**: 関数の定義を返す。
 - **Execute(FunctionName)**: 関数を実行する。
@@ -114,7 +131,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
-- **CallUtility(UtilityName)** Utility Functionを実行する。実行前に**TempData**に引数を整備しておくこと。
+- **CallPanel(PanelName)**: パネルを呼び出す。なければ新規作成する。
 
 #### フローチャート
 パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
