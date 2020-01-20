@@ -54,7 +54,7 @@ Function IAFc_CallChart()
 	String currentFolder=GetDataFolder(1)
 	
 	String PanelTitle="Flowchart for "+currentFolder
-	SVAR PanelName=IAF_FlowchartPanel
+	SVAR PanelName=IAF_Flowchart_Name
 	Variable needCreation=0
 	If(SVAR_Exists(PanelName))
 		DoWindow $PanelName
@@ -67,10 +67,10 @@ Function IAFc_CallChart()
 	
 	If(needCreation==1)
 		NewPanel/K=1 as PanelTitle
-		String/G IAF_FlowchartPanel=S_name
+		String/G IAF_Flowchart_Name=S_name
 	Endif
 	
-	SVAR PanelName=IAF_FlowchartPanel	
+	SVAR PanelName=IAF_Flowchart_Name	
 	DoWindow/F $PanelName
 	
 	If(needCreation==1)
@@ -118,7 +118,7 @@ Function IAFcu_Flowchart_Hook(s)
 		Variable size=DimSize(ChartPosition,0)
 		Variable selectedIndex=-1
 		Variable i
-		NVAR zoom=IAF_FlowchartZoom
+		NVAR zoom=IAF_Flowchart_Zoom
 		For(i=0;i<size;i+=1)
 			Variable left  =(ChartPosition[i][0]-ChartPosition[i][2]/2)*zoom
 			Variable top   =(ChartPosition[i][1]-ChartPosition[i][3]/2)*zoom
@@ -147,7 +147,7 @@ Function IAFcu_Flowchart_Hook(s)
 		NVAR oldChartLeft=IAF_Flowchart_ChartLeft
 		NVAR oldChartTop=IAF_Flowchart_ChartTop
 		NVAR oldSelectedIndex=IAF_Flowchart_Selected
-		NVAR zoom=IAF_FlowchartZoom
+		NVAR zoom=IAF_Flowchart_Zoom
 		If(!NVAR_exists(oldMouseLeft) || !NVAR_exists(oldMouseTop) || !NVAR_exists(oldChartLeft) || !NVAR_exists(oldChartTop) || !NVAR_exists(oldSelectedIndex) || !NVAR_exists(zoom))
 			cd $dataFolder
 			return 0
@@ -195,11 +195,11 @@ Function IAFc_UpdateChart(updateControl)
 	cd $path
 	
 	String fn=IAFcu_FontName()
-	NVAR zoom=IAF_FlowchartZoom
+	NVAR zoom=IAF_Flowchart_Zoom
 	If(!NVAR_Exists(zoom))
-		Variable/G IAF_FlowchartZoom=1
+		Variable/G IAF_Flowchart_Zoom=1
 	Endif
-	NVAR zoom=IAF_FlowchartZoom
+	NVAR zoom=IAF_Flowchart_Zoom
 	Variable fs=IAFcu_FontSize()*zoom
 	
 	If(updateControl==1)
@@ -215,7 +215,7 @@ Function IAFc_UpdateChart(updateControl)
 		sprintf command,"Button updateButton pos={%g,%g},font=\"%s\", fsize=%g, size={%g,%g}, title=\"Update\",proc=IAFcu_Flowchart_Update",margin,margin,fn,fs,width1,height
 		//Print(command)
 		Execute command
-		sprintf command,"SetVariable zoomVariable pos={%g,%g},font=\"%s\",fsize=%g, size={%g,%g},title=\"Zoom:\",limits={0.1,10,0.05},value=IAF_FlowchartZoom,proc=IAFcu_Flowchart_zoomUpdate",margin,margin*2+height,fn,fs,width2,height
+		sprintf command,"SetVariable zoomVariable pos={%g,%g},font=\"%s\",fsize=%g, size={%g,%g},title=\"Zoom:\",limits={0.1,10,0.05},value=IAF_Flowchart_Zoom,proc=IAFcu_Flowchart_zoomUpdate",margin,margin*2+height,fn,fs,width2,height
 		Execute command
 	Endif
 	
@@ -317,6 +317,10 @@ Function IAFc_UpdateChart(updateControl)
 			If(cmpstr(Definition,"")==0)
 				Definition=IAFc_Module_Definition(partType)
 			Endif
+		Case "Panel":
+			If(cmpstr(Definition,"")==0)
+				Definition=IAFc_Panel_Definition(partType)
+			Endif
 			Variable numArgs=str2num(StringFromList(0,Definition))
 			Variable j
 			For(j=0;j<numArgs;j+=1)
@@ -355,8 +359,6 @@ Function IAFc_UpdateChart(updateControl)
 						break
 				EndSwitch
 			Endfor
-			break
-		Case "Panel":
 			break
 		Endswitch
 		

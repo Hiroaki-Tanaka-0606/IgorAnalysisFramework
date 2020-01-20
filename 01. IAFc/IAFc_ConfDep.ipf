@@ -326,7 +326,62 @@ Function IAFc_ConfigureDependency()
 					Endfor
 					break
 				Case "Panel":
-					//under construction
+					String PanelDef=IAFc_Panel_Definition(Type_ij)
+					//Verify Definition of the Panel
+					If(IAFcu_VerifyPanelDefinition(PanelDef)==0)
+						//ill-defined
+						Print("Error: Module \""+Type_ij+"\" is ill-defined")
+						numErrors+=1
+						break
+					Endif
+					//well-defined
+					numArgs=str2num(StringFromList(0,PanelDef))
+					For(k=0;k<numArgs;k+=1)
+						inout_k=StringFromList(k+1,PanelDef)
+						Type_k=StringFromList(numArgs+k+1,PanelDef)
+						Name_ijk=Diagram_i[j][k+3]
+						Switch(IAFcu_JudgeDataSocket(Type_k))
+						Case 1:
+							//data (input, not output)
+							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
+							If(DataOriginIndex==-1)
+								//Data does not exist
+								Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								numErrors+=1
+								break
+							Endif
+							//Data exists
+							Type_ijk=DataOrigin[DataOriginIndex][0]
+							If(cmpstr(Type_k,Type_ijk)!=0)
+								//types do not match
+								Print("Error: invalid type of data argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								numErrors+=1
+								break
+							Endif
+							//types match
+							StrSwitch(inout_k)
+							Case "0":
+								//input, do nothing
+								break
+							Case "1":
+								//output, error
+								Print("Error: Panel \""+Type_ij+"\" has output data")
+								numErrors+=1
+								break
+							Default:
+								//something strange
+								Print("Unexpected error")
+								numErrors+=1
+								break
+							Endswitch
+							break
+						Case 2:
+							//socket
+							Print("Error: Panel \""+Type_ij+"\" has socket")
+							numErrors+=1
+							break
+						Endswitch
+					Endfor
 					break
 				Default:
 					//never occur (already verified by IAFcu_VerifyKindType)

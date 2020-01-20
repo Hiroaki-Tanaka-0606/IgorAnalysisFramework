@@ -36,7 +36,13 @@ Function IAFcu_VerifyKindType(kind,type)
 		Endif
 		break
 	Case "Panel":
-		//under construction
+		Variable PanelDefinition=Exists("IAFp_"+type+"_Definition")
+		Variable PanelExecution=Exists("IAFp_"+type)
+		If(PanelDefinition==6 && PanelExecution==6)
+			return 1 //both definition and execution exist
+		Else
+			return 0 //not both exist
+		Endif
 		break
 	Default:
 		return 0
@@ -112,7 +118,7 @@ Function IAFcu_VerifyModuleDefinition(ModuleDef)
 		Switch(IAFcu_JudgeDataSocket(Type_i))
 		Case 1:
 			//data
-			//input (data output does not exist in Module
+			//input (data output does not exist in Module)
 			If(inout_i!=0)
 				return 0
 			Endif
@@ -138,4 +144,37 @@ Function IAFcu_VerifyModuleDefinition(ModuleDef)
 	Else
 		return 0
 	Endif
+End
+
+
+//Verify Definition of the Panel
+//return 0 when not ok, 1 when ok
+Function IAFcu_VerifyPanelDefinition(PanelDef)
+	String PanelDef
+	Variable i
+	Variable numArgs=str2num(StringFromList(0,PanelDef))
+	Variable inout_i
+	String Type_i
+	For(i=0;i<numArgs;i+=1)
+		inout_i=str2num(StringFromList(i+1,PanelDef))
+		Type_i=StringFromList(numArgs+i+1,PanelDef)
+		Switch(IAFcu_JudgeDataSocket(Type_i))
+		Case 1:
+			//data
+			//input (data output does not exist in Panel)
+			If(inout_i!=0)
+				return 0
+			Endif
+			break
+		Case 2:
+			//socket
+			return 0
+			break
+		Default:
+			//otherwise
+			return 0
+			break
+		Endswitch
+	Endfor
+	return 1
 End

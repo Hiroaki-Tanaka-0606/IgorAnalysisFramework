@@ -10,6 +10,11 @@ Function IAFc_Prototype(argumentList)
 	String argumentList
 End
 
+
+Function IAFc_Panel_Prototype(argumentList,PanelName,PanelTitle)
+	String argumentList,PanelName,PanelTitle
+End
+
 Function/S IAFc_Function_Definition(FuncType)
 	String FuncType
 	String FuncFullName="IAFf_"+FuncType+"_Definition"
@@ -21,6 +26,13 @@ Function/S IAFc_Module_Definition(ModuleType)
 	String ModuleType
 	String ModuleFullName="IAFm_"+ModuleType+"_Definition"
 	FUNCREF IAFc_Prototype_Definition f = $ModuleFullName
+	return f()
+End
+
+Function/S IAFc_Panel_Definition(PanelType)
+	String PanelType
+	String PanelFullName="IAFp_"+PanelType+"_Definition"
+	FUNCREF IAFc_Prototype_Definition f=$PanelFullName
 	return f()
 End
 
@@ -314,7 +326,6 @@ Function IAFc_ExecuteList(FuncList)
 				//execute
 				FuncList=RemoveFromList(Function_i,FuncList)
 				IAFc_Execute(Function_i)
-				Print(Function_i)
 				break
 			Endif
 		Endfor
@@ -383,4 +394,107 @@ Function IAFc_Update(DataList)
 	Endfor
 	
 	IAFc_ExecuteList(FuncList)
+End
+
+
+//IFAc_DrawPanel: execute a Panel drawing function
+Function IAFc_DrawPanel(PanelName,PanelTitle)
+	String PanelName,PanelTitle
+	
+	//currentFolder is root folder of the framework
+		
+	//find Diagram info	
+	If(!DataFolderExists("Diagrams"))
+		Print("Error: folder Diagrams does not exist")
+		return 0
+	Endif
+	
+	cd Diagrams
+	String DiagramWaveList=WaveList("*",";","TEXT:1,DIMS:2")
+
+	Variable numWaves=ItemsInList(DiagramWaveList)
+	Variable i
+	For(i=0;i<numWaves;i+=1)
+		String DiagramWaveName=StringFromList(i,DiagramWaveList)
+		Wave/T Diagram_i=$DiagramWaveName //i-th wave in the list
+		Variable WaveSize=DimSize(Diagram_i,0)
+		Variable j
+		For(j=0;j<WaveSize;j+=1)
+			String Kind_ij=Diagram_i[j][0]
+			String Type_ij=Diagram_i[j][1]
+			String Name_ij=Diagram_i[j][2]
+			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij,PanelName)==0 && cmpstr(Kind_ij,"Panel")==0)
+					String Definition=IAFc_Panel_Definition(Type_ij)					
+					String FuncFullName="IAFp_"+Type_ij
+					FUNCREF IAFc_Panel_Prototype f = $FuncFullName
+					
+					//check variables exist
+					cd ::
+					If(!DataFolderExists("Data"))
+						Print("Error: folder Data does not exist")
+						return 0
+					Endif
+					cd Data
+					
+					Variable numArgs=str2num(StringFromList(0,Definition))
+					Variable k
+					For(k=0;k<numArgs;k+=1)
+						If(cmpstr(StringFromList(1+k,Definition),"0")==0)
+							StrSwitch(StringFromList(1+numArgs+k,Definition))
+							Case "Variable":
+								NVAR v=$Diagram_i[j][k+3]
+								If(!NVAR_exists(v))
+									Print("Error: Variable \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									cd ::
+									return 0
+								Endif
+								break
+							Case "String":
+								SVAR s=$Diagram_i[j][k+3]
+								If(!SVAR_exists(s))
+									Print("Error: String \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									cd ::
+									return 0
+								Endif
+								break
+							Case "Wave1D":
+							Case "Wave2D":
+							Case "Wave3D":
+								Wave/D w=$Diagram_i[j][k+3]
+								If(!WaveExists(w))
+									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									cd ::
+									return 0
+								Endif
+								break
+							Case "TextWave":
+								Wave/T t=$Diagram_i[j][k+3]
+								If(!WaveExists(t))
+									Print("Error: Text Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									cd ::
+									return 0
+								Endif
+								break
+							Default:
+							Endswitch
+						Endif
+						
+					Endfor
+					
+					//execute
+					String argumentsList=""
+					For(k=0;k<numArgs;k+=1)
+						argumentsList=addListItem(Diagram_i[j][numArgs-k+2],argumentsList)
+					Endfor
+					f(argumentsList,PanelName,PanelTitle)
+					cd ::
+					return 0
+				Endif
+			Endif
+		Endfor
+	Endfor	
+	Print("Error: Function Part \""+PanelName+"\" does not exist")
+	cd ::
+	return 0
 End
