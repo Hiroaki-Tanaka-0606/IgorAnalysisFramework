@@ -74,11 +74,11 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 (under construction)
 
 #### Temporary Data
-処理の途中でWaveを生成する場合、ユーティリティ関数に値を渡す場合はそのデータを**TempData**フォルダに入れる。
+処理の途中でWaveを生成する場合はそのデータを**TempData**フォルダに入れる。
 
 #### Utility Functions
-複数の関数やモジュールで頻繁に使われる処理を行うもの。引数なしのProcedure Functionとして存在する(名称は**IFAu\_** ***UtilityFuncName*** **()**)。
-**TempData**から必要な値を引いて処理を行い**TempData**に反映する。**TempData**の整備は関数やモジュール内で適切に行う。
+複数の関数やモジュールで頻繁に使われる処理を行うもの。Procedure Functionとして存在する(名称は**IFAu\_** ***UtilityFuncName*** **(arguments)**)。
+Waveを参照する場合は**TempData**に用意する。
 
 #### Configurations
 以下のような設定情報が保存される。
@@ -114,7 +114,6 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
-- **CallUtility(UtilityName)** Utility Functionを実行する。実行前に**TempData**に引数を整備しておくこと。
 
 #### フローチャート
 パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
