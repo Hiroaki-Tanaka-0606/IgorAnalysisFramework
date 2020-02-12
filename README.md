@@ -5,7 +5,6 @@ Igor上で、生データからグラフまでの処理をフローチャート�
 - カレントフォルダ直下に以下のフォルダを用意する。
   - **Diagrams** フローチャートを記述するWave(Text, 2D, 複数可)を格納する。
   - **Data** データを格納する。
-  - **Constants** 数または文字列の定数を格納する。フローチャートの初期化時に**Data**フォルダ内に同名コピーが作成される。
   - **Configurations** 依存関係、フローチャートの見た目などの設定情報を格納する。
   - **TempData** 一時的なデータを格納する。ユーティリティ関数を実行する際は引数をすべてここに格納する必要がある。
 
@@ -119,7 +118,6 @@ Waveを参照する場合は**TempData**に用意する。
 #### Core Functions
 フローを管理するための関数群。関数名は**IAFc\_** ***CoreFuntionName*** **(arguments)** となる。Core Functionで使われるユーティリティ関数は**IAFcu\_** ***CoreUtilityFunctionName*** **(arguments)** とする。
 - **SetUp()**: 必要なフォルダ・Waveを作成する。
-- **CopyConstants()**: **Constants**から**Data**に値を移動する。
 - **ConfigureNames()**: 部品の名前に重複がないか確認し、名前がなければ生成する。
 - **ConfigureDependency()**: 引数の型をチェックする。**Configurations**フォルダ内の**DataOrigin**, **Ascend**, **Descend**を生成する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。すでに生成されている部分を保ちつつ更新する。
