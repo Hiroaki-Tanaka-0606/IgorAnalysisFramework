@@ -392,7 +392,6 @@ Function IAFc_Update(DataList)
 			Endif
 		ENdfor
 	Endfor
-	
 	IAFc_ExecuteList(FuncList)
 End
 

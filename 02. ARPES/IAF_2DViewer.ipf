@@ -1,0 +1,656 @@
+#pragma rtGlobals=3		// Use modern global access method and strict wave access.
+
+//Function EDC: create Energy distribution curve (wave[][i,j])
+Function/S IAFf_EDC_Definition()
+	return "4;0;0;0;1;Wave2D;Variable;Variable;Wave1D"
+End
+
+Function IAFf_EDC(argumentList)
+	String argumentList
+	
+	//0th argument: wave
+	String waveArg=StringFromList(0,argumentList)
+	
+	//1st argument: start index (include)
+	String startArg=StringFromList(1,argumentList)
+	
+	//2nd argument: end index (include)
+	String endArg=StringFromList(2,argumentList)
+	
+	//3rd argument: EDC wave
+	String edcArg=StringFromList(3,argumentList)
+	
+	Wave/D input=$waveArg
+	NVAR startIndex=$startArg
+	NVAR endIndex=$endArg
+	
+	Variable size1=DimSize(input,0)
+	Variable size2=DimSize(input,1)
+	If(startIndex>endIndex || startIndex<0 || endIndex>=size2)
+		Print("EDC Error: index ["+num2str(startIndex)+","+num2str(endIndex)+"] is out of range")
+		return 0
+	Endif
+	
+	Variable offset1=DimOffset(input,0)
+	Variable delta1=DimDelta(input,0)
+	
+	Make/O/D/N=(size1) $edcArg
+	Wave/D edc=$edcArg
+	SetScale/P x, offset1, delta1, edc
+	edc[]=0
+	
+	Variable i
+	For(i=startIndex;i<=endIndex;i+=1)
+		edc[]+=input[p][i]
+	Endfor
+End
+	
+	
+//Function MDC: create Momentum distribution curve (wave[i,j][])
+Function/S IAFf_MDC_Definition()
+	return "4;0;0;0;1;Wave2D;Variable;Variable;Wave1D"
+End
+
+Function IAFf_MDC(argumentList)
+	String argumentList
+	
+	//0th argument: wave
+	String waveArg=StringFromList(0,argumentList)
+	
+	//1st argument: start index (include)
+	String startArg=StringFromList(1,argumentList)
+	
+	//2nd argument: end index (include)
+	String endArg=StringFromList(2,argumentList)
+	
+	//3rd argument: MDC wave
+	String mdcArg=StringFromList(3,argumentList)
+	
+	Wave/D input=$waveArg
+	NVAR startIndex=$startArg
+	NVAR endIndex=$endArg
+	
+	Variable size1=DimSize(input,0)
+	If(startIndex>endIndex || startIndex<0 || endIndex>=size1)
+		Print("MDC Error: index ["+num2str(startIndex)+","+num2str(endIndex)+"] is out of range")
+		return 0
+	Endif
+	
+	Variable size2=DimSize(input,1)
+	Variable offset2=DimOffset(input,1)
+	Variable delta2=DimDelta(input,1)
+	
+	Make/O/D/N=(size2) $mdcArg
+	Wave/D mdc=$mdcArg
+	SetScale/P x, offset2, delta2, mdc
+	mdc[]=0
+	
+	Variable i
+	For(i=startIndex;i<=endIndex;i+=1)
+		mdc[]+=input[i][p]
+	Endfor
+End
+
+//Function CutLines: create Energy cut and Momentum cut lines
+Function/S IAFf_CutLines_Definition()
+	return "7;0;0;0;0;0;1;1;Wave2D;Variable;Variable;Variable;Variable;Wave1D;Wave1D"
+End
+
+Function IAFf_CutLines(argumentList)
+	String argumentList
+		
+	//0th argument: 2D wave
+	String waveArg=StringFromList(0,argumentList)
+	
+	//1st argument: EDC start index
+	String edcStartIndexArg=StringFromList(1,argumentList)
+	
+	//2nd argument: EDC end index
+	String edcEndIndexArg=StringFromList(2,argumentList)
+	
+	//3rd argument: MDC start index
+	String mdcStartIndexArg=StringFromList(3,argumentList)
+	
+	//4th argument: MDC end index
+	String mdcEndIndexArg=StringFromList(4,argumentList)
+	
+	//5th argument: EDC cut
+	String edcWaveArg=StringFromList(5,argumentList)
+	
+	//6th argument: MDC cut
+	String mdcWaveArg=StringFromList(6,argumentList)
+	
+	Wave/D input=$waveArg
+	NVAR edcStartIndex=$edcStartIndexArg
+	NVAR edcEndIndex=$edcEndIndexArg
+	NVAR mdcStartIndex=$mdcStartIndexArg
+	NVAR mdcEndIndex=$mdcEndIndexArg
+	
+	Variable offset1=DimOffset(input,0)
+	Variable delta1=DimDelta(input,0)
+	
+	Variable offset2=DimOffset(input,1)
+	Variable delta2=DimDelta(input,1)
+	
+	Variable edcStartValue=offset2+delta2*(edcStartIndex-0.5)
+	Variable edcEndValue=offset2+delta2*(edcEndIndex+0.5)
+	
+	Variable mdcStartValue=offset1+delta1*(mdcStartIndex-0.5)
+	Variable mdcEndValue=offset1+delta1*(mdcEndIndex+0.5)
+	
+	Make/O/D/N=(4,2) $edcWaveArg
+	Wave/D edcCut=$edcWaveArg
+	edcCut[0][0]=-inf
+	edcCut[0][1]=edcStartValue
+	edcCut[1][0]=inf
+	edcCut[1][1]=edcStartValue
+	edcCut[2][0]=inf
+	edcCut[2][1]=edcEndValue
+	edcCut[3][0]=-inf
+	edcCut[3][1]=edcEndValue
+	
+	Make/O/D/N=(4,2) $mdcWaveArg
+	Wave/D mdcCut=$mdcWaveArg
+	mdcCut[0][1]=-inf
+	mdcCut[0][0]=mdcStartValue
+	mdcCut[1][1]=inf
+	mdcCut[1][0]=mdcStartValue
+	mdcCut[2][1]=inf
+	mdcCut[2][0]=mdcEndValue
+	mdcCut[3][1]=-inf
+	mdcCut[3][0]=mdcEndValue
+
+End
+
+//Function EDCIndex: calculate edc_startIndex and edc_endIndex
+Function/S IAFf_Value2Index_Definition()
+	return "5;0;0;0;1;1;Wave1D;Variable;Variable;Variable;Variable;"
+End
+
+Function IAFf_Value2Index(argumentList)
+	String argumentList
+		
+	//0th argument: Wave info [offset,delta,size]
+	String infoArg=StringFromList(0,argumentList)
+	
+	//1st argument: center (input, but possibly changed by this function)
+	String centerArg=StringFromList(1,argumentList)
+	//2nd argument: width (input, but possibly chaned by this function)
+	String widthArg=StringFromList(2,argumentList)
+	
+	//3rd argument: startIndex
+	String startIndexArg=StringFromList(3,argumentList)
+	//4tg argument: endIndex
+	String endIndexArg=StringFromList(4,argumentList)
+	
+	Wave/D info=$infoArg
+	Variable offset=info[0]
+	Variable delta=info[1]
+	Variable size=info[2]
+	
+	NVAR center=$centerArg
+	NVAR width=$widthArg
+	
+	//Validate width
+	Variable widthIndex=round(width/delta)
+	If(widthIndex<=0)
+		widthIndex=1
+	Endif
+	If(widthIndex>=size)
+		widthIndex=size-1
+	Endif
+	width=widthIndex*delta
+
+	//Validate center
+	Variable centerIndex_frac=(center-offset)/delta
+	Variable startIndex,endIndex
+	Variable deltaIndex
+	Switch(mod(widthIndex,2))
+	case 1:
+		//widthIndex is odd
+		//centerIndex is an integer
+		Variable centerIndex_int=round(centerIndex_frac)
+		startIndex=centerIndex_int-round((widthIndex-1)/2)
+		endIndex=centerIndex_int+round((widthIndex-1)/2)
+		If(startIndex<0)
+			deltaIndex=-startIndex
+			startIndex+=deltaIndex
+			endIndex+=deltaIndex
+			centerIndex_int+=deltaIndex
+		Endif
+		If(endIndex>=size)
+			deltaIndex=endIndex-size+1
+			startIndex-=deltaIndex
+			endIndex-=deltaIndex
+			centerIndex_int-=deltaIndex
+		Endif
+		center=offset+centerIndex_int*delta
+		break
+	case 0:
+		//widthIndex is even
+		//centerIndex is a half-integer (int.+1/2)
+		Variable centerIndex_hint=round(centerIndex_frac-0.5)
+		startIndex=centerIndex_hint-round(widthIndex/2-1)
+		endIndex=centerIndex_hint+round(widthIndex/2)
+		
+		If(startIndex<0)
+			delta=-startIndex
+			startIndex+=delta
+			endIndex+=delta
+			centerIndex_hint+=delta
+		Endif
+		If(endIndex>=size)
+			delta=endIndex-size+1
+			startIndex-=delta
+			endIndex-=delta
+			centerIndex_hint-=delta
+		Endif
+		center=offset+(centerIndex_hint+0.5)*delta
+		break
+	Endswitch
+	Variable/G $startIndexArg=startIndex
+	Variable/G $endIndexArg=endIndex
+End
+
+//Function DeltaChange: change +-1*delta
+Function/S IAFf_DeltaChange_Definition()
+	return "3;0;0;1;Wave1D;Variable;Variable"
+End
+
+Function IAFf_DeltaChange(argumentList)
+	String argumentList
+	
+	//0th argument: wave info
+	String waveArg=StringFromList(0,argumentList)
+	
+	//1st argument: delta
+	String deltaArg=StringFromList(1,argumentList)
+	
+	//2nd argument: value
+	String valueArg=StringFromList(2,argumentList)
+	
+	Wave/D input=$waveArg
+	NVAR delta=$deltaArg
+	NVAR value=$valueArg
+	
+	If(!NVAR_exists(value))
+		return 0
+	Endif
+	
+	If(delta==1 || delta==-1)
+		value+=delta*input[1]
+	Endif
+	delta=0
+End
+
+//Panel 2DViewer: 2D image & EDC & MDC
+Function/S IAFp_2DViewer_Definition()
+	return "18;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;Wave2D;Wave1D;Wave1D;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;String;Wave1D;Wave1D;Variable;Variable;Variable;Variable"
+End
+
+Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
+	String argumentList, PanelName, PanelTitle
+	
+	//0th argument: 2D wave
+	String waveArg=StringFromList(0,argumentList)
+	
+	//1st argument: 1D wave (EDC)
+	String edcArg=StringFromList(1,argumentList)
+	
+	//2nd argument: 1D wave (MDC)
+	String mdcArg=StringFromList(2,argumentList)
+	
+	//3rd argument: EDC start index
+	String edcStartIndexArg=StringFromList(3,argumentList)
+	
+	//4th argument: EDC end index
+	String edcEndIndexArg=StringFromList(4,argumentList)
+	
+	//5th argument: MDC start index
+	String mdcStartIndexArg=StringFromList(5,argumentList)
+	
+	//6th argument: MDC end index
+	String mdcEndIndexArg=StringFromList(6,argumentList)
+	
+	//7th argument: EDC center
+	String edcCenterArg=StringFromList(7,argumentList)
+	
+	//8th argument: EDC width
+	String edcWidthArg=StringFromList(8,argumentList)
+
+	//9th argument: MDC center
+	String mdcCenterArg=StringFromList(9,argumentList)
+	
+	//10th argument: MDC width
+	String mdcWidthArg=StringFromList(10,argumentList)
+	
+	//11th argument: x axis label
+	String xLabelArg=StringFromList(11,argumentList)
+	
+	//12th argument: EDC cut
+	String edcCutArg=StringFromList(12,argumentList)
+	
+	//13th argument: MDC cut
+	String mdcCutArg=StringFromList(13,argumentList)
+	
+	//14th argument: EDC center delta
+	//15th argument: MDC center delta
+	//16th argument: EDC width delta
+	//17th argument: MDC width delta
+	
+	Wave/D input=$waveArg
+	Wave/D edc=$edcArg
+	Wave/D mdc=$mdcArg
+	NVAR edcStartIndex=$edcStartIndexArg
+	NVAR edcEndIndex=$edcEndIndexArg
+	NVAR mdcStartIndex=$mdcStartIndexArg
+	NVAR mdcEndIndex=$mdcEndIndexArg
+	NVAR edcCenter=$edcCenterArg
+	NVAR edcWidth=$edcWidthArg
+	NVAR mdcCenter=$mdcCenterArg
+	NVAR mdcWidth=$mdcWidthArg
+	SVAR xLabel=$xLabelArg
+	Wave/D edcCut=$edcCutArg
+	Wave/D mdcCut=$mdcCutArg
+	
+	
+	//empty graph
+	Display/K=1/W=(0,0,400,500) as PanelTitle
+	
+	cd ::
+	String gPanelName="IAF_"+PanelName+"_Name"
+	String/G $gPanelName=S_Name
+	String ParentPanelName=S_Name
+	cd Data
+		
+	//Control bar
+	ControlBar/T 100
+	
+	IAFcu_DrawSetVariable(30,0,"EDC Start",4,edcStartIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(200,0,"End",4,edcEndIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(300,0,"Center",5,edcCenterArg,1,1,-inf,inf,0)
+	IAFcu_DrawSetVariable(450,0,"Width",5,edcWidthArg,1,1,-inf,inf,0)
+	IAFcu_DrawSetVariable(30,30,"MDC Start",4,mdcStartIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(200,30,"End",4,mdcEndIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(300,30,"Center",5,mdcCenterArg,1,1,-inf,inf,0)
+	IAFcu_DrawSetVariable(450,30,"Width",5,mdcWidthArg,1,1,-inf,inf,0)
+	
+	String command
+	String format
+	
+	Variable fs=IAFcu_FontSize()
+	String fn=IAFcu_FontName()
+	
+	Variable width=IAFcu_CalcChartWidth(1)
+	Variable height=IAFcu_CalcChartHeight(1)
+	
+	sprintf format "Button %%s pos={%%g,%%g},font=\"%s\",fsize=%g,title=\"%%s\",proc=%s,size={%g,%g}",fn,fs,"IAFu_2DViewer_Button",width,height
+	
+	sprintf command format,"EDCWide",610,0,"+"
+	Execute command
+	
+	sprintf command format,"EDCNarrow",580,0,"-"
+	Execute command
+		
+	sprintf command format,"MDCWide",610,30,"+"
+	Execute command
+	
+	sprintf command format,"MDCNarrow",580,30,"-"
+	Execute command
+
+	Variable sliderInitial=0.6
+	
+	Slider vertSlider pos={0,0},size={50,50},limits={0,1,0},ticks=0,vert=1,side=1,value=sliderInitial,proc=IAFu_Guide_Slider
+	Slider horizSlider pos={0,60},size={50,50},limits={0,1,0},ticks=0,vert=0,side=2,value=sliderInitial,proc=IAFu_Guide_Slider
+	
+	//Define Guide
+	DefineGuide horizCenter={FL,sliderInitial,FR}
+	DefineGuide vertCenter={FT,1-sliderInitial,FB}
+	
+	Variable margin1=30 //outside, with axis
+	Variable margin2=1 //inside
+	Variable margin3=10 //outside, without axis
+	
+	//2D plot
+	Display/HOST=$parentPanelName/FG=(FL,vertCenter,horizCenter,FB)
+	AppendImage input
+	ModifyGraph swapXY=1,margin(left)=margin1,margin(bottom)=margin1,margin(right)=margin2,margin(top)=margin2
+	ModifyGraph tick=2,axThick=0.5,zero(left)=1
+	Label left "\\f02E\\f00 - \\f02E\\f00\\BF\\M (eV)"
+	Label bottom xLabel
+	ModifyImage $waveArg ctab={*,*,Terrain,1}
+	AppendToGraph edcCut[*][1] vs edcCut[*][0]
+	AppendToGraph mdcCut[*][1] vs mdcCut[*][0]
+	
+	//MDC
+	Display/HOST=$ParentPanelName/FG=(FL,FT,horizCenter,vertCenter) mdc
+	ModifyGraph margin(left)=margin1,margin(bottom)=margin2,margin(right)=margin2,margin(top)=margin3
+	ModifyGraph nticks=0,axThick=0.5,noLabel(bottom)=2,mirror(left)=1
+	Label left "MDC (arb. units)"
+	
+	//EDC
+	Display/HOST=$ParentPanelName/FG=(horizCenter,vertCenter,FR,FB)/VERT edc
+	ModifyGraph margin(left)=margin2,margin(bottom)=margin1,margin(right)=margin3,margin(top)=margin2
+	ModifyGraph nticks=0,axThick=0.5,noLabel(left)=2,mirror(bottom)=1,zero(left)=1
+	Label bottom "EDC (arb. units)"
+	
+	//keyboard hook (for center change)
+	SetWindow $parentPanelName hook(viewer2d_hook)=IAFu_2DViewer_Keyboard
+	
+End
+
+Function IAFu_2DViewer_Keyboard(s)
+	STRUCT WMWinHookStruct &s
+	Variable delta=0
+	If(s.eventCode==11)
+		String currentFolder=getDataFolder(1)
+		
+		Execute "GetWindow kwTopWin,activeSW"
+		//if there is no subwindow, SWpath is the name of the window
+		SVAR SWpath=S_value
+		
+		If(!SVAR_exists(SWpath))
+			return 0
+		Endif
+		
+		//Get Parent window name
+		String windowName=StringFromList(0,SWpath,"#")
+		
+		//Get Parent window title
+		Execute "GetWindow "+windowName+",title"
+		SVAR winTitle=S_value
+		If(!SVAR_exists(winTitle))
+			return 0
+		Endif
+		
+		
+		//winTitle="panelName in DataFolder"
+		Variable inIndex=strsearch(winTitle," in ",0)
+		If(inIndex==-1)
+			return 0
+		Endif
+		String DataFolder=winTitle[inIndex+4,strlen(winTitle)-1]
+		String panelName=winTitle[0,inIndex-1]
+		
+		String edcDeltaArg=""
+		String mdcDeltaArg=""
+		cd $DataFolder
+		
+		cd Diagrams
+		String DiagramWaveList=WaveList("*",";","TEXT:1,DIMS:2")
+
+		Variable numWaves=ItemsInList(DiagramWaveList)
+		Variable i
+		For(i=0;i<numWaves;i+=1)
+			String DiagramWaveName=StringFromList(i,DiagramWaveList)
+			Wave/T Diagram_i=$DiagramWaveName //i-th wave in the list
+			Variable WaveSize=DimSize(Diagram_i,0)
+			Variable j
+			For(j=0;j<WaveSize;j+=1)
+				String Kind_ij=Diagram_i[j][0]
+				String Type_ij=Diagram_i[j][1]
+				String Name_ij=Diagram_i[j][2]
+				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
+						edcDeltaArg=Diagram_i[j][17]
+						mdcDeltaArg=Diagram_i[j][18]
+						break
+					Endif
+				ENdif
+			Endfor
+		Endfor
+		cd ::Data
+
+		switch(s.keyCode)
+		case 28:
+			//left
+			delta=-1
+		case 29:
+			//right
+			If(delta==0)
+				delta=1
+			Endif
+			NVAR edcDelta=$edcDeltaArg
+			edcDelta=delta
+			cd ::
+			IAFc_Update(edcDeltaArg)
+			break
+		case 30:
+			//up
+			delta=1
+		case 31:
+			//down
+			If(delta==0)
+				delta=-1
+			Endif
+			NVAR mdcDelta=$mdcDeltaArg
+			mdcDelta=delta
+			cd ::
+			IAFc_Update(mdcDeltaArg)
+			break
+		endswitch
+		cd $currentFolder			
+	Endif
+	return 1
+End
+
+Function IAFu_Guide_slider(name,value,event): SliderControl
+	String name
+	Variable value
+	Variable event
+			
+		Execute "GetWindow kwTopWin,activeSW"
+		//if there is no subwindow, SWpath is the name of the window
+		SVAR SWpath=S_value
+		
+		If(!SVAR_exists(SWpath))
+			return 0
+		Endif
+		
+		//Get Parent window name
+		String windowName=StringFromList(0,SWpath,"#")
+		
+
+	strswitch(name)
+		case "horizSlider":
+			DefineGuide/W=$windowName horizCenter={FL,value,FR}
+			break
+		case "vertSlider":
+			DefineGuide/W=$windowName vertCenter={FT,1-value,FB}
+			break
+		default:
+			break
+	endswitch
+	return 0
+End
+
+Function IAFu_2DViewer_Button(BS): ButtonControl
+	STRUCT WMButtonAction &BS
+	If(BS.eventCode==1)
+		String currentFolder=getDataFolder(1)
+		
+		Execute "GetWindow kwTopWin,activeSW"
+		//if there is no subwindow, SWpath is the name of the window
+		SVAR SWpath=S_value
+		
+		If(!SVAR_exists(SWpath))
+			return 0
+		Endif
+		
+		//Get Parent window name
+		String windowName=StringFromList(0,SWpath,"#")
+		
+		//Get Parent window title
+		Execute "GetWindow "+windowName+",title"
+		SVAR winTitle=S_value
+		If(!SVAR_exists(winTitle))
+			return 0
+		Endif
+		
+		
+		//winTitle="panelName in DataFolder"
+		Variable inIndex=strsearch(winTitle," in ",0)
+		If(inIndex==-1)
+			return 0
+		Endif
+		String DataFolder=winTitle[inIndex+4,strlen(winTitle)-1]
+		String panelName=winTitle[0,inIndex-1]
+		
+		String edcDeltaArg=""
+		String mdcDeltaArg=""
+		cd $DataFolder
+		
+		cd Diagrams
+		String DiagramWaveList=WaveList("*",";","TEXT:1,DIMS:2")
+
+		Variable numWaves=ItemsInList(DiagramWaveList)
+		Variable i
+		For(i=0;i<numWaves;i+=1)
+			String DiagramWaveName=StringFromList(i,DiagramWaveList)
+			Wave/T Diagram_i=$DiagramWaveName //i-th wave in the list
+			Variable WaveSize=DimSize(Diagram_i,0)
+			Variable j
+			For(j=0;j<WaveSize;j+=1)
+				String Kind_ij=Diagram_i[j][0]
+				String Type_ij=Diagram_i[j][1]
+				String Name_ij=Diagram_i[j][2]
+				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
+						edcDeltaArg=Diagram_i[j][19]
+						mdcDeltaArg=Diagram_i[j][20]
+						break
+					Endif
+				ENdif
+			Endfor
+		Endfor
+		cd ::Data
+				
+		Variable delta=0
+		strswitch(BS.ctrlName)
+			case "EDCWide":
+				delta=1
+			case "EDCNarrow":
+				If(delta==0)
+					delta=-1
+				Endif
+				NVAR edcDelta=$edcDeltaArg
+				edcDelta=delta
+				cd ::
+				IAFc_Update(edcDeltaArg)
+				break
+			case "MDCWide":
+				delta=1
+			case "MDCNarrow":
+				If(delta==0)
+					delta=-1
+				Endif
+				NVAR mdcDelta=$mdcDeltaArg
+				mdcDelta=delta
+				cd ::
+				IAFc_Update(mdcDeltaArg)
+				break
+		Endswitch
+		cd $currentFolder
+	Endif
+	return 1
+End

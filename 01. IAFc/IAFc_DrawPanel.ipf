@@ -132,25 +132,25 @@ Function IAFc_ReCallPanelDialog()
 	IAFc_ReCallPanel(PanelName)	
 End
 
-Function IAFcu_DrawSetVariable(x,y,title,variableName,visibility,autoUpdate)
-	Variable x,y,visibility,autoUpdate
+Function IAFcu_DrawSetVariable(x,y,title,variableWidth,variableName,visibility,autoUpdate,low,high,inc)
+	Variable x,y,variableWidth,visibility,autoUpdate,low,high,inc
 	String title,variableName
 	
 	Variable fs=IAFcu_FontSize()
 	String fn=IAFcu_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(strlen(title)+5)
+	Variable width=IAFcu_CalcChartWidth(strlen(title)+variableWidth)
+	Variable bodyWidth=IAFcu_CalcChartWidth(variableWidth)
 	Variable height=IAFcu_CalcChartHeight(1)
 	
 	String command
-	sprintf command, "SetVariable %s pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},value=%s,title=\"%s\"",variableName,x,y,fn,fs,width,height,variableName,title
+	sprintf command, "SetVariable %s pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},bodyWidth=%g,value=%s,title=\"%s\",limits={%g,%g,%g}",variableName,x,y,fn,fs,width,height,bodyWidth,variableName,title,low,high,inc
 	If(visibility==0)
 		command=command+",disable=2"
 	Endif
 	If(autoUpdate==1)
 		command=command+",proc=IAFcu_Panel_SetVariable"
 	Endif
-	
 	Execute command
 End
 
@@ -170,14 +170,29 @@ End
 
 Function IAFcu_Panel_SetVariable(SV): SetVariableControl
 	STRUCT WMSetVariableAction &SV
+	
 	If(SV.eventCode==1 || SV.eventCode==2)
 		String currentFolder=getDataFolder(1)
 		
-		Execute "GetWindow kwTopWin,title"
+		Execute "GetWindow kwTopWin,activeSW"
+		//if there is no subwindow, SWpath is the name of the window
+		SVAR SWpath=S_value
+		
+		If(!SVAR_exists(SWpath))
+			return 0
+		Endif
+		
+		//Get Parent window name
+		String windowName=StringFromList(0,SWpath,"#")
+		
+		//Get Parent window title
+		Execute "GetWindow "+windowName+",title"
 		SVAR winTitle=S_value
 		If(!SVAR_exists(winTitle))
 			return 0
 		Endif
+		
+		
 		//winTitle="panelName in DataFolder"
 		Variable inIndex=strsearch(winTitle," in ",0)
 		If(inIndex==-1)
@@ -188,11 +203,11 @@ Function IAFcu_Panel_SetVariable(SV): SetVariableControl
 		cd $DataFolder
 		
 		String ControlName=SV.ctrlName
-		
 		IAFc_Update(ControlName)
 		
 		cd $currentFolder
 	Endif
+	
 End
 
 Function IAFcu_Panel_Button(BV): ButtonControl

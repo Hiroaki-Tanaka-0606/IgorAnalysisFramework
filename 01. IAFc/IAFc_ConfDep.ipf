@@ -330,7 +330,7 @@ Function IAFc_ConfigureDependency()
 					//Verify Definition of the Panel
 					If(IAFcu_VerifyPanelDefinition(PanelDef)==0)
 						//ill-defined
-						Print("Error: Module \""+Type_ij+"\" is ill-defined")
+						Print("Error: Panel \""+Type_ij+"\" is ill-defined")
 						numErrors+=1
 						break
 					Endif

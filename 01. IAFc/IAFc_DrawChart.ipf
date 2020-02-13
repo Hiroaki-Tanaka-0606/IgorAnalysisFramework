@@ -14,7 +14,7 @@ End
 
 //IAFcu_WidthRatio: return width/fontSize of a letter
 Function IAFcu_WidthRatio()
-	return 0.8
+	return 0.7
 End
 
 //IAFcu_FontName: return font name
@@ -301,7 +301,7 @@ Function IAFc_UpdateChart(updateControl)
 		DrawText ChartPosition[i][0]*zoom,(ChartPosition[i][1]+unitHeight/2)*zoom,partName
 		
 		//connections
-		SetDrawEnv linethick=3 //for parts connections
+		SetDrawEnv linethick=1 //for parts connections
 		SetDrawEnv arrow=1
 		
 		SetDrawEnv save

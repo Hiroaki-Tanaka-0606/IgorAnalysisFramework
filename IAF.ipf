@@ -6,6 +6,7 @@
 #include "IAFc_DrawChart"
 #include "IAFc_Execute"
 #include "IAFc_DrawPanel"
+#include "IAFc_CreateData"
 
 Menu "IAF"
 	"SetUp", IAFc_SetUp(-1)
@@ -15,4 +16,6 @@ Menu "IAF"
 	"CallChart", IAFc_CallChart()
 	"CallPanel", IAFc_CallPanelDialog()
 	"ReCallPanel", IAFc_ReCallPanelDialog()
+	"ExecuteAll", IAFc_ExecuteAll()
+	"CreateData", IAFc_CreateData()
 End

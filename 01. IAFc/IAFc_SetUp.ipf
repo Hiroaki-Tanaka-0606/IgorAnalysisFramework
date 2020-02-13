@@ -20,7 +20,6 @@ Function IAFc_SetUp(numArgs)
 	//create folders
 	IAFcu_createFolder("Diagrams")
 	IAFcu_createFolder("Data")
-	IAFcu_createFolder("Constants")
 	IAFcu_createFolder("Configurations")
 	IAFcu_createFolder("TempData")
 	
