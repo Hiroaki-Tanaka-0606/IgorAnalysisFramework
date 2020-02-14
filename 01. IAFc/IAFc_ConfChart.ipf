@@ -12,6 +12,7 @@ Function IAFc_ConfigureChart()
 	//assuming duplication is already verified
 	String TypeList=""
 	String NameList=""
+	String OriginList=""
 	If(!DataFolderExists("Diagrams"))
 		Print("Error: folder Diagrams does not exist")
 		return 0
@@ -36,6 +37,7 @@ Function IAFc_ConfigureChart()
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 				TypeList=AddListItem(Type_ij,TypeList)
 				NameList=AddListItem(Name_ij,NameList)
+				OriginList=AddListItem(DiagramWaveName,OriginList)
 			Endif
 		Endfor
 	Endfor
@@ -52,7 +54,7 @@ Function IAFc_ConfigureChart()
 	Endif
 	cd Configurations
 	//create new ChartIndex & ChartPosition
-	Make/O/T/N=(numParts) newChartIndex
+	Make/O/T/N=(numParts,2) newChartIndex
 	Make/O/D/N=(numParts,4) newChartPosition
 	
 	//copy ChartIndex & ChartPosition
@@ -65,10 +67,10 @@ Function IAFc_ConfigureChart()
 	Variable newIndex=0
 	If(ChartIndexSize==DimSize(ChartPosition,0))
 		For(i=0;i<ChartIndexSize;i+=1)
-			String PartName=ChartIndex[i][2]
+			String PartName=ChartIndex[i][0]
 			If(WhichListItem(PartName,remainingPartsList)!=-1)
 				//exist
-				newChartIndex[newIndex]=ChartIndex[i]
+				newChartIndex[newIndex][]=ChartIndex[i][q]
 				newChartPosition[newIndex][]=ChartPosition[i][q]
 				newIndex+=1
 				remainingPartsList=RemoveFromList(PartName,remainingPartsList)
@@ -87,7 +89,9 @@ Function IAFc_ConfigureChart()
 		PartName=StringFromList(i,remainingPartsList)
 		Variable index=WhichListItem(PartName,NameList)
 		String TypeName=StringFromList(index,TypeList)
-		newChartIndex[newIndex]=PartName
+		newChartIndex[newIndex][0]=PartName
+		String OriginName=StringFromList(index,OriginList)
+		newChartIndex[newIndex][1]=OriginName
 		Variable LetterLength=max(strlen(PartName),strlen(TypeName))
 		Variable width=IAFcu_CalcChartWidth(LetterLength)
 		Variable height=IAFcu_CalcChartHeight(2)
