@@ -144,7 +144,7 @@ Function IAFcu_DrawSetVariable(x,y,title,variableWidth,variableName,visibility,a
 	Variable height=IAFcu_CalcChartHeight(1)
 	
 	String command
-	sprintf command, "SetVariable %s pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},bodyWidth=%g,value=%s,title=\"%s\",limits={%g,%g,%g}",variableName,x,y,fn,fs,width,height,bodyWidth,variableName,title,low,high,inc
+	sprintf command, "SetVariable %s pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},bodyWidth=%g,value=\'%s\',title=\"%s\",limits={%g,%g,%g}","SV"+variableName,x,y,fn,fs,width,height,bodyWidth,variableName,title,low,high,inc
 	If(visibility==0)
 		command=command+",disable=2"
 	Endif
@@ -202,7 +202,8 @@ Function IAFcu_Panel_SetVariable(SV): SetVariableControl
 		
 		cd $DataFolder
 		
-		String ControlName=SV.ctrlName
+		String ControlName=SV.ctrlName //"SV"+dataName
+		String DataName=ControlName[2,strlen(ControlName)-1]
 		IAFc_Update(ControlName)
 		
 		cd $currentFolder

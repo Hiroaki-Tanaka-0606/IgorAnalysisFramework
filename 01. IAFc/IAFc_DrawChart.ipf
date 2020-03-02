@@ -355,6 +355,7 @@ Function IAFc_UpdateChart(updateControl)
 			OriginList=AddListItem(ChartIndex[i][1],OriginList)
 		Endif
 	Endfor
+	//Print(OriginList)
 	Make/O/D/N=(itemsInList(OriginList),4) FrameCoordinate
 	//[left,top,right,bottom]
 	Wave/D FrameCoordinate=FrameCoordinate

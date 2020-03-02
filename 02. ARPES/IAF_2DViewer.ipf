@@ -1,5 +1,75 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+//Template 2DViewer
+//argumentList:
+//[0]: name of the panel(=name of the Diagram wave)
+//[1]: 2D wave to show
+//[2]: xLabel
+Function IAFt_2DViewer(argumentList)
+	String argumentList
+	If(ItemsInList(argumentList)<3)
+		Print("Error: Template 2DViewer need three arguments")
+		return 0
+	Endif
+	String PanelName=stringfromlist(0,argumentList)
+	String WaveName=StringFromList(1,argumentList)
+	String xLabelName=StringFromList(2,argumentList)
+	Make/O/T/N=(29,21) $PanelName
+	
+	//diagram wave
+	Wave/T D=$PanelName
+	//suffix
+	String S="_"+PanelName
+	//EDC
+	D[0][0]="Data";      D[0][1]="Variable";     D[0][2]="_edc_start"+S
+	D[1][0]="Data";      D[1][1]="Variable";     D[1][2]="_edc_end"+S
+	D[2][0]="Data";      D[2][1]="Wave1D";       D[2][2]="EDC"+S
+	D[3][0]="Function";  D[3][1]="EDC";          D[3][2]="E"+S; D[3][3]=WaveName; D[3][4]=D[0][2]; D[3][5]=D[1][2]; D[3][6]=D[2][2]
+	//MDC
+	D[4][0]="Data";      D[4][1]="Variable";     D[4][2]="_mdc_start"+S
+	D[5][0]="Data";      D[5][1]="Variable";     D[5][2]="_mdc_end"+S
+	D[6][0]="Data";      D[6][1]="Wave1D";       D[6][2]="MDC"+S
+	D[7][0]="Function";  D[7][1]="MDC";          D[7][2]="M"+S; D[7][3]=WaveName; D[7][4]=D[4][2]; D[7][5]=D[5][2]; D[7][6]=D[6][2]
+	//EDC & MDC cut
+	D[8][0]="Data";      D[8][1]="Wave1D";       D[8][2]="_edccut"+S
+	D[9][0]="Data";      D[9][1]="Wave1D";       D[9][2]="_mdccut"+S
+	D[10][0]="Function"; D[10][1]="CutLines";    D[10][2]="_CL"+S; D[10][3]=WaveName; D[10][4]=D[0][2]; D[10][5]=D[1][2]; D[10][6]=D[4][2]; D[10][7]=D[5][2]; D[10][8]=D[8][2]; D[10][9]=D[9][2]
+	//WaveInfo
+	D[11][0]="Data";     D[11][1]="Wave1D";      D[11][2]="_energyinfo"+S
+	D[12][0]="Data";     D[12][1]="Wave1D";      D[12][2]="_momentuminfo"+S
+	D[13][0]="Function"; D[13][1]="WaveInfo2D";  D[13][2]="_WI"+S; D[13][3]=WaveName; D[13][4]=D[11][2]; D[13][5]=D[12][2];
+	//EDC value2index
+	D[14][0]="Data";     D[14][1]="Variable";    D[14][2]="_edccenter"+S
+	D[15][0]="Data";     D[15][1]="Variable";    D[15][2]="_edcwidth"+S
+	D[16][0]="Function"; D[16][1]="Value2Index"; D[16][2]="_EI"+S; D[16][3]=D[12][2]; D[16][4]=D[14][2]; D[16][5]=D[15][2]; D[16][6]=D[0][2]; D[16][7]=D[1][2]
+	//MDC value2index
+	D[17][0]="Data";     D[17][1]="Variable";    D[17][2]="_mdccenter"+S
+	D[18][0]="Data";     D[18][1]="Variable";    D[18][2]="_mdcwidth"+S
+	D[19][0]="Function"; D[19][1]="Value2Index"; D[19][2]="_MI"+S; D[19][3]=D[11][2]; D[19][4]=D[17][2]; D[19][5]=D[18][2]; D[19][6]=D[4][2]; D[19][7]=D[5][2]
+	//EDC centerdelta
+	D[20][0]="Data";     D[20][1]="Variable";    D[20][2]="_edccenterdelta"+S;
+	D[21][0]="Function"; D[21][1]="DeltaChange"; D[21][2]="_ECC"+S; D[21][3]=D[12][2]; D[21][4]=D[20][2]; D[21][5]=D[14][2]
+	//EDC widthdelta
+	D[22][0]="Data";     D[22][1]="Variable";    D[22][2]="_edcwidthdelta"+S;
+	D[23][0]="Function"; D[23][1]="DeltaChange"; D[23][2]="_EWC"+S; D[23][3]=D[12][2]; D[23][4]=D[22][2]; D[23][5]=D[15][2]
+	//MDC centerdelta
+	D[24][0]="Data";     D[24][1]="Variable";    D[24][2]="_mdccenterdelta"+S;
+	D[25][0]="Function"; D[25][1]="DeltaChange"; D[25][2]="_MCC"+S; D[25][3]=D[11][2]; D[25][4]=D[24][2]; D[25][5]=D[17][2]
+	//MDC widthdelta
+	D[26][0]="Data";     D[26][1]="Variable";    D[26][2]="_mdcwidthdelta"+S;
+	D[27][0]="Function"; D[27][1]="DeltaChange"; D[27][2]="_MWC"+S; D[27][3]=D[11][2]; D[27][4]=D[26][2]; D[27][5]=D[18][2]
+	//Panel
+	D[28][0]="Panel";    D[28][1]="2DViewer";    D[28][2]=PanelName;
+	D[28][3]=WaveName;   D[28][4]=D[2][2];       D[28][5]=D[6][2];
+	D[28][6]=D[0][2];    D[28][7]=D[1][2];       D[28][8]=D[4][2];
+	D[28][9]=D[5][2];    D[28][10]=D[14][2];     D[28][11]=D[15][2];
+	D[28][12]=D[17][2];  D[28][13]=D[18][2];     D[28][14]=xLabelName;
+	D[28][15]=D[8][2];   D[28][16]=D[9][2];      D[28][17]=D[20][2];
+	D[28][18]=D[24][2];  D[28][19]=D[22][2];     D[28][20]=D[26][2];
+
+	return 1
+End
+
 //Function EDC: create Energy distribution curve (wave[][i,j])
 Function/S IAFf_EDC_Definition()
 	return "4;0;0;0;1;Wave2D;Variable;Variable;Wave1D"
