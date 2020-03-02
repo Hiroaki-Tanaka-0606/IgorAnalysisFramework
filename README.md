@@ -77,6 +77,7 @@ Igor上で、生データからグラフまでの処理をフローチャート�
   - \[1-n\]: すべての引数が入力なので"0"が並ぶ。出力("1")、入力受け付けソケット("2")はない。
   - \[n+1-2n\]: 引数の型
 - **IAFp\_** ***PanelType*** **(argumentList)** : 描画時に実行される関数。パネル（またはグラフ）のウィンドウを作り、グラフや入力欄を設置していく。
+- **IAFt\_** ***PanelType*** **(argumentList)** : Panelに関係するDataやFunctionをDiagram Waveとして生成する。内的に使われるだけのDataは適当に名前を付けるが、外から読み込むDataについてはその名前をargumentListに列挙する。
 
 #### Temporary Data
 処理の途中でWaveを生成する場合はそのデータを**TempData**フォルダに入れる。
@@ -131,6 +132,7 @@ Waveを参照する場合は**TempData**に用意する。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
 - **CallPanel(PanelName)**: パネルを呼び出す。なければ新規作成する。
+- **LoadTemplate(PanelType,argumentList)** パネル関係のデータをDiagram Waveに整備する。
 
 #### フローチャート
 パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
