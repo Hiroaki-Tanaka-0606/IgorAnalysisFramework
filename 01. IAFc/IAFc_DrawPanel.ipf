@@ -204,7 +204,7 @@ Function IAFcu_Panel_SetVariable(SV): SetVariableControl
 		
 		String ControlName=SV.ctrlName //"SV"+dataName
 		String DataName=ControlName[2,strlen(ControlName)-1]
-		IAFc_Update(ControlName)
+		IAFc_Update(DataName)
 		
 		cd $currentFolder
 	Endif

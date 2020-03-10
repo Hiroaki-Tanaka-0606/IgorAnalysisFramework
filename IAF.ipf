@@ -11,7 +11,7 @@
 
 Menu "IAF"
 	"SetUp", IAFc_SetUp(-1)
-	"ConfigureName", IAFc_ConfigureNames()
+	"ConfigureNames", IAFc_ConfigureNames()
 	"ConfigureDependency", IAFc_ConfigureDependency()
 	"ConfigureChart", IAFc_ConfigureChart()
 	"CallChart", IAFc_CallChart()
