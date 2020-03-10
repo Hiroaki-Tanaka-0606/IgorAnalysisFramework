@@ -7,19 +7,45 @@ Function IAFc_CallPanel(PanelName)
 	Print("[IAFc_CallPanel]")
 	
 	String SVARName="IAF_"+PanelName+"_Name"
+	String PanelTitle=PanelName+" in "+currentFolder
 	SVAR gPanelName=$SVARName
 	Variable needCreation=0
 	If(SVAR_Exists(gPanelName))
 		DoWindow/F $gPanelName
 		If(V_flag==0)
 			needCreation=1
+		Else
+			//There is possibility where another panel named $gPanelName exists
+			Execute "GetWindow kwTopWin,activeSW"
+			//if there is no subwindow, SWpath is the name of the window
+			SVAR SWpath=S_value
+			
+			If(!SVAR_exists(SWpath))
+				return 0
+			Endif
+			
+			//Get Parent window name
+			String windowName=StringFromList(0,SWpath,"#")
+			
+			//Get Parent window title
+			Execute "GetWindow "+windowName+",title"
+			SVAR winTitle=S_value
+			If(!SVAR_exists(winTitle))
+				return 0
+			Endif
+			
+			If(cmpstr(winTitle,PanelTitle)==0)
+				//The intended window exists
+			Else
+				//not exist
+				needCreation=1
+			Endif
 		Endif
 	Else
 		needCreation=1
 	Endif
 	
 	If(needCreation==1)
-		String PanelTitle=PanelName+" in "+currentFolder
 		IAFc_DrawPanel(PanelName,PanelTitle)
 	Endif
 End
@@ -75,16 +101,38 @@ Function IAFc_ReCallPanel(PanelName)
 	Print("[IAFc_CallPanel]")
 	
 	String SVARName="IAF_"+PanelName+"_Name"
+	String PanelTitle=PanelName+" in "+currentFolder
 	SVAR gPanelName=$SVARName
 	Variable needCreation=0
 	If(SVAR_Exists(gPanelName))
 		DoWindow/F $gPanelName
 		If(V_flag==1)
-			KillWindow $gPanelName
+			//There is possibility where another panel named $gPanelName exists
+			Execute "GetWindow kwTopWin,activeSW"
+			//if there is no subwindow, SWpath is the name of the window
+			SVAR SWpath=S_value
+			
+			If(!SVAR_exists(SWpath))
+				return 0
+			Endif
+			
+			//Get Parent window name
+			String windowName=StringFromList(0,SWpath,"#")
+			
+			//Get Parent window title
+			Execute "GetWindow "+windowName+",title"
+			SVAR winTitle=S_value
+			If(!SVAR_exists(winTitle))
+				return 0
+			Endif
+			
+			If(cmpstr(winTitle,PanelTitle)==0)
+				//The intended window exists
+				KillWindow $gPanelName
+			Endif
 		Endif
 	Endif
 	
-	String PanelTitle=PanelName+" in "+currentFolder
 	IAFc_DrawPanel(PanelName,PanelTitle)
 End
 
