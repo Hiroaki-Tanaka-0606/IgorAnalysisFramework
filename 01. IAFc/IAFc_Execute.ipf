@@ -39,7 +39,7 @@ End
 //IFAc_Execute: execute a Function
 Function IAFc_Execute(FuncName)
 	String FuncName
-	
+	//Print(FuncName)
 	//currentFolder is root folder of the framework
 		
 	//find Diagram info	
@@ -249,7 +249,7 @@ Function IAFc_ExecuteList(FuncList)
 	String FuncList
 	Variable i
 	Variable numFuncs
-	
+	//Print(FuncList)
 	If(!DataFolderExists("Configurations"))
 		Print("Error: folder Configurations does not exist")
 		return 0

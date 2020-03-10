@@ -2,3 +2,4 @@
 
 #include "IAF_LoadWave"
 #include "IAF_2DViewer"
+#include "IAF_3DViewer"

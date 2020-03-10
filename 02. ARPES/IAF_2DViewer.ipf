@@ -33,7 +33,7 @@ Function IAFt_2DViewer(argumentList)
 	//EDC & MDC cut
 	D[8][0]="Data";      D[8][1]="Wave1D";       D[8][2]="_edccut"+S
 	D[9][0]="Data";      D[9][1]="Wave1D";       D[9][2]="_mdccut"+S
-	D[10][0]="Function"; D[10][1]="CutLines";    D[10][2]="_CL"+S; D[10][3]=WaveName; D[10][4]=D[0][2]; D[10][5]=D[1][2]; D[10][6]=D[4][2]; D[10][7]=D[5][2]; D[10][8]=D[8][2]; D[10][9]=D[9][2]
+	D[10][0]="Function"; D[10][1]="CutLines2D";    D[10][2]="_CL"+S; D[10][3]=WaveName; D[10][4]=D[0][2]; D[10][5]=D[1][2]; D[10][6]=D[4][2]; D[10][7]=D[5][2]; D[10][8]=D[8][2]; D[10][9]=D[9][2]
 	//WaveInfo
 	D[11][0]="Data";     D[11][1]="Wave1D";      D[11][2]="_energyinfo"+S
 	D[12][0]="Data";     D[12][1]="Wave1D";      D[12][2]="_momentuminfo"+S
@@ -108,11 +108,10 @@ Function IAFf_EDC(argumentList)
 	Wave/D edc=$edcArg
 	SetScale/P x, offset1, delta1, edc
 	edc[]=0
-	
 	Variable i
 	For(i=startIndex;i<=endIndex;i+=1)
 		edc[]+=input[p][i]
-	Endfor
+	Endfor	
 End
 	
 	
@@ -161,12 +160,12 @@ Function IAFf_MDC(argumentList)
 	Endfor
 End
 
-//Function CutLines: create Energy cut and Momentum cut lines
-Function/S IAFf_CutLines_Definition()
+//Function CutLines2D: create Energy cut and Momentum cut lines
+Function/S IAFf_CutLines2D_Definition()
 	return "7;0;0;0;0;0;1;1;Wave2D;Variable;Variable;Variable;Variable;Wave1D;Wave1D"
 End
 
-Function IAFf_CutLines(argumentList)
+Function IAFf_CutLines2D(argumentList)
 	String argumentList
 		
 	//0th argument: 2D wave
@@ -232,7 +231,7 @@ Function IAFf_CutLines(argumentList)
 
 End
 
-//Function EDCIndex: calculate edc_startIndex and edc_endIndex
+//Function ValueIndex: calculate startIndex and endIndex from center and width
 Function/S IAFf_Value2Index_Definition()
 	return "5;0;0;0;1;1;Wave1D;Variable;Variable;Variable;Variable;"
 End
@@ -425,7 +424,7 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	
 	
 	//empty graph
-	Display/K=1/W=(0,0,400,500) as PanelTitle
+	NewPanel/K=1/W=(0,0,700,800) as PanelTitle
 	
 	cd ::
 	String gPanelName="IAF_"+PanelName+"_Name"
@@ -433,8 +432,8 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	String ParentPanelName=S_Name
 	cd Data
 		
-	//Control bar
-	ControlBar/T 100
+	//Control bar (not actual ControlBar created by the command "ControlBar")
+	Variable ControlBarHeight=100
 	
 	IAFcu_DrawSetVariable(30,0,"EDC Start",4,edcStartIndexArg,0,1,-inf,inf,1)
 	IAFcu_DrawSetVariable(200,0,"End",4,edcEndIndexArg,0,1,-inf,inf,1)
@@ -448,6 +447,7 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	String command
 	String format
 	
+	//Wide & Narrow button
 	Variable fs=IAFcu_FontSize()
 	String fn=IAFcu_FontName()
 	
@@ -474,12 +474,15 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	Slider horizSlider pos={0,60},size={50,50},limits={0,1,0},ticks=0,vert=0,side=2,value=sliderInitial,proc=IAFu_Guide_Slider
 	
 	//Define Guide
+	DefineGuide vertTop={FT,ControlBarHeight}
 	DefineGuide horizCenter={FL,sliderInitial,FR}
-	DefineGuide vertCenter={FT,1-sliderInitial,FB}
+	DefineGuide vertCenter={vertTop,1-sliderInitial,FB}
+
 	
-	Variable margin1=30 //outside, with axis
-	Variable margin2=1 //inside
+	Variable margin1=50 //outside, with axis
+	Variable margin2=5 //inside
 	Variable margin3=10 //outside, without axis
+	Variable gfSize=18
 	
 	//2D plot
 	Display/HOST=$parentPanelName/FG=(FL,vertCenter,horizCenter,FB)
@@ -491,18 +494,21 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	ModifyImage $waveArg ctab={*,*,Terrain,1}
 	AppendToGraph edcCut[*][1] vs edcCut[*][0]
 	AppendToGraph mdcCut[*][1] vs mdcCut[*][0]
+	ModifyGraph gfSize=gfSize
 	
 	//MDC
-	Display/HOST=$ParentPanelName/FG=(FL,FT,horizCenter,vertCenter) mdc
+	Display/HOST=$ParentPanelName/FG=(FL,vertTop,horizCenter,vertCenter) mdc
 	ModifyGraph margin(left)=margin1,margin(bottom)=margin2,margin(right)=margin2,margin(top)=margin3
 	ModifyGraph nticks=0,axThick=0.5,noLabel(bottom)=2,mirror(left)=1
 	Label left "MDC (arb. units)"
-	
+	ModifyGraph gfSize=gfSize
+		
 	//EDC
 	Display/HOST=$ParentPanelName/FG=(horizCenter,vertCenter,FR,FB)/VERT edc
 	ModifyGraph margin(left)=margin2,margin(bottom)=margin1,margin(right)=margin3,margin(top)=margin2
 	ModifyGraph nticks=0,axThick=0.5,noLabel(left)=2,mirror(bottom)=1,zero(left)=1
 	Label bottom "EDC (arb. units)"
+	ModifyGraph gfSize=gfSize	
 	
 	//keyboard hook (for center change)
 	SetWindow $parentPanelName hook(viewer2d_hook)=IAFu_2DViewer_Keyboard
@@ -601,7 +607,7 @@ Function IAFu_2DViewer_Keyboard(s)
 		endswitch
 		cd $currentFolder			
 	Endif
-	return 1
+	return 0
 End
 
 Function IAFu_Guide_slider(name,value,event): SliderControl
@@ -626,7 +632,7 @@ Function IAFu_Guide_slider(name,value,event): SliderControl
 			DefineGuide/W=$windowName horizCenter={FL,value,FR}
 			break
 		case "vertSlider":
-			DefineGuide/W=$windowName vertCenter={FT,1-value,FB}
+			DefineGuide/W=$windowName vertCenter={vertTop,1-value,FB}
 			break
 		default:
 			break
