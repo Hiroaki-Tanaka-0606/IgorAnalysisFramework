@@ -6,13 +6,13 @@ Igor上で、生データからグラフまでの処理をフローチャート�
   - **Diagrams** フローチャートを記述するWave(Text, 2D, 複数可)を格納する。
   - **Data** データを格納する。
   - **Configurations** 依存関係、フローチャートの見た目などの設定情報を格納する。
-  - **TempData** 一時的なデータを格納する。ユーティリティ関数を実行する際は引数をすべてここに格納する必要がある。
+  - **TempData** 一時的なデータを格納する。
 
 ## フローチャート
 フローチャートを記述するWaveでは、以下の順で部品の性質を並べる。
 - 0行目: 部品の種類(Data, Function, Module, Panel)
 - 1行目: 部品の型(\[A-Za-z0-9\]のみで構成される。混乱を招かないためには他の種類も含めて重複しないようにした方がよいが、重複してもプログラム上は不具合がない)
-- 2行目: 部品の名前(他のWaveにある部品を含めて、重複不可。空欄、または重複であれば初期化時に**部品の型**+**数字**で命名される。1文字目が_（アンダースコア）であれば、フローチャートに表示されない。)
+- 2行目: 部品の名前(他のWaveにある部品を含めて、重複不可。空欄、または重複であれば初期化時に**部品の型**+**数字**で命名される。1文字目が_（アンダースコア）であれば、フローチャートに表示されないことがある(条件は後述)。)
 - 3行目以降: 部品のプロパティ(入出力)
 
 ソケットは関数・モジュール間の接続関係として定まるので、部品として記述する必要はない。
@@ -107,7 +107,7 @@ Waveを参照する場合は**TempData**に用意する。
   - \[i\]\[2\]: 横幅
   - \[i\]\[3\]: 縦幅
   
-#### Variables for Panels
+#### Variables for　Flowchart and Panels
 パネル操作時の情報がカレントフォルダ直下にGlobal Variables / Strings として保存されている。
 - **IAF_Flowchart_ChartLeft**, **IAF_Flowchart_ChartTop**: クリックされている部品の初期位置
 - **IAF_Flowchart_Clicked**: 部品がクリックされていれば1、そうでなければ0
@@ -125,14 +125,28 @@ Waveを参照する場合は**TempData**に用意する。
 - **ConfigureChart()**: **Configurations**フォルダ内の**ChartIndex**, **ChartPosition**を生成する。すでに生成されている部分を保ちつつ更新する。
 - **CallChart()**: フローチャートパネルを呼び出す。なければ新規作成する。
 - **Function_Definition(FunctionType)**: 関数の定義を返す。
-- **Module_Definition(ModuleType)**: 関数の定義を返す。
+- **Module_Definition(ModuleType)**: モジュールの定義を返す。
 - **Execute(FunctionName)**: 関数を実行する。
 - **ExecuteList(FunctionList)**: リストに挙げられた関数を実行する。順序は依存関係に基づく。
 - **ExecuteAll()**: すべての関数を実行する。順序は依存関係に基づく。
 - **Update(DataList)**: DataListの更新に伴う関数を実行する。実行される関数およびその順序は依存関係に基づく。
 - **CallSocket(SocketName, ValueList)** ソケットを呼び出す。値は文字列リストとして入力。
 - **CallPanel(PanelName)**: パネルを呼び出す。なければ新規作成する。
-- **LoadTemplate(TemplateType,argumentList)** パネル関係のデータをDiagram Waveに整備する。
+- **ReCallPanel(PanelName)**: パネルを呼び出す。すでにあったとしても作り直す。
+- **CreateData()**: VariableまたはStringの型を持つデータのうち、Global Variable / Stringとして存在しないものを生成する。初期値は**0** / **""**。
+- **LoadTemplate(TemplateType,argumentList)** パネル関係のデータをDiagram Waveに整備する。**argumentList**の指定は**IAFt\_** ***TemplateType*** **(argumentList)** に従う。
 
 #### フローチャート
 パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
+
+- **Show all parts**にチェックを入れないと、アンダースコアで始まる部品は表示されない。
+- 各部品が長方形で表示され、依存関係が矢印で表される。色の対応は以下の通り。行番号は**IAFc_DrawChart.ipf**のもの。
+  - **Data**: 黒(397行目)
+  - **Function**: 青(400行目)
+  - **Module**: 赤(403行目)
+  - **Panel**: 緑(406行目)
+  - **入力・出力の矢印**: 黒(473, 494行目)
+  - **ソケットの矢印**: 紫(477行目)
+  - **フレーム**: 灰色(515行目)
+- 各部品はクリック&ドラッグで動かせる。
+- Diagram Waveごとにフレームが描かれる。部品の外かつフレームの中をクリック&ドラッグすると、フレーム内の部品をまとめて動かせる。
