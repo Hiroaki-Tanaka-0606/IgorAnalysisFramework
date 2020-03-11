@@ -1,5 +1,98 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+//Template 3DViewer
+//argumentList:
+//[0]: name of the panel(=name of the Diagram wave)
+//[1]: 3D wave to use
+//[2]: xLabel
+//[3]: yLabel
+Function IAFt_3DViewer(argumentList)
+	String argumentList
+	If(ItemsInList(argumentList)<4)
+		Print("Error: Template 3DViewer need four arguments")
+		return 0
+	ENdif
+	String PanelName=stringfromlist(0,argumentList)
+	String WaveName=StringFromList(1,argumentList)
+	String xLabelName=StringFromList(2,argumentList)
+	String yLabelName=StringFromList(3,argumentList)
+	Make/O/T/N=(42,29) $PanelName
+	
+	//diagram wave
+	Wave/T D=$PanelName
+	//suffix
+	String S="_"+PanelName
+	
+	//Ex
+	D[0][0]="Data";      D[0][1]="Variable";     D[0][2]="_Ex_start"+S
+	D[1][0]="Data";      D[1][1]="Variable";     D[1][2]="_Ex_end"+S
+	D[2][0]="Data";      D[2][1]="Wave2D";       D[2][2]="ExCut"+S
+	D[3][0]="Function";  D[3][1]="ExCut";        D[3][2]="ExC"+S; D[3][3]=WaveName; D[3][4]=D[0][2]; D[3][5]=D[1][2]; D[3][6]=D[2][2]
+	//Ey	
+	D[4][0]="Data";      D[4][1]="Variable";     D[4][2]="_Ey_start"+S
+	D[5][0]="Data";      D[5][1]="Variable";     D[5][2]="_Ey_end"+S
+	D[6][0]="Data";      D[6][1]="Wave2D";       D[6][2]="EyCut"+S
+	D[7][0]="Function";  D[7][1]="EyCut";        D[7][2]="EyC"+S; D[7][3]=WaveName; D[7][4]=D[4][2]; D[7][5]=D[5][2]; D[7][6]=D[6][2]
+	//xy
+	D[8][0]="Data";      D[8][1]="Variable";     D[8][2]="_xy_start"+S
+	D[9][0]="Data";      D[9][1]="Variable";     D[9][2]="_xy_end"+S
+	D[10][0]="Data";     D[10][1]="Wave2D";      D[10][2]="xyCut"+S
+	D[11][0]="Function"; D[11][1]="xyCut";       D[11][2]="xyC"+S; D[11][3]=WaveName; D[11][4]=D[8][2]; D[11][5]=D[9][2]; D[11][6]=D[10][2]
+	//cut lines
+	D[12][0]="Data";     D[12][1]="Wave1D";      D[12][2]="_ECut"+S;
+	D[13][0]="Data";     D[13][1]="Wave1D";      D[13][2]="_xCut"+S;
+	D[14][0]="Data";     D[14][1]="Wave1D";      D[14][2]="_yCut"+S;
+	D[15][0]="Function"; D[15][1]="CutLines3D";  D[15][2]="_CL3"+S; D[15][3]=WaveName; D[15][4]=D[8][2]; D[15][5]=D[9][2]; D[15][6]=D[4][2]; D[15][7]=D[5][2]; D[15][8]=D[0][2]; D[15][9]=D[1][2]; D[15][10]=D[12][2]; D[15][11]=D[13][2]; D[15][12]=D[14][2]
+	//Waveinfo
+	D[16][0]="Data";     D[16][1]="Wave1D";      D[16][2]="_EInfo"+S
+	D[17][0]="Data";     D[17][1]="Wave1D";      D[17][2]="_xInfo"+S
+	D[18][0]="Data";     D[18][1]="Wave1D";      D[18][2]="_yInfo"+S
+	D[19][0]="Function"; D[19][1]="WaveInfo3D";  D[19][2]="_WI3"+S; D[19][3]=WaveName; D[19][4]=D[16][2]; D[19][5]=D[17][2]; D[19][6]=D[18][2];
+	//Ex value2index
+	D[20][0]="Data";     D[20][1]="Variable";    D[20][2]="_ExCenter"+S	
+	D[21][0]="Data";     D[21][1]="Variable";    D[21][2]="_ExWidth"+S
+	D[22][0]="Function"; D[22][1]="Value2Index"; D[22][2]="_yI"+S; D[22][3]=D[18][2]; D[22][4]=D[20][2]; D[22][5]=D[21][2]; D[22][6]=D[0][2]; D[22][7]=D[1][2]
+	//Ey value2index
+	D[23][0]="Data";     D[23][1]="Variable";    D[23][2]="_EyCenter"+S	
+	D[24][0]="Data";     D[24][1]="Variable";    D[24][2]="_EyWidth"+S
+	D[25][0]="Function"; D[25][1]="Value2Index"; D[25][2]="_xI"+S; D[25][3]=D[17][2]; D[25][4]=D[23][2]; D[25][5]=D[24][2]; D[25][6]=D[4][2]; D[25][7]=D[5][2]
+	//xy value2index
+	D[26][0]="Data";     D[26][1]="Variable";    D[26][2]="_xyCenter"+S	
+	D[27][0]="Data";     D[27][1]="Variable";    D[27][2]="_xyWidth"+S
+	D[28][0]="Function"; D[28][1]="Value2Index"; D[28][2]="_EI"+S; D[28][3]=D[16][2]; D[28][4]=D[26][2]; D[28][5]=D[27][2]; D[28][6]=D[8][2]; D[28][7]=D[9][2]
+	//Ex centerdelta
+	D[29][0]="Data";     D[29][1]="Variable";    D[29][2]="_ExCenterDelta"+S
+	D[30][0]="Function"; D[30][1]="DeltaChange"; D[30][2]="_ExCC"+S; D[30][3]=D[18][2]; D[30][4]=D[29][2]; D[30][5]=D[20][2]
+	//Ex widthdelta
+	D[31][0]="Data";     D[31][1]="Variable";    D[31][2]="_ExWidthDelta"+S
+	D[32][0]="Function"; D[32][1]="DeltaChange"; D[32][2]="_ExWC"+S; D[32][3]=D[18][2]; D[32][4]=D[31][2]; D[32][5]=D[21][2]
+	//Ey centerdelta
+	D[33][0]="Data";     D[33][1]="Variable";    D[33][2]="_EyCenterDelta"+S
+	D[34][0]="Function"; D[34][1]="DeltaChange"; D[34][2]="_EyCC"+S; D[34][3]=D[17][2]; D[34][4]=D[33][2]; D[34][5]=D[23][2]
+	//Ey widthdelta
+	D[35][0]="Data";     D[35][1]="Variable";    D[35][2]="_EyWidthDelta"+S
+	D[36][0]="Function"; D[36][1]="DeltaChange"; D[36][2]="_EyWC"+S; D[36][3]=D[17][2]; D[36][4]=D[35][2]; D[36][5]=D[24][2]
+	//xy centerdelta
+	D[37][0]="Data";     D[37][1]="Variable";    D[37][2]="_xyCenterDelta"+S
+	D[38][0]="Function"; D[38][1]="DeltaChange"; D[38][2]="_xyCC"+S; D[38][3]=D[16][2]; D[38][4]=D[37][2]; D[38][5]=D[26][2]
+	//xy widthdelta
+	D[39][0]="Data";     D[39][1]="Variable";    D[39][2]="_xyWidthDelta"+S
+	D[40][0]="Function"; D[40][1]="DeltaChange"; D[40][2]="_xyWC"+S; D[40][3]=D[16][2]; D[40][4]=D[39][2]; D[40][5]=D[27][2]
+	//Panel
+	D[41][0]="Panel";    D[41][1]="3DViewer";    D[41][2]=PanelName;
+	D[41][3]=D[2][2];    D[41][4]=D[6][2];       D[41][5]=D[10][2];
+	D[41][6]=D[0][2];    D[41][7]=D[1][2];       D[41][8]=D[4][2];
+	D[41][9]=D[5][2];    D[41][10]=D[8][2];      D[41][11]=D[9][2];
+	D[41][12]=D[20][2];  D[41][13]=D[21][2];     D[41][14]=D[23][2];
+	D[41][15]=D[24][2];  D[41][16]=D[26][2];     D[41][17]=D[27][2];
+	D[41][18]=xLabelName;D[41][19]=yLabelName;   D[41][20]=D[12][2];
+	D[41][21]=D[13][2];  D[41][22]=D[14][2];     D[41][23]=D[29][2];
+	D[41][24]=D[33][2];  D[41][25]=D[37][2];     D[41][26]=D[31][2];
+	D[41][27]=D[35][2];  D[41][28]=D[39][2];
+
+End
+	
+
 //Function ExCut: create Energy-x (k_x or theta_x) map wave[][][i,j]
 Function/S IAFf_ExCut_Definition()
 	return "4;0;0;0;1;Wave3D;Variable;Variable;Wave2D"
