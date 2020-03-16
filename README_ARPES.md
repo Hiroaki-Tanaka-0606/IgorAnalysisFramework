@@ -317,3 +317,45 @@ x軸のラベル。
 
 ## 3DViewer
 
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/3DViewer.svg?sanitize=true">
+
+#### View example
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/3DViewer_view2.png" width=455>
+
+(1) \_Ex\_start
+(2) \_Ex\_end
+(3) \_Ey\_start
+(4) \_Ey\_end
+(5) \_xy\_start
+(6) \_xy\_end
+(7) \_ExCenter
+(8) \_ExWidth
+(9) \_EyCenter
+(10) \_EyWidth
+(11) \_xyCenter
+(12) \_xyWidth
+(13) **+** を押すと\_ExWidthDeltaが1に、**-** を押すと-1になる。
+(14) **+** を押すと\_EyWidthDeltaが1に、**-** を押すと-1になる。
+(15) **+** を押すと\_xyWidthDeltaが1に、**-** を押すと-1になる。
+(16) EyCut
+(17) xyCut
+(18) ExCut
+(19) 上下のサイズ比を変更できるスライダー
+(20) 左右のサイズ比を変更できるスライダー
+
+カーソルキー上下左右で、選択中のパネルに対応するCenterDeltaが±1になる。
+
+
+#### Template 0th argument(String ***PanelName***)
+パネルの表示名。接尾辞にも使われる。
+
+#### Template 1st argument(Wave3D ***WaveName***)
+Energy-x・Energy-y・x-y mapsを生成するWave。
+
+#### Template 2nd argument(String ***xLabel***)
+x軸のラベル。
+
+#### Template 3rd argument(String ***yLabel***)
+y軸のラベル。
+
