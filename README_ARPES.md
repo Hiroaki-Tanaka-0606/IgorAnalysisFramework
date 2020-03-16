@@ -85,3 +85,91 @@ Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOf
 
 #### 3rd argument(output, Wave1D)
 Waveの3rd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
+
+## EDC
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/EDC.svg?sanitize=true" width=275>
+
+#### 0th argument(input, Wave2D)
+Energy distribution curve (EDC)を生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
+
+#### 1st argument(input, Variable)
+EDCの積算範囲の開始インデックス。
+
+#### 2nd argument(input, Variable)
+EDCの積算範囲の終了インデックス。
+
+#### 3rd argument(output, Wave1D)
+EDC。```input[][start]```から```input[][end]```までの和となる。
+
+## MDC
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/MDC.svg?sanitize=true" width=275>
+
+#### 0th argument(input, Wave2D)
+Momentum distribution curve (MDC)を生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
+
+#### 1st argument(input, Variable)
+MDCの積算範囲の開始インデックス。
+
+#### 2nd argument(input, Variable)
+MDCの積算範囲の終了インデックス。
+
+#### 3rd argument(output, Wave1D)
+MDC。```input[start][]```から```input[end][]```までの和となる。
+
+## ExCut
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/ExCut.svg?sanitize=true" width=275>
+
+#### 0th argument(input, Wave3D)
+Energy-x mapを生成するWave。1st indexがエネルギー、2nd・3rd indexが波数または角度(x・y)。
+
+#### 1st argument(input, Variable)
+Energy-x mapの積算範囲の開始インデックス。
+
+#### 2nd argument(input, Variable)
+Energy-x mapの積算範囲の終了インデックス。
+
+#### 3rd argument(output, Wave1D)
+Energy-x map。```input[][][start]```から```input[][][end]```までの和となる。
+
+## EyCut
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/EyCut.svg?sanitize=true" width=275>
+
+#### 0th argument(input, Wave3D)
+Energy-y mapを生成するWave。1st indexがエネルギー、2nd・3rd indexが波数または角度(x・y)。
+
+#### 1st argument(input, Variable)
+Energy-y mapの積算範囲の開始インデックス。
+
+#### 2nd argument(input, Variable)
+Energy-y mapの積算範囲の終了インデックス。
+
+#### 3rd argument(output, Wave1D)
+Energy-y map。```input[][start][]```から```input[][end][]```までの和となる。
+
+## xyCut
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/xyCut.svg?sanitize=true" width=275>
+
+#### 0th argument(input, Wave3D)
+x-y mapを生成するWave。1st indexがエネルギー、2nd・3rd indexが波数または角度(x・y)。
+
+#### 1st argument(input, Variable)
+x-y mapの積算範囲の開始インデックス。
+
+#### 2nd argument(input, Variable)
+x-y mapの積算範囲の終了インデックス。
+
+#### 3rd argument(output, Wave1D)
+x-y map。```input[start][][]```から```input[end][][]```までの和となる。
+
+## CutLines2D
+
+## CutLines3D
+
+## Value2Index
+
+## DeltaChange
+
+## 2DViewer
+
+## 3DViewer
+
