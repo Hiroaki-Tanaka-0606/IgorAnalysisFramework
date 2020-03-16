@@ -1,8 +1,10 @@
 # Readme for ARPES Analysis
 ## 注意事項
-- 図では部品の型のみをフローチャートに表示している。実際のフローチャートでは2行目に部品の名前も表示される。
-- \[x\]はDiagram Waveの3行目以降に記述するデータの順番を表す。\[x\]は3+x列目に現れる。
+- Function・Moduleの説明の場合、図では部品の型のみをフローチャートに表示している。実際のフローチャートでは2行目に部品の名前も表示される。
+- \[x\]はDiagram Waveの3列目以降に記述するデータの順番を表す。\[x\]は3+x列目に現れる。Templateの説明では、\[x\]は対応するPanelへの入力順序である。
 - 矢印は見やすくなるよう折れ線にしていることがある。実際のフローチャートではすべて部品の間を直線でつないでいる。
+- Panelに入力される矢印は省略することがある。
+- Templateの説明の場合、部品の名前はサフィックスを無視したような感じになっている。**argumentList**で名前を指定するものについてはイタリックになっている。
 
 ## 目次
 ### Wave読み込み
@@ -279,6 +281,39 @@ E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギ�
 インデックスの変化に対応して変化する値。
 
 ## 2DViewer
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/2DViewer.svg?sanitize=true">
+
+#### View example
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/2DViewer_view2.png" width=455>
+
+(1) \_edc\_start
+(2) \_edc\_end
+(3) \_mdc\_start
+(4) \_mdc\_end
+(5) \_edc\_center
+(6) \_edc\_width
+(7) \_mdc\_center
+(8) \_mdc\_width
+(9) **+** を押すと\_edcwidthdeltaが1に、**-** を押すと-1になる。
+(10) **+** を押すと\_mdcwidthdeltaが1に、**-** を押すと-1になる。
+(11) MDC
+(12) ***WaveName*** で入力されるWave2D
+(13) EDC
+(14) 上下のサイズ比を変更できるスライダー
+(15) 左右のサイズ比を変更できるスライダー
+
+カーソルキー左右で\_edccenterdeltaが±1に、カーソルキー上下で\_mdccenterdeltaが±1になる。
+
+#### Template 0th argument(String ***PanelName***)
+パネルの表示名。接尾辞にも使われる。
+
+#### Template 1st argument(Wave2D ***WaveName***)
+表示し、EDC・MDCを生成するWave。
+
+#### Template 2nd argument(String ***xLabel***)
+x軸のラベル。
 
 ## 3DViewer
 
