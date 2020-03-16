@@ -264,6 +264,19 @@ E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギ�
 範囲インデックスの終了値。
 
 ## DeltaChange
+インデックスが±1変化することに対応して値を変化させる。
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/DeltaChange.svg?sanitize=true" width=310>
+
+#### 0th argument(input, Wave1D)
+あるindexに関するWaveの情報。[Function WaveInfo1D](#WaveInfo1D)・[Function WaveInfo2D](#WaveInfo2D)・[Function WaveInfo3D](#WaveInfo3D)から出力されるものを用いればよい。
+
+#### 1st argument(input, Variable)
+インデックスの変化。±1だった場合のみ2nd argumentの値が変化する。処理後は値は0になる。
+
+#### 2nd argument(output, Variable)
+インデックスの変化に対応して変化する値。
 
 ## 2DViewer
 
