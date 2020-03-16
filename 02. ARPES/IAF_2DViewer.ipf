@@ -31,8 +31,8 @@ Function IAFt_2DViewer(argumentList)
 	D[6][0]="Data";      D[6][1]="Wave1D";       D[6][2]="MDC"+S
 	D[7][0]="Function";  D[7][1]="MDC";          D[7][2]="M"+S; D[7][3]=WaveName; D[7][4]=D[4][2]; D[7][5]=D[5][2]; D[7][6]=D[6][2]
 	//EDC & MDC cut
-	D[8][0]="Data";      D[8][1]="Wave1D";       D[8][2]="_edccut"+S
-	D[9][0]="Data";      D[9][1]="Wave1D";       D[9][2]="_mdccut"+S
+	D[8][0]="Data";      D[8][1]="Wave2D";       D[8][2]="_edccut"+S
+	D[9][0]="Data";      D[9][1]="Wave2D";       D[9][2]="_mdccut"+S
 	D[10][0]="Function"; D[10][1]="CutLines2D";    D[10][2]="_CL"+S; D[10][3]=WaveName; D[10][4]=D[0][2]; D[10][5]=D[1][2]; D[10][6]=D[4][2]; D[10][7]=D[5][2]; D[10][8]=D[8][2]; D[10][9]=D[9][2]
 	//WaveInfo
 	D[11][0]="Data";     D[11][1]="Wave1D";      D[11][2]="_energyinfo"+S
@@ -162,7 +162,7 @@ End
 
 //Function CutLines2D: create Energy cut and Momentum cut lines
 Function/S IAFf_CutLines2D_Definition()
-	return "7;0;0;0;0;0;1;1;Wave2D;Variable;Variable;Variable;Variable;Wave1D;Wave1D"
+	return "7;0;0;0;0;0;1;1;Wave2D;Variable;Variable;Variable;Variable;Wave2D;Wave2D"
 End
 
 Function IAFf_CutLines2D(argumentList)
@@ -354,7 +354,7 @@ End
 
 //Panel 2DViewer: 2D image & EDC & MDC
 Function/S IAFp_2DViewer_Definition()
-	return "18;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;Wave2D;Wave1D;Wave1D;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;String;Wave1D;Wave1D;Variable;Variable;Variable;Variable"
+	return "18;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;Wave2D;Wave1D;Wave1D;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;String;Wave2D;Wave2D;Variable;Variable;Variable;Variable"
 End
 
 Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)

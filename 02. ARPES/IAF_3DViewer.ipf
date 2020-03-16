@@ -39,9 +39,9 @@ Function IAFt_3DViewer(argumentList)
 	D[10][0]="Data";     D[10][1]="Wave2D";      D[10][2]="xyCut"+S
 	D[11][0]="Function"; D[11][1]="xyCut";       D[11][2]="xyC"+S; D[11][3]=WaveName; D[11][4]=D[8][2]; D[11][5]=D[9][2]; D[11][6]=D[10][2]
 	//cut lines
-	D[12][0]="Data";     D[12][1]="Wave1D";      D[12][2]="_ECut"+S;
-	D[13][0]="Data";     D[13][1]="Wave1D";      D[13][2]="_xCut"+S;
-	D[14][0]="Data";     D[14][1]="Wave1D";      D[14][2]="_yCut"+S;
+	D[12][0]="Data";     D[12][1]="Wave2D";      D[12][2]="_ECut"+S;
+	D[13][0]="Data";     D[13][1]="Wave2D";      D[13][2]="_xCut"+S;
+	D[14][0]="Data";     D[14][1]="Wave2D";      D[14][2]="_yCut"+S;
 	D[15][0]="Function"; D[15][1]="CutLines3D";  D[15][2]="_CL3"+S; D[15][3]=WaveName; D[15][4]=D[8][2]; D[15][5]=D[9][2]; D[15][6]=D[4][2]; D[15][7]=D[5][2]; D[15][8]=D[0][2]; D[15][9]=D[1][2]; D[15][10]=D[12][2]; D[15][11]=D[13][2]; D[15][12]=D[14][2]
 	//Waveinfo
 	D[16][0]="Data";     D[16][1]="Wave1D";      D[16][2]="_EInfo"+S
@@ -242,7 +242,7 @@ End
 
 //Function CutLines3D: create Energy and momentum-x and momentum-y cut lines
 Function/S IAFf_CutLines3D_Definition()
-	return "10;0;0;0;0;0;0;0;1;1;1;Wave3D;Variable;Variable;Variable;Variable;Variable;Variable;Wave1D;Wave1D;Wave1D"
+	return "10;0;0;0;0;0;0;0;1;1;1;Wave3D;Variable;Variable;Variable;Variable;Variable;Variable;Wave2D;Wave2D;Wave2D"
 End
 
 Function IAFf_CutLines3D(argumentList)
@@ -340,7 +340,7 @@ End
 
 //Panel 3DViewer: xyCut (right-top) & ExCut (right-bottom) & EyCut(left-top)
 Function/S IAFp_3DViewer_Definition()
-	return "26;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;Wave2D;Wave2D;Wave2D;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;String;String;Wave1D;Wave1D;Wave1D;Variable;Variable;Variable;Variable;Variable;Variable"
+	return "26;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;Wave2D;Wave2D;Wave2D;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;Variable;String;String;Wave2D;Wave2D;Wave2D;Variable;Variable;Variable;Variable;Variable;Variable"
 End
 
 Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
