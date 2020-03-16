@@ -6,25 +6,25 @@
 
 ## 目次
 ### Wave読み込み
-- [Function LoadWave1D](#LoadWave1D)
-- [Function LoadWave2D](#LoadWave2D)
-- [Function LoadWave3D](#LoadWave3D)
+- [Function **LoadWave1D**](#LoadWave1D)
+- [Function **LoadWave2D**](#LoadWave2D)
+- [Function **LoadWave3D**](#LoadWave3D)
 ### WaveInfo
-- [Function WaveInfo1D](#WaveInfo1D)
-- [Function WaveInfo2D](#WaveInfo2D)
-- [Function WaveInfo3D](#WaveInfo3D)
+- [Function **WaveInfo1D**](#WaveInfo1D)
+- [Function **WaveInfo2D**](#WaveInfo2D)
+- [Function **WaveInfo3D**](#WaveInfo3D)
 ### Viewer関連
-- [Function EDC](#EDC)
-- [Function MDC](#MDC)
-- [Function ExCut](#ExCut)
-- [Function EyCut](#EyCut)
-- [Funciton xyCut](#xyCut)
-- [Function CutLines2D](#CutLines2D)
-- [Function CutLines3D](#CutLines3D)
-- [Function Value2Index](#Value2Index)
-- [Function DeltaChange](#DeltaChange)
-- [Panel&Template 2DViewer](#2DViewer)
-- [Panel&Template 3DViewer](#3DViewer)
+- [Function **EDC**](#EDC)
+- [Function **MDC**](#MDC)
+- [Function **ExCut**](#ExCut)
+- [Function **EyCut**](#EyCut)
+- [Funciton **xyCut**](#xyCut)
+- [Function **CutLines2D**](#CutLines2D)
+- [Function **CutLines3D**](#CutLines3D)
+- [Function **Value2Index**](#Value2Index)
+- [Function **DeltaChange**](#DeltaChange)
+- [Panel&Template **2DViewer**](#2DViewer)
+- [Panel&Template **3DViewer**](#3DViewer)
 
 ## LoadWave1D
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave1D.svg?sanitize=true" width=300>
