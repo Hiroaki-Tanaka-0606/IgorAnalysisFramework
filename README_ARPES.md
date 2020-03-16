@@ -197,13 +197,29 @@ Energy-x mapにおけるy波数の積算範囲。[Function ExCut](#ExCut)で用�
 #### 7th argument(output, Wave2D)
 x-y mapのエネルギー範囲表示。1st indexがエネルギー、2nd indexがx波数またはy波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・Energy-y mapsに現れる。
 
-#### 7th argument(output, Wave2D)
+#### 8th argument(output, Wave2D)
 E-y mapのx波数範囲表示。1st indexがx波数、2nd indexがエネルギーまたはy波数```(-infinity,infinity)```になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・x-y mapsに現れる。
 
-#### 7th argument(output, Wave2D)
+#### 9th argument(output, Wave2D)
 E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギーまたはx波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-y・x-y mapsに現れる。
 
 ## Value2Index
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/Value2Index.svg?sanitize=true" width=310>
+
+#### 0th argument(input, Wave1D)
+あるindexに関するWaveの情報。[Function WaveInfo1D](#WaveInfo1D)・[Function WaveInfo2D](#WaveInfo2D)・[Function WaveInfo3D](#WaveInfo3D)から出力されるものを用いればよい。
+
+#### 1st argument(input, Variable)
+範囲の中央値。範囲インデックスが整数になるように値は更新される。
+
+#### 2nd argument(input, Variable)
+範囲の幅。範囲インデックスが整数になるように値は更新される。
+
+#### 3rd argument(output, Variable)
+範囲インデックスの開始値。
+
+#### 4th argument(output, Variable)
+範囲インデックスの終了値。
 
 ## DeltaChange
 
