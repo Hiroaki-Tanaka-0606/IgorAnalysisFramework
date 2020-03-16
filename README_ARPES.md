@@ -27,6 +27,9 @@
 - [Panel&Template **3DViewer**](#3DViewer)
 
 ## LoadWave1D
+1D Waveを読み込む。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave1D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, String)
@@ -35,6 +38,9 @@
 読み込んだWave。
 
 ## LoadWave2D
+2D Waveを読み込む。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave2D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, String)
@@ -43,6 +49,9 @@
 読み込んだWave。
 
 ## LoadWave3D
+3D Waveを読み込む。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave3D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, String)
@@ -51,6 +60,9 @@
 読み込んだWave。
 
 ## WaveInfo1D
+1D Waveの軸スケール情報を返す。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/WaveInfo1D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, Wave1D)
@@ -60,6 +72,9 @@
 Waveの1st indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
 
 ## WaveInfo2D
+2D Waveの軸スケール情報を返す。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/WaveInfo2D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, Wave2D)
@@ -72,6 +87,9 @@ Waveの1st indexに関する情報を持つWave。データは3個で、```DimOf
 Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
 
 ## WaveInfo3D
+3D Waveの軸スケール情報を返す。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/WaveInfo3D.svg?sanitize=true" width=300>
 
 #### 0th argument(input, Wave3D)
@@ -87,10 +105,13 @@ Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOf
 Waveの3rd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
 
 ## EDC
+Energy distribution curve(EDC)を生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/EDC.svg?sanitize=true" width=275>
 
 #### 0th argument(input, Wave2D)
-Energy distribution curve (EDC)を生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
+EDCを生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
 
 #### 1st argument(input, Variable)
 EDCの積算範囲の開始インデックス。
@@ -102,10 +123,13 @@ EDCの積算範囲の終了インデックス。
 EDC。```input[][start]```から```input[][end]```までの和となる。
 
 ## MDC
+Momentum distribution curve (MDC)を生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/MDC.svg?sanitize=true" width=275>
 
 #### 0th argument(input, Wave2D)
-Momentum distribution curve (MDC)を生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
+MDCを生成するWave。1st indexがエネルギー、2nd indexが波数または角度。
 
 #### 1st argument(input, Variable)
 MDCの積算範囲の開始インデックス。
@@ -117,6 +141,9 @@ MDCの積算範囲の終了インデックス。
 MDC。```input[start][]```から```input[end][]```までの和となる。
 
 ## ExCut
+Energy-x mapを生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/ExCut.svg?sanitize=true" width=275>
 
 #### 0th argument(input, Wave3D)
@@ -132,6 +159,9 @@ Energy-x mapの積算範囲の終了インデックス。
 Energy-x map。```input[][][start]```から```input[][][end]```までの和となる。
 
 ## EyCut
+Energy-y mapを生成する。
+
+#### Diagram 
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/EyCut.svg?sanitize=true" width=275>
 
 #### 0th argument(input, Wave3D)
@@ -147,6 +177,9 @@ Energy-y mapの積算範囲の終了インデックス。
 Energy-y map。```input[][start][]```から```input[][end][]```までの和となる。
 
 ## xyCut
+x-y mapを生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/xyCut.svg?sanitize=true" width=275>
 
 #### 0th argument(input, Wave3D)
@@ -162,6 +195,9 @@ x-y mapの積算範囲の終了インデックス。
 x-y map。```input[start][][]```から```input[end][][]```までの和となる。
 
 ## CutLines2D
+EDC・MDCの範囲を表す線を生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/CutLines2D.svg?sanitize=true" width=305>
 
 #### 0th argument(input, Wave2D)
@@ -180,6 +216,9 @@ EDCの波数範囲表示。1st indexがエネルギー(```(-infinity,infinity)``
 MDCのエネルギー範囲表示。1st indexがエネルギー、2nd indexが波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。
 
 ## CutLines3D
+Energy-x・Energy-y・x-y mapsの範囲を表す線を生成する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/CutLines3D.svg?sanitize=true" width=305>
 
 #### 0th argument(input, Wave3D)
@@ -204,6 +243,9 @@ E-y mapのx波数範囲表示。1st indexがx波数、2nd indexがエネルギ�
 E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギーまたはx波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-y・x-y mapsに現れる。
 
 ## Value2Index
+軸スケールされた中央値・幅で表された範囲を整数インデックスに変換する。
+
+#### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/Value2Index.svg?sanitize=true" width=310>
 
 #### 0th argument(input, Wave1D)
