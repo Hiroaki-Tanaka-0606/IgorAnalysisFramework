@@ -89,6 +89,8 @@ Function IAFt_3DViewer(argumentList)
 	D[41][21]=D[13][2];  D[41][22]=D[14][2];     D[41][23]=D[29][2];
 	D[41][24]=D[33][2];  D[41][25]=D[37][2];     D[41][26]=D[31][2];
 	D[41][27]=D[35][2];  D[41][28]=D[39][2];
+	
+	return 1
 
 End
 	
@@ -539,7 +541,6 @@ Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	
 	//keyboard hook (for center change)
 	SetWindow $parentPanelName hook(viewer3d_hook)=IAFu_3DViewer_Keyboard
-
 End
 
 

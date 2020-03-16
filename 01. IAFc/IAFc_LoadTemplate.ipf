@@ -25,6 +25,8 @@ Function IAFc_LoadTemplate(TemplateType, argumentList)
 		IAFc_ConfigureDependency()
 		IAFc_ConfigureChart()
 		IAFc_CallChart()
+		IAFc_CreateData()
+		IAFc_ExecuteAll()
 	Endif
 End
 
