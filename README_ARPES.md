@@ -6,19 +6,33 @@
 
 ## 目次
 ### Wave読み込み
-- [LoadWave1D](#LoadWave1D)
-- [LoadWave2D](#LoadWave2D)
-- [LoadWave3D](#LoadWave3D)
+- [Function LoadWave1D](#LoadWave1D)
+- [Function LoadWave2D](#LoadWave2D)
+- [Function LoadWave3D](#LoadWave3D)
 ### WaveInfo
-- [WaveInfo1D](#WaveInfo1D)
-- [WaveInfo2D](#WaveInfo2D)
-- [WaveInfo3D](#WaveInfo3D)
+- [Function WaveInfo1D](#WaveInfo1D)
+- [Function WaveInfo2D](#WaveInfo2D)
+- [Function WaveInfo3D](#WaveInfo3D)
+### Viewer関連
+- [Function EDC](#EDC)
+- [Function MDC](#MDC)
+- [Function ExCut](#ExCut)
+- [Function EyCut](#EyCut)
+- [Funciton xyCut](#xyCut)
+- [Function CutLines2D](#CutLines2D)
+- [Function CutLines3D](#CutLines3D)
+- [Function Value2Index](#Value2Index)
+- [Function DeltaChange](#DeltaChange)
+- [Panel&Template 2DViewer](#2DViewer)
+- [Panel&Template 3DViewer](#3DViewer)
 
 ## LoadWave1D
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave1D.svg?sanitize=true" width=300>
 
-- 0th argument(input, String): 読み込むWaveの相対パス（起点はカレントフォルダ）。カレントフォルダ直下にあればWaveの名前そのままでよいし、カレントフォルダ内の何らかのフォルダ内にあれば```Folder:WaveName```となる。
-- 1st argument(output, Wave1D): 読み込んだWave。
+#### 0th argument(input, String)
+読み込むWaveの相対パス（起点はカレントフォルダ）。カレントフォルダ直下にあればWaveの名前そのままでよいし、カレントフォルダ内の何らかのフォルダ内にあれば```Folder:WaveName```となる。
+#### 1st argument(output, Wave1D)
+読み込んだWave。
 
 ## LoadWave2D
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadWave2D.svg?sanitize=true" width=300>
