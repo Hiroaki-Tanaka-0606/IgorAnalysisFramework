@@ -162,8 +162,46 @@ x-y mapの積算範囲の終了インデックス。
 x-y map。```input[start][][]```から```input[end][][]```までの和となる。
 
 ## CutLines2D
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/CutLines2D.svg?sanitize=true" width=305>
+
+#### 0th argument(input, Wave2D)
+EDC・MDCの範囲を表示するWave。
+
+#### 1st & 2nd arguments(input, Variable)
+EDCの波数積算範囲。[Function EDC](#EDC)で用いたものと同じ。
+
+#### 3rd & 4th arguments(input, Variable)
+MDCのエネルギー積算範囲。[Function MDC](#MDC)で用いたものと同じ。
+
+#### 5th argument(output, Wave2D)
+EDCの波数範囲表示。1st indexがエネルギー(```(-infinity,infinity)```)、2nd indexが波数になっていて、4点を繋げば積算範囲の境界を描く。
+
+#### 6th argument(output, Wave2D)
+MDCのエネルギー範囲表示。1st indexがエネルギー、2nd indexが波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。
 
 ## CutLines3D
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/CutLines3D.svg?sanitize=true" width=305>
+
+#### 0th argument(input, Wave3D)
+Energy-x・Energy-y・x-y mapsの範囲を表示するWave。
+
+#### 1st & 2nd arguments(input, Variable)
+x-y mapにおけるエネルギー積算範囲。[Function xyCut](#xyCut)で用いたものと同じ。
+
+#### 3rd & 4th arguments(input, Variable)
+Energy-y mapにおけるx波数の積算範囲。[Function EyCut](#EyCut)で用いたものと同じ。
+
+#### 5th & 6th arguments(input, Variable)
+Energy-x mapにおけるy波数の積算範囲。[Function ExCut](#ExCut)で用いたものと同じ。
+
+#### 7th argument(output, Wave2D)
+x-y mapのエネルギー範囲表示。1st indexがエネルギー、2nd indexがx波数またはy波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・Energy-y mapsに現れる。
+
+#### 7th argument(output, Wave2D)
+E-y mapのx波数範囲表示。1st indexがx波数、2nd indexがエネルギーまたはy波数```(-infinity,infinity)```になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・x-y mapsに現れる。
+
+#### 7th argument(output, Wave2D)
+E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギーまたはx波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-y・x-y mapsに現れる。
 
 ## Value2Index
 
