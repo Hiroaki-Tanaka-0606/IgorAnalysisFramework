@@ -4,12 +4,12 @@
 	 y="0px" viewBox="0 0 275 100" style="enable-background:new 0 0 275 100;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
-	.st1{fill:none;stroke:#000000;stroke-width:1.0308;stroke-miterlimit:10;}
-	.st2{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st3{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
-	.st4{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
-	.st5{fill:#FFFFFF;stroke:#0000FF;stroke-width:0.7906;stroke-miterlimit:10;}
-	.st6{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
+	.st4{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#000000;stroke-width:1.2624;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#00FF00;stroke-width:1.2624;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="185" y="13" class="st0" width="80" height="17.58"/>
@@ -109,10 +109,10 @@
 		c-0.14-0.17-0.35-0.33-0.62-0.47s-0.57-0.21-0.88-0.21h-1.79V21.94z"/>
 </g>
 <rect x="10" y="10" class="st1" width="85" height="20"/>
-<rect x="185" y="10" class="st2" width="80" height="20"/>
+<rect x="185" y="10" class="st1" width="80" height="20"/>
 <g>
 	<g>
-		<line class="st3" x1="95" y1="20" x2="106.14" y2="20"/>
+		<line class="st2" x1="95" y1="20" x2="106.14" y2="20"/>
 		<g>
 			<polygon points="104.16,22.91 115,20 104.16,17.09 			"/>
 		</g>
@@ -120,13 +120,13 @@
 </g>
 <g>
 	<g>
-		<line class="st3" x1="165" y1="20" x2="176.14" y2="20"/>
+		<line class="st2" x1="165" y1="20" x2="176.14" y2="20"/>
 		<g>
 			<polygon points="174.16,22.91 185,20 174.16,17.09 			"/>
 		</g>
 	</g>
 </g>
-<rect x="115" y="10" class="st5" width="50" height="20"/>
+<rect x="115" y="10" class="st4" width="50" height="20"/>
 <g>
 	<rect x="115" y="14" class="st0" width="50" height="17.58"/>
 	<path d="M131.2,20.12v2.82h3.79v-1.45c0-0.12,0.02-0.2,0.07-0.25s0.1-0.08,0.18-0.08s0.13,0.03,0.18,0.08s0.07,0.13,0.07,0.25v1.95
@@ -270,6 +270,6 @@
 		s-1.07,0.17-1.48,0.5s-0.67,0.78-0.77,1.33H90.67z"/>
 </g>
 <rect x="10" y="70" class="st1" width="85" height="20"/>
-<polyline class="st3" points="95,80 100,80 100,20 "/>
-<line class="st3" x1="100" y1="50" x2="95" y2="50"/>
+<polyline class="st2" points="95,80 100,80 100,20 "/>
+<line class="st2" x1="100" y1="50" x2="95" y2="50"/>
 </svg>

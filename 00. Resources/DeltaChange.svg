@@ -4,13 +4,12 @@
 	 y="0px" viewBox="0 0 310 70" style="enable-background:new 0 0 310 70;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
-	.st1{fill:none;stroke:#000000;stroke-width:1.0308;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
 	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
-	.st3{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st4{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
-	.st5{fill:#FFFFFF;stroke:#0000FF;stroke-width:1.0308;stroke-miterlimit:10;}
-	.st6{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
-	.st7{fill:#FFFFFF;stroke:#0000FF;stroke-width:0.7906;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
+	.st4{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#000000;stroke-width:1.2624;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#00FF00;stroke-width:1.2624;stroke-miterlimit:10;}
 </style>
 <g>
 	<rect x="220" y="13" class="st0" width="85" height="17.58"/>
@@ -139,7 +138,7 @@
 		</g>
 	</g>
 </g>
-<rect x="115" y="10" class="st5" width="85" height="20"/>
+<rect x="115" y="10" class="st4" width="85" height="20"/>
 <g>
 	<rect x="115" y="14" class="st0" width="85" height="17.58"/>
 	<path d="M119.56,22.94v-5.87h-0.42c-0.12,0-0.2-0.02-0.25-0.07s-0.08-0.1-0.08-0.18s0.03-0.13,0.08-0.18s0.13-0.07,0.25-0.07h2.65

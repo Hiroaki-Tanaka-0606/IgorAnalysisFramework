@@ -4,16 +4,16 @@
 	 y="0px" viewBox="0 0 300 100" style="enable-background:new 0 0 300 100;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:none;}
-	.st1{fill:none;stroke:#000000;stroke-width:1.0308;stroke-miterlimit:10;}
-	.st2{fill:none;stroke:#000000;stroke-miterlimit:10;}
-	.st3{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
-	.st4{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
-	.st5{fill:#FFFFFF;stroke:#0000FF;stroke-width:0.7906;stroke-miterlimit:10;}
-	.st6{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#000000;stroke-width:2;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#0000FF;stroke-miterlimit:10;}
+	.st4{fill:#FFFFFF;stroke:#0000FF;stroke-miterlimit:10;}
+	.st5{fill:none;stroke:#000000;stroke-width:1.2624;stroke-miterlimit:10;}
+	.st6{fill:none;stroke:#00FF00;stroke-width:1.2624;stroke-miterlimit:10;}
 </style>
 <g>
 	<g>
-		<polyline class="st3" points="195,20 195,80 201.14,80 		"/>
+		<polyline class="st2" points="195,20 195,80 201.14,80 		"/>
 		<g>
 			<polygon points="199.16,82.91 210,80 199.16,77.09 			"/>
 		</g>
@@ -21,7 +21,7 @@
 </g>
 <g>
 	<g>
-		<line class="st3" x1="195" y1="50" x2="201.14" y2="50"/>
+		<line class="st2" x1="195" y1="50" x2="201.14" y2="50"/>
 		<g>
 			<polygon points="199.16,52.91 210,50 199.16,47.09 			"/>
 		</g>
@@ -120,11 +120,11 @@
 		s0.63-0.59,0.81-0.97s0.27-0.75,0.27-1.12v-0.89c0-0.3-0.05-0.58-0.15-0.81c-0.14-0.35-0.34-0.68-0.6-0.99
 		c-0.14-0.17-0.35-0.33-0.62-0.47s-0.57-0.21-0.88-0.21h-1.79V21.94z"/>
 </g>
-<rect x="10" y="10" class="st2" width="80" height="20"/>
-<rect x="210" y="10" class="st2" width="80" height="20"/>
+<rect x="10" y="10" class="st1" width="80" height="20"/>
+<rect x="210" y="10" class="st1" width="80" height="20"/>
 <g>
 	<g>
-		<line class="st3" x1="90" y1="20" x2="101.14" y2="20"/>
+		<line class="st2" x1="90" y1="20" x2="101.14" y2="20"/>
 		<g>
 			<polygon points="99.16,22.91 110,20 99.16,17.09 			"/>
 		</g>
@@ -132,7 +132,7 @@
 </g>
 <g>
 	<g>
-		<line class="st3" x1="190" y1="20" x2="201.14" y2="20"/>
+		<line class="st2" x1="190" y1="20" x2="201.14" y2="20"/>
 		<g>
 			<polygon points="199.16,22.91 210,20 199.16,17.09 			"/>
 		</g>
@@ -184,8 +184,8 @@
 		s0.63-0.59,0.81-0.97s0.27-0.75,0.27-1.12v-0.89c0-0.3-0.05-0.58-0.15-0.81c-0.14-0.35-0.34-0.68-0.6-0.99
 		c-0.14-0.17-0.35-0.33-0.62-0.47s-0.57-0.21-0.88-0.21h-1.79V51.94z"/>
 </g>
-<rect x="210" y="40" class="st2" width="80" height="20"/>
-<rect x="110" y="10" class="st6" width="80" height="20"/>
+<rect x="210" y="40" class="st1" width="80" height="20"/>
+<rect x="110" y="10" class="st4" width="80" height="20"/>
 <g>
 	<rect x="110" y="13" class="st0" width="80" height="17.58"/>
 	<path d="M119.75,22.43h-0.77l-1.39-4.87l-1.37,4.87h-0.77l-0.73-6.36h-0.18c-0.12,0-0.2-0.02-0.25-0.07s-0.08-0.1-0.08-0.18
@@ -296,5 +296,5 @@
 		s0.63-0.59,0.81-0.97s0.27-0.75,0.27-1.12v-0.89c0-0.3-0.05-0.58-0.15-0.81c-0.14-0.35-0.34-0.68-0.6-0.99
 		c-0.14-0.17-0.35-0.33-0.62-0.47s-0.57-0.21-0.88-0.21h-1.79V81.94z"/>
 </g>
-<rect x="210" y="70" class="st2" width="80" height="20"/>
+<rect x="210" y="70" class="st1" width="80" height="20"/>
 </svg>
