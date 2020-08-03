@@ -1,4 +1,5 @@
-# IAF_LoadWave.md
+# LoadWave
+ソースコードは **IAF_LoadWave.ipf** のひとつ。
 ## 目次
 ### Wave読み込み
 - [Function **LoadWave1D**](#LoadWave1D)
@@ -8,6 +9,7 @@
 - [Function **WaveInfo1D**](#WaveInfo1D)
 - [Function **WaveInfo2D**](#WaveInfo2D)
 - [Function **WaveInfo3D**](#WaveInfo3D)
+- [Function **FullRange**](#FullRange)
 
 ## LoadWave1D
 1D Waveを読み込む。
@@ -86,3 +88,18 @@ Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOf
 
 #### 3rd argument(output, Wave1D)
 Waveの3rd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
+
+## FullRange
+WaveInfoを基に、幅全体を指定するためのVariableを作る。
+
+### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/FullRange.svg?sanitize=true" width=300>
+
+#### 0th argument(input, Wave1D)
+Waveのあるindexに関する情報を持つWave。**WaveInfo1D**・**WaveInfo2D**・**WaveInfo3D**の出力として得られるものを用いる。
+
+#### 1st argument(output, Variable)
+幅全体を指定するときの開始値。常に0。
+
+#### 2nd argument(output, Variable)
+幅全体を指定するときの終了値。**input\[2\]-1**の値となる。
