@@ -90,7 +90,7 @@ Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOf
 Waveの3rd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
 
 ## FullRange
-WaveInfoを基に、幅全体を指定するためのVariableを作る。
+WaveInfoを基に、幅全体を指定する（両端含む）ためのVariableを作る。
 
 ### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/FullRange.svg?sanitize=true" width=300>
