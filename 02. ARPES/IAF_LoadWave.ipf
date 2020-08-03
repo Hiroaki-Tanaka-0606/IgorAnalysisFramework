@@ -200,3 +200,26 @@ Function IAFf_WaveInfo3D(argumentList)
 	zoutput[1]=DimDelta(input,2)
 	zoutput[2]=DimSize(input,2)
 End
+
+//Function FullRange: return first and last index from WaveInfo
+Function/S IAFf_FullRange_Definition()
+	return "3;0;1;1;Wave1D;Variable;Variable"
+End
+
+Function IAFf_FullRange(argumentList)
+	String argumentList
+	
+	//0th argument: WaveInfo
+	String infoArg=StringFromList(0,argumentList)
+	
+	//1st argument: first index
+	String firstIndexArg=StringFromList(1,argumentList)
+	
+	//2nd argument: last index
+	String lastIndexArg=StringFromList(2,argumentList)
+	
+	Wave/D info=$infoArg
+	
+	Variable/G $firstIndexArg=0
+	Variable/G $lastIndexArg=info[2]-1
+End
