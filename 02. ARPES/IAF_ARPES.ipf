@@ -5,3 +5,5 @@
 #include "IAF_3DViewer"
 #include "IAF_FermiEdgeFit"
 #include "IAF_Sequence"
+#include "IAF_Corrections"
+#include "IAF_PolyFit"
