@@ -233,7 +233,7 @@ Function IAFcu_Flowchart_Hook(s)
 		Elseif(oldSelectedIndex==-1)
 			Wave/T ChartIndex=$":Configurations:ChartIndex"
 			Wave/D oldChartPosition=$":Configurations:oldChartPosition"
-			If(!SVAR_exists(oldSelectedFrame))
+			If(!SVAR_exists(oldSelectedFrame) || cmpstr(oldSelectedFrame,"")==0)
 				cd $datafolder
 				return 0
 			Endif
@@ -251,6 +251,7 @@ Function IAFcu_Flowchart_Hook(s)
 	Case 5: //mouseup
 		cd $path
 		Variable/G IAF_Flowchart_Clicked=0
+		String/G IAF_Flowchart_SelectedFrame=""
 		Wave/D a=$":Configurations:oldChartPosition"
 		If(WaveExists(a))
 			KillWaves a
