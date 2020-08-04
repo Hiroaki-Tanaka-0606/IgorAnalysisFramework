@@ -7,5 +7,41 @@
 - Templateの説明の場合、部品の名前はサフィックスを無視したような感じになっている。**argumentList**で名前を指定するものについてはイタリックになっている。
 
 ## 目次
-- **LoadWave** [Source](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_LoadWave.ipf) [Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_LoadWave.md)
-- **Viewer** [Source (2D)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_2DViewer.ipf) [Source (3D)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_3DViewer.ipf) [Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_Viewer.md)
+### LoadWave
+[Source](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_LoadWave.ipf)
+[Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_LoadWave.md)
+#### Functions
+- **LoadWave1D**
+- **LoadWave2D**
+- **LoadWave3D**
+- **WaveInfo1D**
+- **WaveInfo2D**
+- **WaveInfo3D**
+
+### Viewer
+[Source (2D)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_2DViewer.ipf)
+[Source (3D)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_3DViewer.ipf)
+[Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_Viewer.md)
+#### Functions
+- **EDC**
+- **MDC**
+- **ExCut**
+- **EyCut**
+- **xyCut**
+- **CutLines2D**
+- **CutLines3D**
+- **Value2Index**
+- **DeltaChange**
+
+#### Panels and Templates
+- **2DViewer**
+- **3DViewer**
+
+### FermiEdgeFit
+[Source](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_FermiEdgeFit.ipf)
+[Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_FermiEdgeFit.ipf)
+#### Functions
+- **FermiEdgeFit**
+#### Utility Functions
+- **EfTrialFunc**
+- **GaussianWave**
