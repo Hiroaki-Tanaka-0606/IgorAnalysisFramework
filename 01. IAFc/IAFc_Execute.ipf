@@ -10,6 +10,11 @@ Function IAFc_Prototype(argumentList)
 	String argumentList
 End
 
+Function/S IAFc_Prototype_Module(argumentList)
+	String argumentList
+	return ""
+End
+
 
 Function IAFc_Panel_Prototype(argumentList,PanelName,PanelTitle)
 	String argumentList,PanelName,PanelTitle
@@ -138,19 +143,17 @@ Function IAFc_Execute(FuncName)
 	return 0
 End
 
-
-Function IAFc_CallSocket(ModuleName,valueList)
-	//valueList does not need ";" at the end ("xx;yy;zz" is ok)
-	String ModuleName,valueList
+//IAFc_CallSocket: call socket
+Function/S IAFc_CallSocket(ModuleName,valueWaveName)
+	String ModuleName,valueWaveName
 	
 	//currentFolder is Data
-		
 	//find Diagram info	
 	cd ::
 	If(!DataFolderExists("Diagrams"))
 		Print("Error: folder Diagrams does not exist")
 		cd currentFolder
-		return 0
+		return ""
 	Endif
 	
 	cd Diagrams
@@ -169,16 +172,15 @@ Function IAFc_CallSocket(ModuleName,valueList)
 			String Name_ij=Diagram_i[j][2]
 			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 				If(cmpstr(Name_ij,ModuleName)==0 && cmpstr(Kind_ij,"Module")==0)
-					String Definition=IAFc_Module_Definition(Type_ij)					
 					String FuncFullName="IAFm_"+Type_ij
-					FUNCREF IAFc_Prototype f = $FuncFullName
-					
+					String Definition=IAFc_Module_Definition(Type_ij)	
+					FUNCREF IAFc_Prototype_Module f = $FuncFullName			
 					//check variables exist
 					cd ::
 					If(!DataFolderExists("Data"))
 						Print("Error: folder Data does not exist")
 						cd Data
-						return 0
+						return ""
 					Endif
 					cd Data
 					
@@ -192,14 +194,14 @@ Function IAFc_CallSocket(ModuleName,valueList)
 								NVAR v=$Diagram_i[j][k+3]
 								If(!NVAR_exists(v))
 									Print("Error: Variable \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
-									return 0
+									return ""
 								Endif
 								break
 							Case "String":
 								SVAR s=$Diagram_i[j][k+3]
 								If(!SVAR_exists(s))
 									Print("Error: String \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
-									return 0
+									return ""
 								Endif
 								break
 							Case "Wave1D":
@@ -208,14 +210,14 @@ Function IAFc_CallSocket(ModuleName,valueList)
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
 									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
-									return 0
+									return ""
 								Endif
 								break
 							Case "TextWave":
 								Wave/T t=$Diagram_i[j][k+3]
 								If(!WaveExists(t))
 									Print("Error: Text Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
-									return 0
+									return ""
 								Endif
 								break
 							Default:
@@ -224,11 +226,11 @@ Function IAFc_CallSocket(ModuleName,valueList)
 
 					Endfor
 					
-					//execute
+					//get argumentsList
 					For(k=0;k<numArgs;k+=1)
 						If(cmpstr(StringFromList(1+(numArgs-k-1),Definition),"2")==0)
 							//socket
-							argumentsList=addListItem(valueList,argumentsList)
+							argumentsList=addListItem(valueWaveName,argumentsList)
 						Else
 							//data
 							argumentsList=addListItem(Diagram_i[j][3+(numArgs-k-1)],argumentsList)
@@ -238,10 +240,11 @@ Function IAFc_CallSocket(ModuleName,valueList)
 				Endif
 			Endif
 		Endfor
-	Endfor	
+	Endfor
+	
 	Print("Error: Function Part \""+ModuleName+"\" does not exist")
 	cd ::Data
-	return 0
+	return ""
 End
 
 //IAFc_ExecuteList: Execute Functions in FuncList according to the order taking into account the dependency
