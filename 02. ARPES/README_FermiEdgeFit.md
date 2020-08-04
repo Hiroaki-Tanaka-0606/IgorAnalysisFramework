@@ -13,7 +13,7 @@
 Gaussianによるノイズが重層されたFermi分布関数でフィッティングを行う。
 
 ### Diagram
-<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/EDC.svg?sanitize=true" width=300>
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/FermiEdgeFit.svg?sanitize=true" width=300>
 
 ### 0th argument(input, Wave1D)
 フィッティングの対象となるWave。
