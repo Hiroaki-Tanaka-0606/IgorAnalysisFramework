@@ -7,3 +7,4 @@
 #include "IAF_Sequence"
 #include "IAF_Corrections"
 #include "IAF_PolyFit"
+#include "IAF_Smoothing"
