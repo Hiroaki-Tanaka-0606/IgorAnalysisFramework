@@ -187,6 +187,36 @@ Function/S IAFm_CorrectInt_sw2D(argumentList)
 	return outputPath
 End
 
+//Function ConstantWave1D: make a constant wave
+Function/S IAFf_ConstantWave1D_Definition()
+	return "3;0;0;1;Variable;Wave1D;Wave1D"
+End
+
+Function IAFf_ConstantWave1D(argumentList)
+	String argumentList
+	
+	//0th argument: constant value
+	String constValueArg=StringFromList(0,argumentList)
+	
+	//1st argument: WaveInfo
+	String waveInfoArg=StringFromList(1,argumentList)
+	
+	//2nd argument: output
+	String outputArg=StringFromList(2,argumentList)
+	
+	NVAR constValue=$constValueArg
+	Wave/D waveInformation=$waveInfoArg
+	Variable offset=waveInformation[0]
+	Variable delta=waveInformation[1]
+	Variable size=waveInformation[2]
+	
+	
+	Make/O/D/N=(size) $outputArg
+	Wave/D output=$outputArg
+	SetScale/P x, offset, delta, output
+	output[]=constValue
+End
+
 //Module ConvertIndex2D: convert index to coordinate
 Function/S IAFm_ConvertIndex2D_Definition()
 	return "5;0;0;0;0;2;Variable;Wave1D;Wave1D;Index2D;Coordinate2D"
@@ -291,7 +321,7 @@ Function/S IAFm_ConvertIndex2D(argumentList)
 		output[]=socketOutput[p]
 	Endif
 	
-	killwaves indices
+	killwaves indices,socketOutput
 	if(waveexists(fracIndices)==1)
 		killwaves fracIndices
 	Endif
@@ -476,8 +506,6 @@ Function IAFf_Make2D_Index(argumentList)
 	Make/O/D/N=(size1*size2,2) $inputPath
 	Wave/D input=$inputPath
 		
-	String fullArgumentsList
-	String valueList
 	Variable i,j
 	Variable inputIndex=0
 	For(i=0;i<size1;i+=1)
@@ -543,8 +571,6 @@ Function IAFf_Make2D_Coord(argumentList)
 	Make/O/D/N=(size1*size2,2) $inputPath
 	Wave/D input=$inputPath
 		
-	String fullArgumentsList
-	String valueList
 	Variable i,j
 	Variable inputIndex=0
 	For(i=0;i<size1;i+=1)
@@ -568,3 +594,4 @@ Function IAFf_Make2D_Coord(argumentList)
 	
 	KillWaves socketOutput,input
 End
+
