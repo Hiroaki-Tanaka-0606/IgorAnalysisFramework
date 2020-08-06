@@ -1,9 +1,10 @@
 # FermiEdgeFit
-ソースコードはIAF_FermiEdgeFit.ipfのひとつ。
+ソースコードは **IAF_FermiEdgeFit.ipf** と **IAF_PolyFit.ipf** の2つ。
 
 ## 目次
 ### Functions
 - [Function **FermiEdgeFit**](#FermiEdgeFit)
+- [Function **PolyFit**](#PolyFit) 準備中
 
 ### Utility Functions
 - [Utility Function **EfTrialFunc**](#EfTrialFunc)
