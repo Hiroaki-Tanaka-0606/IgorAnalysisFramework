@@ -1,4 +1,4 @@
-# FermiEdgeFit
+# Fitting
 ソースコードは **IAF_FermiEdgeFit.ipf** と **IAF_PolyFit.ipf** の2つ。
 
 ## 目次
