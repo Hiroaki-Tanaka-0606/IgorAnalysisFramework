@@ -66,7 +66,8 @@ Function IAFf_FermiEdgeFit(argumentList)
 	
 	//share the value of temperature by a global variable in TempData
 	cd ::TempData
-	Variable/G temperature=temperature
+	//Variable/G temperature=temperature
+	Variable/G FEF_temperature=temperature
 	
 	//duplicate the input in the range of [fitMin, fitMax]
 	Duplicate/O/R=[fitMin,fitMax] input yTemp
@@ -88,7 +89,9 @@ Function IAFu_EfTrialFunc(params, ywave, xwave): FitFunc
 	Variable delta=DimDelta(ywave,0)
 	Variable size=DimSize(ywave,0)
 	Variable offset=DimOffset(ywave,0)
-	NVAR temperature=temperature
+	cd ::TempData
+	NVAR temperature=FEF_temperature
+	cd ::Data
 	Variable beta=11604.53/temperature //1/k_B T
 	
 	params[5]=abs(params[5])
