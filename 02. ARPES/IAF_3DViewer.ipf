@@ -507,7 +507,7 @@ Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	Display/HOST=$parentPanelName/FG=(horizCenter,vertCenter,FR,FB)/N=Ex
 	AppendImage Ex
 	ModifyGraph swapXY=1,margin(left)=margin2,margin(bottom)=margin1,margin(right)=margin3,margin(top)=margin4
-	ModifyGraph tick=2,axThick=0.5,zero(left)=1
+	ModifyGraph tick=2,axThick=0.5,zero=1
 	Label left "\\f02E\\f00 - \\f02E\\f00\\BF\\M (eV)"
 	Label bottom xLabel
 	ModifyImage $exArg ctab={*,*,Terrain,1}
@@ -520,7 +520,7 @@ Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	Display/HOST=$parentPanelName/FG=(FL,vertTop,horizCenter,vertCenter)/N=Ey
 	AppendImage Ey
 	ModifyGraph margin(left)=margin1,margin(bottom)=margin2,margin(right)=margin4,margin(top)=margin3
-	ModifyGraph tick=2,axThick=0.5,zero(left)=1
+	ModifyGraph tick=2,axThick=0.5,zero=1
 	Label bottom "\\f02E\\f00 - \\f02E\\f00\\BF\\M (eV)"
 	Label left yLabel
 	ModifyImage $eyArg ctab={*,*,Terrain,1}
@@ -532,7 +532,7 @@ Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	Display/HOST=$parentPanelName/FG=(horizCenter,vertTop,FR,vertCenter)/N=xy
 	AppendImage xy
 	ModifyGraph margin(left)=margin2,margin(bottom)=margin2,margin(right)=margin3,margin(top)=margin3
-	ModifyGraph tick=2,axThick=0.5,zero(left)=1
+	ModifyGraph tick=2,axThick=0.5,zero=1
 	ModifyImage $xyArg ctab={*,*,Terrain,1}
 	ModifyGraph gfSize=gfSize, noLabel=2
 
