@@ -67,6 +67,7 @@ Function IAFc_CleanData()
 		String variableName=StringFromList(i,existVariables)
 		If(FindListItem(variableName,VariablesList)==-1)
 			//the variable is not necessary for current diagram
+			Print("Remove Variable "+variableName)
 			KillVariables $variableName
 		Endif
 	Endfor
@@ -76,6 +77,7 @@ Function IAFc_CleanData()
 		String stringName=StringFromList(i,existStrings)
 		If(FindListItem(stringName,StringsList)==-1)
 			//the string is not necessary for current diagram
+			Print("Remove String "+stringName)
 			KillStrings $stringName
 		Endif
 	Endfor
@@ -85,6 +87,7 @@ Function IAFc_CleanData()
 		String waveName=StringFromList(i,existWaves)
 		If(FindListItem(waveName,WavesList)==-1)
 			//the wave is not necessary for current diagram
+			Print("Remove Wave "+waveName)
 			KillWaves $waveName
 		Endif
 	Endfor
