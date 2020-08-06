@@ -391,7 +391,7 @@ Function IAFc_ConfigureDependency()
 				Endswitch
 			
 			Else
-				Print("Skip row "+num2str(j)+" of Diagram Wave \""+DiagramWaveName+"\" (Kind: \""+Kind_ij+"\", Type: \""+Type_ij+" is ill-defined\")")
+				Print("Skip row "+num2str(j)+" of Diagram Wave \""+DiagramWaveName+"\" (Kind: \""+Kind_ij+"\", Type: \""+Type_ij+"\" is ill-defined)")
 			Endif
 		Endfor
 	Endfor
