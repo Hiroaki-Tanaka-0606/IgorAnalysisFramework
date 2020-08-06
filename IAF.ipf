@@ -8,6 +8,7 @@
 #include "IAFc_DrawPanel"
 #include "IAFc_CreateData"
 #include "IAFc_LoadTemplate"
+#include "IAFc_CleanData"
 
 Menu "IAF"
 	"SetUp", IAFc_SetUp(-1)
@@ -20,4 +21,5 @@ Menu "IAF"
 	"ExecuteAll", IAFc_ExecuteAll()
 	"CreateData", IAFc_CreateData()
 	"LoadTemplate", IAFc_LoadTemplateDialog()
+	"CleanData", IAFc_CleanData()
 End
