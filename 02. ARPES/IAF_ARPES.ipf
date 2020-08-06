@@ -10,3 +10,4 @@
 #include "IAF_PolyFit"
 #include "IAF_Smoothing"
 #include "IAF_Socket3DViewer"
+#include "IAF_ColorTable"
