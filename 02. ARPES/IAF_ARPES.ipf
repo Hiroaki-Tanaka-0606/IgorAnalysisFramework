@@ -11,3 +11,4 @@
 #include "IAF_Smoothing"
 #include "IAF_Socket3DViewer"
 #include "IAF_ColorTable"
+#include "IAF_ConvertAngle"
