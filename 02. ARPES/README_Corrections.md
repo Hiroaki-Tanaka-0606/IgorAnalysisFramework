@@ -1,5 +1,5 @@
 # Corrections
-ソースコードは **IAF_Corrections2D.ipf** と **IAF_Corrections3D.ipf** の2つ。
+ソースコードは **IAF_Corrections2D.ipf** と **IAF_Corrections3D.ipf** と **IAF_Smoothing.ipf** の3つ。
 
 ## 補正用データ作成
 - [Function AveragedMDC](#AveragedMDC) 準備中
@@ -18,6 +18,18 @@
 - [Module ConvertIndex3D](#ConvertIndex3D) 準備中
 - [Module CorrectEf3D](#CorrectEf3D) 準備中
 - [Function CorrectEf3D_F](#CorrectEf3D_F) 準備中
+
+## フィルタリング・ピクセル統合
+### 2D
+- [Module Smoothing2D](#Smoothing2D) 準備中
+- [Module Smoothing2D_F](#Smoothing2D_F) 準備中
+- [Panel SmoothingCtrl2D](#SmoothingCtrl2D) 準備中
+### 3D
+- [Module Smoothing3D](#Smoothing3D) 準備中
+- [Module Smoothing3D_F](#Smoothing3D_F) 準備中
+- [Panel SmoothingCtrl3D](#SmoothingCtrl3D) 準備中
+
+
 
 ## マップ作成
 ### 2D
