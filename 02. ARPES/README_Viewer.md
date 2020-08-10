@@ -10,12 +10,12 @@
 - [Funciton **xyCut**](#xyCut)
 - [Function **CutLines2D**](#CutLines2D)
 - [Function **CutLines3D**](#CutLines3D)
-- [Function **CutLines3D2**](#CutLines3D2) 準備中
+- [Function **CutLines3D2**](#CutLines3D2)
 - [Function **Value2Index**](#Value2Index)
 - [Function **DeltaChange**](#DeltaChange)
 - [Panel&Template **2DViewer**](#2DViewer)
 - [Panel&Template **3DViewer**](#3DViewer)
-- [Panel&Template **Socket3DViewer**](#Socket3DViewer) 準備中
+- [Template **Socket3DViewer**](#Socket3DViewer) 準備中
 
 ## EDC
 Energy distribution curve(EDC)を生成する。
@@ -153,6 +153,41 @@ x-y mapのエネルギー範囲表示。1st indexがエネルギー、2nd index�
 E-y mapのx波数範囲表示。1st indexがx波数、2nd indexがエネルギーまたはy波数```(-infinity,infinity)```になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・x-y mapsに現れる。
 
 #### 9th argument(output, Wave2D)
+E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギーまたはx波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-y・x-y mapsに現れる。
+
+
+## CutLines3D2
+Energy-x・Energy-y・x-y mapsの範囲を表す線を生成する。Socket3DViewer用。
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/CutLines3D2.svg?sanitize=true" width=305>
+
+#### 0th argument(input, Wave1D)
+1st index（エネルギー）に関するWaveの情報。
+
+
+#### 1st argument(input, Wave1D)
+2nd index（x）に関するWaveの情報。
+
+#### 2nd argument(input, Wave1D)
+3rd index（y）に関するWaveの情報。
+
+#### 3rd & 4th arguments(input, Variable)
+x-y mapにおけるエネルギー積算範囲。[Function xyCut](#xyCut)で用いたものと同じ。
+
+#### 5th & 6th arguments(input, Variable)
+Energy-y mapにおけるx波数の積算範囲。[Function EyCut](#EyCut)で用いたものと同じ。
+
+#### 7th & 8th arguments(input, Variable)
+Energy-x mapにおけるy波数の積算範囲。[Function ExCut](#ExCut)で用いたものと同じ。
+
+#### 9th argument(output, Wave2D)
+x-y mapのエネルギー範囲表示。1st indexがエネルギー、2nd indexがx波数またはy波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・Energy-y mapsに現れる。
+
+#### 10th argument(output, Wave2D)
+E-y mapのx波数範囲表示。1st indexがx波数、2nd indexがエネルギーまたはy波数```(-infinity,infinity)```になっていて、4点を繋げば積算範囲の境界を描く。Energy-x・x-y mapsに現れる。
+
+#### 11th argument(output, Wave2D)
 E-x mapのy波数範囲表示。1st indexがy波数、2nd indexがエネルギーまたはx波数(```(-infinity,infinity)```)になっていて、4点を繋げば積算範囲の境界を描く。Energy-y・x-y mapsに現れる。
 
 ## Value2Index
