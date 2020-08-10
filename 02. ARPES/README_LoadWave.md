@@ -5,11 +5,16 @@
 - [Function **LoadWave1D**](#LoadWave1D)
 - [Function **LoadWave2D**](#LoadWave2D)
 - [Function **LoadWave3D**](#LoadWave3D)
+- [Function **LoadTextWave**](#LoadTextWave)
 ### WaveInfo
 - [Function **WaveInfo1D**](#WaveInfo1D)
 - [Function **WaveInfo2D**](#WaveInfo2D)
 - [Function **WaveInfo3D**](#WaveInfo3D)
+- [Function **WaveInfoText**](#WaveInfoText)
 - [Function **FullRange**](#FullRange)
+### Wave保存
+一部は **IAF_Sequence.ipf** （ **README_Sequence.md** ）に類似したものがある。
+- [Function **StoreWave2D**](#StoreWave2D)
 
 ## LoadWave1D
 1D Waveを読み込む。
