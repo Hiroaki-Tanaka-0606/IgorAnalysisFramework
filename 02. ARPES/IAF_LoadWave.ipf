@@ -201,6 +201,64 @@ Function IAFf_WaveInfo3D(argumentList)
 	zoutput[2]=DimSize(input,2)
 End
 
+//Function LoadTextWave: load textwave using relative path from the current folder
+Function/S IAFf_LoadTextWave_Definition()
+	return "2;0;1;String;TextWave"
+End
+
+Function IAFf_LoadTextWave(argumentList)
+	String argumentList
+	
+	//0th argument: wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathArg=StringFromList(0,argumentList)
+	
+	SVAR wavePath=$wavePathArg
+	String relativeWavePath="::"+wavePath
+	
+	//1st argument: Wave name
+	String waveNameArg=StringFromList(1,argumentList)
+	
+	Wave/T loadedWave=$relativeWavePath
+	If(!WaveExists(loadedWave))
+		Print("LoadTextWave Error: Wave "+wavePath+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)==0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $waveNameArg
+	Else
+		//not ok
+		Print("LoadTextWave Error: Wave "+wavePath+" is not one-dimensional")
+		return 0
+	Endif
+End
+
+
+//Function WaveInfoText: create wave containing [offset,delta,size]
+Function/S IAFf_WaveInfoText_Definition()
+	return "2;0;1;TextWave;Wave1D"
+End
+
+Function IAFf_WaveInfoText(argumentList)
+	String argumentList
+	
+	//0th argument: wave
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: info wave
+	String outputArg=StringFromList(1,argumentList)
+	
+	Wave/T input=$inputArg
+	Make/O/D/N=3 $outputArg
+	Wave/D output=$outputArg
+	output[0]=DimOffset(input,0)
+	output[1]=DimDelta(input,0)
+	output[2]=DimSize(input,0)
+End
+
 //Function FullRange: return first and last index from WaveInfo
 Function/S IAFf_FullRange_Definition()
 	return "3;0;1;1;Wave1D;Variable;Variable"
@@ -222,4 +280,40 @@ Function IAFf_FullRange(argumentList)
 	
 	Variable/G $firstIndexArg=0
 	Variable/G $lastIndexArg=info[2]-1
+End
+
+
+//Function StoreWave2D: Store 2D wave using relative path from the current folder
+Function/S IAFf_StoreWave2D_Definition()
+	return "2;0;0;Wave2D;String"
+End
+
+Function IAFf_StoreWave2D(argumentList)
+	String argumentList
+	
+	//0th argument: Wave name
+	String waveNameArg=StringFromList(0,argumentList)
+	
+	//1st argument: wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathArg=StringFromList(1,argumentList)
+	
+	SVAR wavePath=$wavePathArg
+	String relativeWavePath="::"+wavePath
+	
+	Wave/D loadedWave=$waveNameArg
+	If(!WaveExists(loadedWave))
+		Print("StoreWave2D Error: Wave "+waveNameArg+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $relativeWavePath
+	Else
+		//not ok
+		Print("StoreWave2D Error: Wave "+waveNameArg+" is not two-dimensional")
+		return 0
+	Endif
 End
