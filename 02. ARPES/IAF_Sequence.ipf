@@ -198,3 +198,126 @@ Function IAFf_StoreVariable(argumentList)
 	output[index]=value
 	
 End
+
+
+//Function ExtractString: get a value from a TextWave
+Function/S IAFf_ExtractString_Definition()
+	return "3;0;0;1;TextWave;Variable;String"
+End
+
+Function IAFf_ExtractString(argumentList)
+	String argumentList
+	
+	//0th argument: input wave
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: index
+	String indexArg=StringFromList(1,argumentList)
+	
+	//2nd argument: value
+	String valueArg=StringFromList(2,argumentList)
+	
+	Wave/T input=$inputArg
+	NVAR index=$indexArg
+	String/G $valueArg=input[index]
+	
+End
+
+//Function StoreWave13D: save Wave1D[] in a Wave3D[][i][j]
+Function/S IAFf_StoreWave13D_Definition()
+	return "7;0;0;0;0;0;0;1;Wave1D;Wave1D;Wave1D;Variable;Variable;Wave1D;Wave3D"
+End
+
+Function IAFf_StoreWave13D(argumentList)
+	String argumentList
+	
+	//0th argument: waveinfo of the output wave 1st index
+	String waveInfo1Arg=StringFromList(0,argumentList)
+	
+	//1st argument: waveinfo of the output wave 2nd index
+	String waveInfo2Arg=StringFromList(1,argumentList)
+	
+	//2nd argument: waveinfo of the output wave 3rd index
+	String waveInfo3Arg=StringFromList(2,argumentList)
+	
+	//3rd argument: 2nd index 
+	String index2Arg=StringFromList(3,argumentList)
+	
+	//4th argument: 3rd index 
+	String index3Arg=StringFromList(4,argumentList)
+	
+	//5th argument: wave to be stored
+	String valueWaveArg=StringFromList(5,argumentList)
+	
+	//6th argument: output wave
+	String outputArg=StringFromList(6,argumentList)
+	
+	Wave/D waveInfo1=$waveInfo1Arg
+	Wave/D waveInfo2=$waveInfo2Arg
+	Wave/D waveInfo3=$waveInfo3Arg
+	
+	NVAR index2=$index2Arg
+	NVAR index3=$index3Arg
+	Wave/D valueWave=$valueWaveArg
+	
+	Wave/D output=$outputArg
+	//check the existence of the output with the same size specified by waveinfo input
+	If(Waveexists(output)==0 || DimSize(output,0)!=waveInfo1[2] || DimSize(output,1)!=waveInfo2[2]|| DimSize(output,2)!=waveInfo3[2])
+		Make/O/D/N=(waveInfo1[2], waveInfo2[2], waveInfo3[2]) $outputArg
+		Wave/D output=$outputArg
+		SetScale/P x, waveInfo1[0], waveInfo1[1], output
+		SetScale/P y, waveInfo2[0], waveInfo2[1], output
+		SetScale/P z, waveInfo3[0], waveInfo3[1], output
+	Endif
+	If(DimSize(valueWave,0)!=waveInfo1[2])
+		Print("StoreWave13D Error: size mismatch")
+		abort
+	Endif
+	output[][index2][index3]=valueWave[p]
+	
+End
+
+//Function mod: return remainder
+Function/S IAFf_Mod_Definition()
+	return "3;0;0;1;Variable;Variable;Variable"
+End
+
+Function IAFf_Mod(argumentList)
+	String argumentList
+	
+	//0th argument: a
+	String aArg=StringFromList(0,argumentList)
+	
+	//1st argument: b
+	String bArg=StringFromList(1,argumentList)
+	
+	//2nd argument: c=a%b
+	String cArg=StringFromList(2,argumentList)
+	NVAR a=$aArg
+	NVAR b=$bArg
+	Variable/G $cArg=mod(a,b)
+	
+End
+
+//Function quotient: return quotient
+Function/S IAFf_Quotient_Definition()
+	return "3;0;0;1;Variable;Variable;Variable"
+End
+
+Function IAFf_Quotient(argumentList)
+	String argumentList
+	
+	//0th argument: a
+	String aArg=StringFromList(0,argumentList)
+	
+	//1st argument: b
+	String bArg=StringFromList(1,argumentList)
+	
+	//2nd argument: c=floor(a/b)
+	String cArg=StringFromList(2,argumentList)
+	
+	NVAR a=$aArg
+	NVAR b=$bArg
+	Variable/G $cArg=floor(a*1.0/b)
+	
+End
