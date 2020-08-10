@@ -242,7 +242,7 @@ Function/S IAFm_CorrectEf3D(argumentList)
 	Wave/D coordinates=$coordsArg
 	Variable coordinatesSize=DimSize(coordinates,0)
 	
-	String socketInputPath="::TempData:CorrectEf2D_Input"
+	String socketInputPath="::TempData:CorrectEf3D_Input"
 	Duplicate/O coordinates $socketInputPath
 	Wave/D socketInput=$socketInputPath
 	
@@ -281,7 +281,7 @@ Function/S IAFm_CorrectEf3D(argumentList)
 	
 End
 	
-//Function CorrectEf3D_F: Format function of Module CorrectEf2D
+//Function CorrectEf3D_F: Format function of Module CorrectEf3D
 Function/S IAFf_CorrectEf3D_F_Definition()
 	return "7;0;0;0;0;1;1;1;Wave1D;Wave1D;Wave1D;Wave1D;Wave1D;Wave1D;Wave1D"
 End
@@ -334,7 +334,7 @@ Function IAFf_CorrectEf3D_F(argumentList)
 	
 	//calculate shift (in unit of index)
 	//averageEf position has zero shift
-	String TempShiftPath="::TempData:CorrectEf2D_F_shift"
+	String TempShiftPath="::TempData:CorrectEf3D_F_shift"
 	Duplicate/O EfWave $TempShiftPath
 	Wave/D TempShift=$TempShiftPath
 	TempShift[]=round((EfWave[p]-averageEf)/inWaveInfo1[1])
