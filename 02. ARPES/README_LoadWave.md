@@ -49,6 +49,17 @@
 #### 1st argument(output, Wave3D)
 読み込んだWave。
 
+## LoadTextWave
+3D Waveを読み込む。
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/LoadTextWave.svg?sanitize=true" width=300>
+
+#### 0th argument(input, String)
+読み込むWaveの相対パス（起点はカレントフォルダ）。カレントフォルダ直下にあればWaveの名前そのままでよいし、カレントフォルダ内の何らかのフォルダ内にあれば```Folder:WaveName```となる。
+#### 1st argument(output, TextWave)
+読み込んだWave。
+
 ## WaveInfo1D
 1D Waveの軸スケール情報を返す。
 
@@ -93,6 +104,18 @@ Waveの2nd indexに関する情報を持つWave。データは3個で、```DimOf
 
 #### 3rd argument(output, Wave1D)
 Waveの3rd indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
+
+## WaveInfoText
+TextWaveの軸スケール情報を返す。
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/WaveInfoText.svg?sanitize=true" width=300>
+
+#### 0th argument(input, TextWave)
+参照するWave。
+
+#### 1st argument(output, Wave1D)
+Waveの1st indexに関する情報を持つWave。データは3個で、```DimOffset```・```DimDelta```・```DimSize```の値が並ぶ。
 
 ## FullRange
 WaveInfoを基に、幅全体を指定する（両端含む）ためのVariableを作る。
