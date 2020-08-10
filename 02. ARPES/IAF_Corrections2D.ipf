@@ -187,6 +187,69 @@ Function/S IAFm_CorrectInt_sw2D(argumentList)
 	return outputPath
 End
 
+
+//Module CorrectInt_fx2D: return intensity of fixed 3D data [i][j] normalized by 2D normalization reference [i][j]
+Function/S IAFm_CorrectInt_fx2D_Definition()
+	return "3;0;0;2;Wave2D;Wave2D;Index2D"
+End
+
+Function/S IAFm_CorrectInt_fx2D(argumentList)
+	String argumentList
+	
+	//0th argument: raw data
+	String rawArg=StringFromList(0,argumentList)
+	
+	//1st argument: normalization reference
+	String refArg=StringFromList(1,argumentList)
+	
+	//2nd argument: indices wave passed through socket
+	String indicesArg=StringFromList(2,argumentList)
+	
+	Wave/D raw=$rawArg
+	Wave/D ref=$refArg
+	
+	//size check
+	if(DimSize(raw,0)!=DimSize(ref,0) || DimSize(raw,1)!=DimSize(ref,1))
+		// if ref is larger than raw only warning (without abort) is sent
+		if(DimSize(raw,0)>DimSize(ref,0) || DimSize(raw,1)>DimSize(ref,1))
+			print("CorrectInt_fx2D Error: sizes of raw is larger than that of ref")
+			abort
+		Else
+			print("CorrectInt_fx2D Warning: sizes of ref is larger than that of raw")
+		Endif
+	Endif
+	
+	Variable size1=DimSize(raw,0)
+	Variable size2=DimSize(raw,1)
+	
+	Wave/D indices=$indicesArg
+	Variable dataSize=DimSize(indices,0)
+	
+	//output wave (the name of it is returned)
+	String outputPath="::TempData:CorrectInt_fx2D_Output"
+	Make/O/D/N=(dataSize) $outputPath
+	Wave/D output=$outputPath
+	
+	Variable i
+	Variable index1,index2
+	For(i=0;i<dataSize;i+=1)
+		index1=indices[i][0]
+		index2=indices[i][1]
+		//range check
+		If(index1<0 || size1<=index1 || index2<0 || size2<=index2)
+			output[i]=0
+		Else
+			//MCP validity check
+			If(ref[index1][index2]>=0)
+				output[i]=raw[index1][index2]/ref[index1][index2]
+			Else
+				output[i]=0
+			Endif
+		Endif
+	Endfor
+	return outputPath
+End
+
 //Function ConstantWave1D: make a constant wave
 Function/S IAFf_ConstantWave1D_Definition()
 	return "3;0;0;1;Variable;Wave1D;Wave1D"
