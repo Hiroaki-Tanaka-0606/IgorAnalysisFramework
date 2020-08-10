@@ -12,3 +12,4 @@
 #include "IAF_Socket3DViewer"
 #include "IAF_ColorTable"
 #include "IAF_ConvertAngle"
+#include "IAF_DivideWave"
