@@ -305,3 +305,32 @@ x軸のラベル。
 #### Template 3rd argument(String ***yLabel***)
 y軸のラベル。
 
+
+
+## Socket3DViewer
+
+#### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/Socket3DViewer.svg?sanitize=true">
+
+Viewは3DViewerと同じ。
+
+#### Template 0th argument(String ***PanelName***)
+パネルの表示名。接尾辞にも使われる。
+
+#### Template 1st argument(Coordinate3D ***SocketName***)
+3D Waveに相当するソケット。
+
+#### Template 2nd argument(Wave1D ***EInfo***)
+1st index（エネルギー）に関するWaveの情報。
+
+#### Template 3rd argument(Wave1D ***xInfo***)
+2nd index（x）に関するWaveの情報。
+
+#### Template 4th argument(Wave1D ***yInfo***)
+3rd index（y）に関するWaveの情報。
+
+#### Template 5th argument(String ***xLabel***)
+x軸のラベル。
+
+#### Template 6th argument(String ***yLabel***)
+y軸のラベル。
