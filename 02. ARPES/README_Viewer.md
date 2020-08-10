@@ -15,7 +15,7 @@
 - [Function **DeltaChange**](#DeltaChange)
 - [Panel&Template **2DViewer**](#2DViewer)
 - [Panel&Template **3DViewer**](#3DViewer)
-- [Template **Socket3DViewer**](#Socket3DViewer) 準備中
+- [Template **Socket3DViewer**](#Socket3DViewer)
 
 ## EDC
 Energy distribution curve(EDC)を生成する。
@@ -312,7 +312,7 @@ y軸のラベル。
 #### Diagram
 <img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/Socket3DViewer.svg?sanitize=true">
 
-Viewは3DViewerと同じ。
+Viewは3DViewerを使う。
 
 #### Template 0th argument(String ***PanelName***)
 パネルの表示名。接尾辞にも使われる。
