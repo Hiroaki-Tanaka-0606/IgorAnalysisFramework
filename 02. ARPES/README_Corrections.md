@@ -1,3 +1,4 @@
+
 # Corrections
 ソースコードは **IAF_Corrections2D.ipf** と **IAF_Corrections3D.ipf** と **IAF_Smoothing.ipf** の3つ。
 
@@ -10,6 +11,7 @@
 ## 補正
 ### 2D
 - [Module CorrectInt_sw2D](#CorrectInt_sw2D) 準備中
+- [Module CorrectInt_fx2D](#CorrectInt_fx2D) 準備中
 - [Module ConvertIndex2D](#ConvertIndex2D) 準備中
 - [Module CorrectEf2D](#CorrectEf2D) 準備中
 - [Function CorrectEf2D_F](#CorrectEf2D_F) 準備中
