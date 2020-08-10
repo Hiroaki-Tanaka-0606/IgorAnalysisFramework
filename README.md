@@ -135,6 +135,7 @@ Waveを参照する場合は**TempData**に用意する。
 - **ReCallPanel(PanelName)**: パネルを呼び出す。すでにあったとしても作り直す。
 - **CreateData()**: VariableまたはStringの型を持つデータのうち、Global Variable / Stringとして存在しないものを生成する。初期値は**0** / **""**。
 - **LoadTemplate(TemplateType,argumentList)** パネル関係のデータをDiagram Waveに整備する。**argumentList**の指定は**IAFt\_** ***TemplateType*** **(argumentList)** に従う。
+- **CleanData** Dataディレクトリ内の不必要なWave・Variable・Stringを削除する。
 
 #### フローチャート
 パネル上に生成される。パネルの名前は```IAF_FlowchartPanel```に保存される。パネルのタイトル（表示名）は**Flowchart for** ***folderpath***になる。
