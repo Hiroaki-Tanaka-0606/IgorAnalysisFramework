@@ -283,6 +283,42 @@ Function IAFf_FullRange(argumentList)
 End
 
 
+//Function StoreWave1D: Store 1D wave using relative path from the current folder
+Function/S IAFf_StoreWave1D_Definition()
+	return "2;0;0;Wave1D;String"
+End
+
+Function IAFf_StoreWave1D(argumentList)
+	String argumentList
+	
+	//0th argument: Wave name
+	String waveNameArg=StringFromList(0,argumentList)
+	
+	//1st argument: wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathArg=StringFromList(1,argumentList)
+	
+	SVAR wavePath=$wavePathArg
+	String relativeWavePath="::"+wavePath
+	
+	Wave/D loadedWave=$waveNameArg
+	If(!WaveExists(loadedWave))
+		Print("StoreWave1D Error: Wave "+waveNameArg+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)==0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $relativeWavePath
+	Else
+		//not ok
+		Print("StoreWave1D Error: Wave "+waveNameArg+" is not one-dimensional")
+		return 0
+	Endif
+End
+
+
 //Function StoreWave2D: Store 2D wave using relative path from the current folder
 Function/S IAFf_StoreWave2D_Definition()
 	return "2;0;0;Wave2D;String"
