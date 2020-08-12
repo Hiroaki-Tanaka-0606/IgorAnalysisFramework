@@ -1,6 +1,6 @@
 
 # Corrections
-ソースコードは **IAF_Corrections2D.ipf** と **IAF_Corrections3D.ipf** と **IAF_Smoothing.ipf** の3つ。
+ソースコードは **IAF_Corrections1D.ipf** と **IAF_Corrections2D.ipf** と **IAF_Corrections3D.ipf** と **IAF_Smoothing.ipf** の3つ。
 
 ## 補正用データ作成
 - [Function **AveragedMDC**](#AveragedMDC) 準備中
@@ -9,6 +9,8 @@
 - [Function **ConstantWave1D**](#ConstantWave1D) 準備中
 
 ## 補正
+### 1D
+- [Function **CorrectEf1D**](#CorrectEf1D) 準備中
 ### 2D
 - [Module **CorrectInt_sw2D**](#CorrectInt_sw2D) 準備中
 - [Module **CorrectInt_fx2D**](#CorrectInt_fx2D) 準備中
