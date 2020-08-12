@@ -47,7 +47,7 @@
 
 ### Fitting
 [Source (FermiEdge)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_FermiEdgeFit.ipf)
-[Source (Polynomial)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_PolyFit.ipf
+[Source (Polynomial)](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/IAF_PolyFit.ipf)
 [Readme](https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/blob/master/02.%20ARPES/README_FermiEdgeFit.ipf)
 #### Functions
 - **FermiEdgeFit**
