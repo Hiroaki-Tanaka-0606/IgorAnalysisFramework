@@ -976,7 +976,7 @@ End
 
 
 
-//Function Make3D_Index: make 3D cube using Coordinate3D socket
+//Function Make3D_Coord: make 3D cube using Coordinate3D socket
 Function/S IAFf_Make3D_Coord_Definition()
 	return "5;0;0;0;0;1;Wave1D;Wave1D;Wave1D;Coordinate3D;Wave3D"
 End
