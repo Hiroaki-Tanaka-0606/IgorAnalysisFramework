@@ -6,7 +6,7 @@
 //=p[0]*convolve((1+p[1]x)/(exp(beta(p[6])*x)+1),gaussian(p[5]))+p[2]+p[3]*x
 //x=energy-p[4]
 
-//Output (7th argument): fitting parameters
+//Output (6th argument): fitting parameters
 //param[0]: Scale of Intensity
 //param[1]: Slope of Intensity [/eV]
 //param[2]: Background
