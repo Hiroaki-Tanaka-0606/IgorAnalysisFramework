@@ -14,6 +14,7 @@
 - [Function **FullRange**](#FullRange)
 ### Wave保存
 一部は **IAF_Sequence.ipf** （ **README_Sequence.md** ）に類似したものがある。
+- [Function **StoreWave1D**](#StoreWave1D) 準備中
 - [Function **StoreWave2D**](#StoreWave2D)
 
 ## LoadWave1D
