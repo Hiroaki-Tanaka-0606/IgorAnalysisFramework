@@ -38,6 +38,24 @@ Fermiエネルギーの推定値\[eV\]。フィッティングの初期値に使
 ### 7th argument(output, Wave1D)
 フィッティングの最終結果のWave。入力と同じ範囲で出力している。
 
+## PolyFIt
+多項式でフィッティングを行う。
+
+### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/PolyFit.svg?sanitize=true" width=300>
+
+### 0th argument(input, Wave1D)
+フィッティングの対象となるWave。
+
+### 1st argument(input, Variable)
+多項式の次数。
+
+### 2nd argument(output, Wave1D)
+フィッティングパラメータがリストアップされたWave。0次（定数項）、1次、…の順。
+
+### 3rd argument(output, Wave1D)
+フィットさせた多項式曲線。
+
 ## EfTrialFunc
 パラメーターに対応し試行関数を出力する。
 試行関数 **f(E)** は、**F(x)** （スロープのついたFermi分布関数） と **G(x)** （Gaussian）の畳み込みで求められる。
