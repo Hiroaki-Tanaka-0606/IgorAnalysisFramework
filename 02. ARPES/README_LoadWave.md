@@ -14,7 +14,7 @@
 - [Function **FullRange**](#FullRange)
 ### Wave保存
 一部は **IAF_Sequence.ipf** （ **README_Sequence.md** ）に類似したものがある。
-- [Function **StoreWave1D**](#StoreWave1D) 準備中
+- [Function **StoreWave1D**](#StoreWave1D)
 - [Function **StoreWave2D**](#StoreWave2D)
 
 ## LoadWave1D
@@ -132,3 +132,28 @@ Waveのあるindexに関する情報を持つWave。**WaveInfo1D**・**WaveInfo2
 
 #### 2nd argument(output, Variable)
 幅全体を指定するときの終了値。**input\[2\]-1**の値となる。
+
+## StoreWave1D
+1D Waveを書き出す。
+
+### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/StoreWave1D.svg?sanitize=true" width=300>
+
+#### 0th argument(input, Wave1D)
+書き出すWave。
+
+#### 1st argument(input, String)
+書き出し先のパス。**LoadWave1D** 等と同様、カレントディレクトリからの相対パス。
+
+
+## StoreWave2D
+1D Waveを書き出す。
+
+### Diagram
+<img src="https://github.com/Hiroaki-Tanaka-0606/IgorAnalysisFramework/raw/master/00.%20Resources/StoreWave2D.svg?sanitize=true" width=300>
+
+#### 0th argument(input, Wave2D)
+書き出すWave。
+
+#### 1st argument(input, String)
+書き出し先のパス。**LoadWave2D** 等と同様、カレントディレクトリからの相対パス。
