@@ -4,7 +4,7 @@
 ## 目次
 ### Functions
 - [Function **FermiEdgeFit**](#FermiEdgeFit)
-- [Function **PolyFit**](#PolyFit) 準備中
+- [Function **PolyFit**](#PolyFit)
 
 ### Utility Functions
 - [Utility Function **EfTrialFunc**](#EfTrialFunc)
