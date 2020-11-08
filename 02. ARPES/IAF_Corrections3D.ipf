@@ -64,6 +64,121 @@ Function/S IAFm_CorrectInt_fx3D(argumentList)
 	return outputPath
 End
 
+
+//Module Read3D: return intensity of 3D data [i][j][k]
+Function/S IAFm_Read3D_Definition()
+	return "2;0;2;Wave3D;Index3D"
+End
+
+Function/S IAFm_Read3D(argumentList)
+	String argumentList
+	
+	//0th argument: raw data
+	String rawArg=StringFromList(0,argumentList)
+	
+	//1st argument: indices wave passed through socket
+	String indicesArg=StringFromList(1,argumentList)
+	
+	Wave/D raw=$rawArg
+	
+	Variable size1=DimSize(raw,0)
+	Variable size2=DimSize(raw,1)
+	Variable size3=DimSize(raw,2)
+	
+	Wave/D indices=$indicesArg
+	Variable dataSize=DimSize(indices,0)
+	
+	//output wave (the name of it is returned)
+	String outputPath="::TempData:CorrectInt_fx3D_Output"
+	Make/O/D/N=(dataSize) $outputPath
+	Wave/D output=$outputPath
+	
+	Variable i
+	Variable index1,index2,index3
+	For(i=0;i<dataSize;i+=1)
+		index1=indices[i][0]
+		index2=indices[i][1]
+		index3=indices[i][2]
+		//range check
+		If(index1<0 || size1<=index1 || index2<0 || size2<=index2 || index3<0 || size3<=index3)
+			output[i]=0
+		Else
+			output[i]=raw[index1][index2][index3]
+		Endif
+	Endfor
+	return outputPath
+End
+
+//Function TotalIntensity: sum up the intensity of each pixel in Wave2D[][]
+Function/S IAFf_TotalIntensity_Definition()
+	return "2;0;1;Wave2D;Variable"
+End
+
+Function IAFf_TotalIntensity(argumentList)
+	String argumentList
+	
+	//0th argument: input Wave2D
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: output total intensity
+	String totalIntArg=StringFromList(1,argumentList)
+	
+	Wave/D input=$inputArg
+	NVAR totalInt=$totalIntArg
+	
+	Variable size1=DimSize(input,0)
+	Variable size2=DimSize(input,1)
+	
+	Variable i,j
+	totalInt=0
+	For(i=0;i<size1;i+=1)
+		For(j=0;j<size2;j+=1)
+			totalInt+=input[i][j]
+		Endfor
+	Endfor
+End
+
+//Function SliceNormalize: Normalize Wave2D[][] (to be gathered into Wave3D[][][i]) by averaged total intensity
+Function/S IAFf_SliceNormalize_Definition()
+	return "4;0;0;0;1;Wave2D;Wave1D;Variable;Wave2D"
+End
+
+Function IAFf_SliceNormalize(argumentList)
+	String argumentList
+	
+	//0th argument: input Wave2D
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: intensity wave ([i] corresponds total intensity of Wave3D[][][i])
+	String intWaveArg=StringFromList(1,argumentList)
+	
+	//2nd argument: index i
+	String indexArg=StringFromList(2,argumentList)
+	
+	//3rd argument: output Wave2D (input[p][q]/(averaged intensity))
+	String outputArg=StringFromList(3,argumentList)
+	
+	Wave/D input=$inputArg
+	Wave/D intWave=$intWaveArg
+	NVAR index=$indexArg
+	Duplicate/O input $outputArg
+	Wave/D output=$outputArg
+	
+	//get average of intWave
+	Variable total=0
+	Variable i
+	Variable size1=DimSize(intWave,0)
+	For(i=0;i<size1;i+=1)
+		total+=intWave[i]
+	Endfor
+	Variable average=total/size1
+	if(average==0)
+		print("SliceNormalize Error: total intensity is zero")
+		abort
+	Endif
+	output[][]=input[p][q]/intWave[index]*average
+End
+
 //Module ConvertIndex3D: convert index to coordinate
 Function/S IAFm_ConvertIndex3D_Definition()
 	return "6;0;0;0;0;0;2;Variable;Wave1D;Wave1D;Wave1D;Index3D;Coordinate3D"
@@ -993,10 +1108,10 @@ Function IAFf_Make3D_Coord(argumentList)
 	//2rd argument: WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//5th argument: socket name
+	//3rd argument: socket name
 	String socketName=StringFromList(3,argumentList)
 	
-	//6rd argument: output wave
+	//4th argument: output wave
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg

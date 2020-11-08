@@ -367,3 +367,55 @@ Function IAFf_StoreWave12D(argumentList)
 	output[][index2]=valueWave[p]
 	
 End
+
+
+//Function StoreWave23D: save Wave2D[][] in a Wave3D[][][i]
+Function/S IAFf_StoreWave23D_Definition()
+	return "6;0;0;0;0;0;1;Wave1D;Wave1D;Wave1D;Variable;Wave2D;Wave3D"
+End
+
+Function IAFf_StoreWave23D(argumentList)
+	String argumentList
+	
+	//0th argument: waveinfo of the output wave 1st index
+	String waveInfo1Arg=StringFromList(0,argumentList)
+	
+	//1st argument: waveinfo of the output wave 2nd index
+	String waveInfo2Arg=StringFromList(1,argumentList)
+	
+	//2nd argument: waveinfo of the output wave 3rd index
+	String waveInfo3Arg=StringFromList(2,argumentList)
+	
+	//3rd argument: 3rd index 
+	String index3Arg=StringFromList(3,argumentList)
+	
+	//4th argument: wave to be stored
+	String valueWaveArg=StringFromList(4,argumentList)
+	
+	//5th argument: output wave
+	String outputArg=StringFromList(5,argumentList)
+	
+	Wave/D waveInfo1=$waveInfo1Arg
+	Wave/D waveInfo2=$waveInfo2Arg
+	Wave/D waveInfo3=$waveInfo3Arg
+	
+	NVAR index3=$index3Arg
+	Wave/D valueWave=$valueWaveArg
+	
+	Wave/D output=$outputArg
+	//check the existence of the output with the same size specified by waveinfo input
+	If(Waveexists(output)==0 || DimSize(output,0)!=waveInfo1[2] || DimSize(output,1)!=waveInfo2[2] || DimSize(output,2)!=waveInfo3[2])
+		Make/O/D/N=(waveInfo1[2], waveInfo2[2], waveInfo3[2]) $outputArg
+		Wave/D output=$outputArg
+		SetScale/P x, waveInfo1[0], waveInfo1[1], output
+		SetScale/P y, waveInfo2[0], waveInfo2[1], output
+		SetScale/P z, waveInfo3[0], waveInfo3[1], output
+
+	Endif
+	If(DimSize(valueWave,0)!=waveInfo1[2] || DimSize(valueWave,1)!=waveInfo2[2])
+		Print("StoreWave23D Error: size mismatch")
+		abort
+	Endif
+	output[][][index3]=valueWave[p][q]
+	
+End
