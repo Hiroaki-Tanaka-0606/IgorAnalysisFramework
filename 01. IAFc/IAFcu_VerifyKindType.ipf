@@ -9,7 +9,7 @@ Function IAFcu_VerifyKindType(kind,type)
 	
 	StrSwitch(kind)
 	Case "Data":
-		String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;TextWave"
+		String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;Wave4D;TextWave"
 		If(WhichListItem(type,DataTypeList)==-1)
 			return 0 //invalid type
 		Else
@@ -55,7 +55,7 @@ End
 Function IAFcu_JudgeDataSocket(type)
 	String type
 	
-	String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;TextWave"		
+	String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;Wave4D;TextWave"		
 	String SocketTypeList="Coordinate1D;Coordinate2D;Coordinate3D;Index1D;Index2D;Index3D"
 	
 	If(WhichListItem(type, DataTypeList)!=-1)

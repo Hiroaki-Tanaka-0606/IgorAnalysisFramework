@@ -40,6 +40,7 @@ Function IAFc_CleanData()
 				Case "Wave1D":
 				Case "Wave2D":
 				Case "Wave3D":
+				Case "Wave4D":
 				Case "TextWave":
 					WavesList=addListItem(Name_ij,WavesList)
 					break

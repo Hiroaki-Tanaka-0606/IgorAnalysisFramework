@@ -265,8 +265,8 @@ Function IAFf_Value2Index(argumentList)
 	If(widthIndex<=0)
 		widthIndex=1
 	Endif
-	If(widthIndex>=size)
-		widthIndex=size-1
+	If(widthIndex>size)
+		widthIndex=size
 	Endif
 	width=widthIndex*delta
 
@@ -303,16 +303,16 @@ Function IAFf_Value2Index(argumentList)
 		endIndex=centerIndex_hint+round(widthIndex/2)
 		
 		If(startIndex<0)
-			delta=-startIndex
-			startIndex+=delta
-			endIndex+=delta
-			centerIndex_hint+=delta
+			deltaIndex=-startIndex
+			startIndex+=deltaIndex
+			endIndex+=deltaIndex
+			centerIndex_hint+=deltaIndex
 		Endif
 		If(endIndex>=size)
-			delta=endIndex-size+1
-			startIndex-=delta
-			endIndex-=delta
-			centerIndex_hint-=delta
+			deltaIndex=endIndex-size+1
+			startIndex-=deltaIndex
+			endIndex-=deltaIndex
+			centerIndex_hint-=deltaIndex
 		Endif
 		center=offset+(centerIndex_hint+0.5)*delta
 		break

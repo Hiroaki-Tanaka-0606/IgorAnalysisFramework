@@ -105,6 +105,7 @@ Function IAFc_Execute(FuncName)
 							Case "Wave1D":
 							Case "Wave2D":
 							Case "Wave3D":
+							Case "Wave4D":
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
 									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
@@ -207,6 +208,7 @@ Function/S IAFc_CallSocket(ModuleName,valueWaveName)
 							Case "Wave1D":
 							Case "Wave2D":
 							Case "Wave3D":
+							Case "Wave4D":
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
 									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
@@ -463,6 +465,7 @@ Function IAFc_DrawPanel(PanelName,PanelTitle)
 							Case "Wave1D":
 							Case "Wave2D":
 							Case "Wave3D":
+							Case "Wave4D":
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
 									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")

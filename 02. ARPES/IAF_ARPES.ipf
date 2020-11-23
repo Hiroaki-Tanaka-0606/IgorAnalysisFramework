@@ -3,6 +3,7 @@
 #include "IAF_LoadWave"
 #include "IAF_2DViewer"
 #include "IAF_3DViewer"
+#include "IAF_4DViewer"
 #include "IAF_FermiEdgeFit"
 #include "IAF_Sequence"
 #include "IAF_Corrections1D"
@@ -17,3 +18,4 @@
 #include "IAF_Integration"
 #include "IAF_Invert"
 #include "IAF_SliceFigure"
+#include "IAF_Resonant"
