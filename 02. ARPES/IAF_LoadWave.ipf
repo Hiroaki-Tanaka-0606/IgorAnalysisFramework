@@ -353,3 +353,40 @@ Function IAFf_StoreWave2D(argumentList)
 		return 0
 	Endif
 End
+
+
+
+//Function StoreWave3D: Store 3D wave using relative path from the current folder
+Function/S IAFf_StoreWave3D_Definition()
+	return "2;0;0;Wave3D;String"
+End
+
+Function IAFf_StoreWave3D(argumentList)
+	String argumentList
+	
+	//0th argument: Wave name
+	String waveNameArg=StringFromList(0,argumentList)
+	
+	//1st argument: wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathArg=StringFromList(1,argumentList)
+	
+	SVAR wavePath=$wavePathArg
+	String relativeWavePath="::"+wavePath
+	
+	Wave/D loadedWave=$waveNameArg
+	If(!WaveExists(loadedWave))
+		Print("StoreWave3D Error: Wave "+waveNameArg+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)>0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $relativeWavePath
+	Else
+		//not ok
+		Print("StoreWave3D Error: Wave "+waveNameArg+" is not two-dimensional")
+		return 0
+	Endif
+End

@@ -323,7 +323,7 @@ Function IAFf_Quotient(argumentList)
 End
 
 
-//Function StoreWave12D: save Wave1D[] in a Wave3D[][i]
+//Function StoreWave12D: save Wave1D[] in a Wave2D[][i]
 Function/S IAFf_StoreWave12D_Definition()
 	return "5;0;0;0;0;1;Wave1D;Wave1D;Variable;Wave1D;Wave2D"
 End

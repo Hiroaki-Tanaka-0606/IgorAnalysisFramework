@@ -64,6 +64,59 @@ Function/S IAFm_CorrectInt_fx3D(argumentList)
 	return outputPath
 End
 
+//Module CorrectInt_sw3D: return intensity of fixed 3D data [i][j][k] normalized by 1D normalization reference [j]
+Function/S IAFm_CorrectInt_sw3D_Definition()
+	return "3;0;0;2;Wave3D;Wave1D;Index3D"
+End
+
+Function/S IAFm_CorrectInt_sw3D(argumentList)
+	String argumentList
+	
+	//0th argument: raw data
+	String rawArg=StringFromList(0,argumentList)
+	
+	//1st argument: normalization reference
+	String refArg=StringFromList(1,argumentList)
+	
+	//2nd argument: indices wave passed through socket
+	String indicesArg=StringFromList(2,argumentList)
+	
+	Wave/D raw=$rawArg
+	Wave/D ref=$refArg
+	
+	//size check
+	if(DimSize(raw,1)!=DimSize(ref,0))
+		print("CorrectInt_fx3D Warning: sizes of ref is larger than that of raw")
+	Endif
+	
+	Variable size1=DimSize(raw,0)
+	Variable size2=DimSize(raw,1)
+	Variable size3=DimSize(raw,2)
+	
+	Wave/D indices=$indicesArg
+	Variable dataSize=DimSize(indices,0)
+	
+	//output wave (the name of it is returned)
+	String outputPath="::TempData:CorrectInt_sw3D_Output"
+	Make/O/D/N=(dataSize) $outputPath
+	Wave/D output=$outputPath
+	
+	Variable i
+	Variable index1,index2,index3
+	For(i=0;i<dataSize;i+=1)
+		index1=indices[i][0]
+		index2=indices[i][1]
+		index3=indices[i][2]
+		//range check
+		If(index1<0 || size1<=index1 || index2<0 || size2<=index2 || index3<0 || size3<=index3)
+			output[i]=0
+		Else
+			output[i]=raw[index1][index2][index3]/ref[index2]
+		Endif
+	Endfor
+	return outputPath
+End
+
 
 //Module Read3D: return intensity of 3D data [i][j][k]
 Function/S IAFm_Read3D_Definition()

@@ -542,3 +542,50 @@ Function IAFf_LoadkzMap_F(argumentList)
 	
 End
 	
+
+//Module ConvPeaks: convert peak positions (Energy,hn) to (Energy,kz), where kx is given
+//E: Energy (<0) with 0 being set to Ef
+//kx: momentum along the slit direction (A^-1)
+//kz: momentum perp. to the crystal surface
+//
+//W: Work function [eV]
+//V0: Inner potential [eV]
+//Energy of photoelectron: Eph=Eph_Ef+E, Eph_Ef=hn-W
+//Momentum of photoelectron in crystal: Eph=(hbar Kph_c)^2/2me - V0 <=> Kph_c=sqrt(2me Eph+V0)/hbar
+// kz=sqrt(Kph_c^2-kx^2)=sqrt((2me/hbar^2 (Eph+V0)) - kx^2)
+
+Function/S IAFf_ConvPeaks_Definition()
+	return "5;0;0;0;0;1;Variable;Variable;Wave2D;Variable;Wave2D"
+End	
+
+Function IAFf_ConvPeaks(argumentList)
+	String argumentList
+	
+	//0th argument: work function W [eV]
+	String WArg=StringFromList(0,argumentList)
+	
+	//1st argument: inner potential V0 [eV]
+	String V0Arg=StringFromList(1,argumentList)
+	
+	//2nd argument: list of peak positions (hn-E)
+	String Peaks_hnArg=StringFromList(2,argumentList)
+	
+	//3rd argument: kx
+	String kxArg=StringFromList(3,argumentList)
+	
+	//4th argument: output peak positions (E-kz)
+	String Peaks_kzArg=StringFromList(4,argumentList)
+	
+	NVAR W=$WArg
+	NVAR V0=$V0Arg
+	NVAR kx=$kxArg
+	Wave/D Peaks_hn=$Peaks_hnArg
+	Duplicate/O Peaks_hn $Peaks_kzArg
+	Wave/D Peaks_kz=$Peaks_kzArg
+	
+	
+	Variable E2kConstant=IAFu_E2kConstant()
+	
+	Peaks_kz[][0]=Peaks_hn[p][1]
+	Peaks_kz[][1]=sqrt((Peaks_hn[p][0]+Peaks_hn[p][1]-W+V0)*(E2kConstant^2)-kx^2)
+End

@@ -658,3 +658,87 @@ Function IAFf_Make2D_Coord(argumentList)
 	KillWaves socketOutput,input
 End
 
+
+
+//Function CompositeEhn: composite Energy-hn map at a certain k (with normalization)
+Function/S IAFf_CompositeEhn_Definition()
+	return "4;0;0;0;1;TextWave;Variable;Variable;Wave2D"
+End
+
+Function IAFf_CompositeEhn(argumentList)
+	String argumentList
+	
+	//0th argument: EDC map list
+	String ListArg=StringFromList(0,argumentList)
+	
+	//1st argument: start index of normalization area (include)
+	String StartIndexArg=StringFromList(1,argumentList)
+	
+	//2nd argument: end index
+	String EndIndexArg=StringFromList(2,argumentList)
+	
+	//3rd argument: output
+	String OutputArg=StringFromList(3,argumentList)
+	
+	Wave/T list=$listArg
+	NVAR StartIndex=$StartIndexArg
+	NVAR EndIndex=$EndIndexArg
+		
+	// normalization and offset
+	Variable i,j
+	Variable listSize=DimSize(list,0)
+	String TempPath="::TempData:SliceNorm_temp"
+	Make/O/D/N=(listSize) $TempPath
+	Wave/D intensity=$TempPath
+	Variable intensitySum=0
+	
+	Variable offsetSum=0
+	
+	//EDC information
+	Wave/D input_0=$("::"+list[0])
+	Variable EDelta=DimDelta(input_0,0)
+	Variable ESize=DimSize(input_0,0)
+	For(i=0;i<listSize;i+=1)
+		intensity[i]=0
+		Wave/D input_i=$("::"+list[i])
+		offsetSum+=DimOffset(input_i,0)
+		For(j=StartIndex;j<=EndIndex;j+=1)
+			intensity[i]+=input_i[j]
+		Endfor
+		intensitySum+=intensity[i]
+	Endfor
+	Variable intensityAverage=intensitySum/listSize
+	Variable offsetAverage=offsetSum/listSize
+	
+	//min and max shift
+	Variable minShift=0
+	Variable maxShift=0
+	For(i=0;i<listSize;i+=1)
+		Wave/D input_i=$("::"+list[i])
+		Variable shift=round((DimOffset(input_i,0)-offsetAverage)/EDelta)
+		if(shift<minShift)
+			minShift=shift
+		Endif
+		if(shift>maxShift)
+			maxShift=shift
+		Endif
+	Endfor
+	
+	Make/O/D/N=(ESize-minShift+maxShift,listSize) $OutputArg
+	Wave/D output=$OutputArg
+	SetScale/P x, (offsetAverage+minShift*EDelta), EDelta, output
+	SetScale/P y, DimOffset(list,0), DimDelta(list,0), output
+	output[][]=0
+	For(i=0;i<listSize;i+=1)
+		For(j=0;j<ESize;j+=1)
+			Wave/D input_i=$("::"+list[i])
+			shift=round((DimOffset(input_i,0)-offsetAverage)/EDelta)
+			output[j+shift-minShift][i]=input_i[j]*intensityAverage/intensity[i]
+		Endfor
+	Endfor
+	
+	
+	
+	killwaves intensity
+End
+	

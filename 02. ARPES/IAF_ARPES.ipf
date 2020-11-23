@@ -16,3 +16,4 @@
 #include "IAF_DivideWave"
 #include "IAF_Integration"
 #include "IAF_Invert"
+#include "IAF_SliceFigure"
