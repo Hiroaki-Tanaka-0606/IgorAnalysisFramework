@@ -569,7 +569,7 @@ Function IAFu_4DViewer_Button(BS): ButtonControl
 				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						EDeltaArg=Diagram_i[j][30]
-						EDeltaArg=Diagram_i[j][31]
+						ADeltaArg=Diagram_i[j][31]
 						xDeltaArg=Diagram_i[j][32]
 						yDeltaArg=Diagram_i[j][33]
 						break
@@ -696,7 +696,7 @@ Function IAFu_4DViewer_Keyboard(s)
 				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						EDeltaArg=Diagram_i[j][26]
-						EDeltaArg=Diagram_i[j][27]
+						ADeltaArg=Diagram_i[j][27]
 						xDeltaArg=Diagram_i[j][28]
 						yDeltaArg=Diagram_i[j][29]
 						break
