@@ -19,3 +19,4 @@
 #include "IAF_Invert"
 #include "IAF_SliceFigure"
 #include "IAF_Resonant"
+#include "IAF_Concatenate"
