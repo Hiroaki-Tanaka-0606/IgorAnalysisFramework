@@ -18,80 +18,113 @@ Function IAFt_4DViewer(argumentList)
 	String angleLabelName=StringFromList(2,argumentList)
 	String xLabelName=StringFromList(3,argumentList)
 	String yLabelName=StringFromList(4,argumentList)
-	Make/O/T/N=(42,29) $PanelName
+	Make/O/T/N=(49,34) $PanelName
 	
 	//diagram wave
 	Wave/T D=$PanelName
 	//suffix
 	String S="_"+PanelName
 	
-	//Ex
-	D[0][0]="Data";      D[0][1]="Variable";     D[0][2]="_Ex_start"+S
-	D[1][0]="Data";      D[1][1]="Variable";     D[1][2]="_Ex_end"+S
-	D[2][0]="Data";      D[2][1]="Wave2D";       D[2][2]="ExCut"+S
-	D[3][0]="Function";  D[3][1]="ExCut";        D[3][2]="ExC"+S; D[3][3]=WaveName; D[3][4]=D[0][2]; D[3][5]=D[1][2]; D[3][6]=D[2][2]
-	//Ey	
-	D[4][0]="Data";      D[4][1]="Variable";     D[4][2]="_Ey_start"+S
-	D[5][0]="Data";      D[5][1]="Variable";     D[5][2]="_Ey_end"+S
-	D[6][0]="Data";      D[6][1]="Wave2D";       D[6][2]="EyCut"+S
-	D[7][0]="Function";  D[7][1]="EyCut";        D[7][2]="EyC"+S; D[7][3]=WaveName; D[7][4]=D[4][2]; D[7][5]=D[5][2]; D[7][6]=D[6][2]
-	//xy
-	D[8][0]="Data";      D[8][1]="Variable";     D[8][2]="_xy_start"+S
-	D[9][0]="Data";      D[9][1]="Variable";     D[9][2]="_xy_end"+S
-	D[10][0]="Data";     D[10][1]="Wave2D";      D[10][2]="xyCut"+S
-	D[11][0]="Function"; D[11][1]="xyCut";       D[11][2]="xyC"+S; D[11][3]=WaveName; D[11][4]=D[8][2]; D[11][5]=D[9][2]; D[11][6]=D[10][2]
-	//cut lines
-	D[12][0]="Data";     D[12][1]="Wave2D";      D[12][2]="_ECut"+S;
-	D[13][0]="Data";     D[13][1]="Wave2D";      D[13][2]="_xCut"+S;
-	D[14][0]="Data";     D[14][1]="Wave2D";      D[14][2]="_yCut"+S;
-	D[15][0]="Function"; D[15][1]="CutLines3D";  D[15][2]="_CL3"+S; D[15][3]=WaveName; D[15][4]=D[8][2]; D[15][5]=D[9][2]; D[15][6]=D[4][2]; D[15][7]=D[5][2]; D[15][8]=D[0][2]; D[15][9]=D[1][2]; D[15][10]=D[12][2]; D[15][11]=D[13][2]; D[15][12]=D[14][2]
+	//EAxy start and end
+	D[0][0]="Data";      D[0][1]="Variable";     D[0][2]="_E_start"+S
+	D[1][0]="Data";      D[1][1]="Variable";     D[1][2]="_E_end"+S
+	D[2][0]="Data";      D[2][1]="Variable";     D[2][2]="_A_start"+S
+	D[3][0]="Data";      D[3][1]="Variable";     D[3][2]="_A_end"+S
+	D[4][0]="Data";      D[4][1]="Variable";     D[4][2]="_x_start"+S
+	D[5][0]="Data";      D[5][1]="Variable";     D[5][2]="_x_end"+S
+	D[6][0]="Data";      D[6][1]="Variable";     D[6][2]="_y_start"+S
+	D[7][0]="Data";      D[7][1]="Variable";     D[7][2]="_y_end"+S
+	
+	//EAMap
+	D[8][0]="Data";      D[8][1]="Wave2D";       D[8][2]="Map_EA"+S
+	D[9][0]="Function";  D[9][1]="EAMap";        D[9][2]="EAM"+S;
+	D[9][3]=WaveName; D[9][4]=D[4][2]; D[9][5]=D[5][2]; D[9][6]=D[6][2]; D[9][7]=D[7][2]; D[9][8]=D[8][2]
+	
+	//xyMap
+	D[10][0]="Data";     D[10][1]="Wave2D";      D[10][2]="Map_xy"+S
+	D[11][0]="Function"; D[11][1]="xyMap";       D[11][2]="xyM"+S;
+	D[11][3]=WaveName; D[11][4]=D[0][2]; D[11][5]=D[1][2]; D[11][6]=D[2][2]; D[11][7]=D[3][2]; D[11][8]=D[10][2]
+
+	//cut rects
+	D[12][0]="Data";     D[12][1]="Wave2D";      D[12][2]="_EARect"+S;
+	D[13][0]="Data";     D[13][1]="Wave2D";      D[13][2]="_xyRect"+S;
+	D[14][0]="Function"; D[14][1]="CutRects";    D[14][2]="_CR"+S;
+	D[14][3]=WaveName; D[14][4]=D[0][2]; D[14][5]=D[1][2]; D[14][6]=D[2][2]; D[14][7]=D[3][2]; D[14][8]=D[4][2];
+	D[14][9]=D[5][2]; D[14][10]=D[6][2]; D[14][11]=D[7][2]; D[14][12]=D[12][2]; D[14][13]=D[13][2]
+	
 	//Waveinfo
-	D[16][0]="Data";     D[16][1]="Wave1D";      D[16][2]="_EInfo"+S
+	D[15][0]="Data";     D[15][1]="Wave1D";      D[15][2]="_EInfo"+S
+	D[16][0]="Data";     D[16][1]="Wave1D";      D[16][2]="_AInfo"+S
 	D[17][0]="Data";     D[17][1]="Wave1D";      D[17][2]="_xInfo"+S
 	D[18][0]="Data";     D[18][1]="Wave1D";      D[18][2]="_yInfo"+S
-	D[19][0]="Function"; D[19][1]="WaveInfo3D";  D[19][2]="_WI3"+S; D[19][3]=WaveName; D[19][4]=D[16][2]; D[19][5]=D[17][2]; D[19][6]=D[18][2];
-	//Ex value2index
-	D[20][0]="Data";     D[20][1]="Variable";    D[20][2]="_ExCenter"+S	
-	D[21][0]="Data";     D[21][1]="Variable";    D[21][2]="_ExWidth"+S
-	D[22][0]="Function"; D[22][1]="Value2Index"; D[22][2]="_yI"+S; D[22][3]=D[18][2]; D[22][4]=D[20][2]; D[22][5]=D[21][2]; D[22][6]=D[0][2]; D[22][7]=D[1][2]
-	//Ey value2index
-	D[23][0]="Data";     D[23][1]="Variable";    D[23][2]="_EyCenter"+S	
-	D[24][0]="Data";     D[24][1]="Variable";    D[24][2]="_EyWidth"+S
-	D[25][0]="Function"; D[25][1]="Value2Index"; D[25][2]="_xI"+S; D[25][3]=D[17][2]; D[25][4]=D[23][2]; D[25][5]=D[24][2]; D[25][6]=D[4][2]; D[25][7]=D[5][2]
-	//xy value2index
-	D[26][0]="Data";     D[26][1]="Variable";    D[26][2]="_xyCenter"+S	
-	D[27][0]="Data";     D[27][1]="Variable";    D[27][2]="_xyWidth"+S
-	D[28][0]="Function"; D[28][1]="Value2Index"; D[28][2]="_EI"+S; D[28][3]=D[16][2]; D[28][4]=D[26][2]; D[28][5]=D[27][2]; D[28][6]=D[8][2]; D[28][7]=D[9][2]
-	//Ex centerdelta
-	D[29][0]="Data";     D[29][1]="Variable";    D[29][2]="_ExCenterDelta"+S
-	D[30][0]="Function"; D[30][1]="DeltaChange"; D[30][2]="_ExCC"+S; D[30][3]=D[18][2]; D[30][4]=D[29][2]; D[30][5]=D[20][2]
-	//Ex widthdelta
-	D[31][0]="Data";     D[31][1]="Variable";    D[31][2]="_ExWidthDelta"+S
-	D[32][0]="Function"; D[32][1]="DeltaChange"; D[32][2]="_ExWC"+S; D[32][3]=D[18][2]; D[32][4]=D[31][2]; D[32][5]=D[21][2]
-	//Ey centerdelta
-	D[33][0]="Data";     D[33][1]="Variable";    D[33][2]="_EyCenterDelta"+S
-	D[34][0]="Function"; D[34][1]="DeltaChange"; D[34][2]="_EyCC"+S; D[34][3]=D[17][2]; D[34][4]=D[33][2]; D[34][5]=D[23][2]
-	//Ey widthdelta
-	D[35][0]="Data";     D[35][1]="Variable";    D[35][2]="_EyWidthDelta"+S
-	D[36][0]="Function"; D[36][1]="DeltaChange"; D[36][2]="_EyWC"+S; D[36][3]=D[17][2]; D[36][4]=D[35][2]; D[36][5]=D[24][2]
-	//xy centerdelta
-	D[37][0]="Data";     D[37][1]="Variable";    D[37][2]="_xyCenterDelta"+S
-	D[38][0]="Function"; D[38][1]="DeltaChange"; D[38][2]="_xyCC"+S; D[38][3]=D[16][2]; D[38][4]=D[37][2]; D[38][5]=D[26][2]
-	//xy widthdelta
-	D[39][0]="Data";     D[39][1]="Variable";    D[39][2]="_xyWidthDelta"+S
-	D[40][0]="Function"; D[40][1]="DeltaChange"; D[40][2]="_xyWC"+S; D[40][3]=D[16][2]; D[40][4]=D[39][2]; D[40][5]=D[27][2]
-	//Panel
-	D[41][0]="Panel";    D[41][1]="3DViewer";    D[41][2]=PanelName;
-	D[41][3]=D[2][2];    D[41][4]=D[6][2];       D[41][5]=D[10][2];
-	D[41][6]=D[0][2];    D[41][7]=D[1][2];       D[41][8]=D[4][2];
-	D[41][9]=D[5][2];    D[41][10]=D[8][2];      D[41][11]=D[9][2];
-	D[41][12]=D[20][2];  D[41][13]=D[21][2];     D[41][14]=D[23][2];
-	D[41][15]=D[24][2];  D[41][16]=D[26][2];     D[41][17]=D[27][2];
-	D[41][18]=xLabelName;D[41][19]=yLabelName;   D[41][20]=D[12][2];
-	D[41][21]=D[13][2];  D[41][22]=D[14][2];     D[41][23]=D[29][2];
-	D[41][24]=D[33][2];  D[41][25]=D[37][2];     D[41][26]=D[31][2];
-	D[41][27]=D[35][2];  D[41][28]=D[39][2];
+	D[19][0]="Function"; D[19][1]="WaveInfo4D";  D[19][2]="_WI4"+S; 
+	D[19][3]=WaveName; D[19][4]=D[15][2]; D[19][5]=D[16][2]; D[19][6]=D[17][2]; D[19][7]=D[18][2];
 	
+	//E value2index
+	D[20][0]="Data";     D[20][1]="Variable";    D[20][2]="_ECenter"+S	
+	D[21][0]="Data";     D[21][1]="Variable";    D[21][2]="_EWidth"+S
+	D[22][0]="Function"; D[22][1]="Value2Index"; D[22][2]="_EI"+S;
+	D[22][3]=D[15][2]; D[22][4]=D[20][2]; D[22][5]=D[21][2]; D[22][6]=D[0][2]; D[22][7]=D[1][2]
+	
+	//A value2index
+	D[23][0]="Data";     D[23][1]="Variable";    D[23][2]="_ACenter"+S	
+	D[24][0]="Data";     D[24][1]="Variable";    D[24][2]="_AWidth"+S
+	D[25][0]="Function"; D[25][1]="Value2Index"; D[25][2]="_AI"+S;
+	D[25][3]=D[16][2]; D[25][4]=D[23][2]; D[25][5]=D[24][2]; D[25][6]=D[2][2]; D[25][7]=D[3][2]
+	
+	//x value2index
+	D[26][0]="Data";     D[26][1]="Variable";    D[26][2]="_xCenter"+S	
+	D[27][0]="Data";     D[27][1]="Variable";    D[27][2]="_xWidth"+S
+	D[28][0]="Function"; D[28][1]="Value2Index"; D[28][2]="_xI"+S;
+	D[28][3]=D[17][2]; D[28][4]=D[26][2]; D[28][5]=D[27][2]; D[28][6]=D[4][2]; D[28][7]=D[5][2]
+	
+	//x value2index
+	D[29][0]="Data";     D[29][1]="Variable";    D[29][2]="_yCenter"+S	
+	D[30][0]="Data";     D[30][1]="Variable";    D[30][2]="_yWidth"+S
+	D[31][0]="Function"; D[31][1]="Value2Index"; D[31][2]="_yI"+S;
+	D[31][3]=D[18][2]; D[31][4]=D[29][2]; D[31][5]=D[30][2]; D[31][6]=D[6][2]; D[31][7]=D[7][2]
+
+	//E centerdelta
+	D[32][0]="Data";     D[32][1]="Variable";    D[32][2]="_ECenterDelta"+S
+	D[33][0]="Function"; D[33][1]="DeltaChange"; D[33][2]="_ECC"+S; D[33][3]=D[15][2]; D[33][4]=D[32][2]; D[33][5]=D[20][2]
+	//E widthdelta
+	D[34][0]="Data";     D[34][1]="Variable";    D[34][2]="_EWidthDelta"+S
+	D[35][0]="Function"; D[35][1]="DeltaChange"; D[35][2]="_EWC"+S; D[35][3]=D[15][2]; D[35][4]=D[34][2]; D[35][5]=D[21][2]
+
+	//A centerdelta
+	D[36][0]="Data";     D[36][1]="Variable";    D[36][2]="_ACenterDelta"+S
+	D[37][0]="Function"; D[37][1]="DeltaChange"; D[37][2]="_ACC"+S; D[37][3]=D[16][2]; D[37][4]=D[36][2]; D[37][5]=D[23][2]
+	//A widthdelta
+	D[38][0]="Data";     D[38][1]="Variable";    D[38][2]="_AWidthDelta"+S
+	D[39][0]="Function"; D[39][1]="DeltaChange"; D[39][2]="_AWC"+S; D[39][3]=D[16][2]; D[39][4]=D[38][2]; D[39][5]=D[24][2]
+		
+	//x centerdelta
+	D[40][0]="Data";     D[40][1]="Variable";    D[40][2]="_xCenterDelta"+S
+	D[41][0]="Function"; D[41][1]="DeltaChange"; D[41][2]="_xCC"+S; D[41][3]=D[17][2]; D[41][4]=D[40][2]; D[41][5]=D[26][2]
+	//x widthdelta
+	D[42][0]="Data";     D[42][1]="Variable";    D[42][2]="_xWidthDelta"+S
+	D[43][0]="Function"; D[43][1]="DeltaChange"; D[43][2]="_xWC"+S; D[43][3]=D[17][2]; D[43][4]=D[42][2]; D[43][5]=D[27][2]
+
+	//y centerdelta
+	D[44][0]="Data";     D[44][1]="Variable";    D[44][2]="_yCenterDelta"+S
+	D[45][0]="Function"; D[45][1]="DeltaChange"; D[45][2]="_yCC"+S; D[45][3]=D[18][2]; D[45][4]=D[44][2]; D[45][5]=D[29][2]
+	//y widthdelta
+	D[46][0]="Data";     D[46][1]="Variable";    D[46][2]="_yWidthDelta"+S
+	D[47][0]="Function"; D[47][1]="DeltaChange"; D[47][2]="_yWC"+S; D[47][3]=D[18][2]; D[47][4]=D[46][2]; D[47][5]=D[30][2]
+		
+	//Panel
+	D[48][0]="Panel";    D[48][1]="4DViewer";    D[48][2]=PanelName;
+	D[48][3]=D[8][2];    D[48][4]=D[10][2];      D[48][5]=D[0][2];
+	D[48][6]=D[1][2];    D[48][7]=D[2][2];       D[48][8]=D[3][2];
+	D[48][9]=D[4][2];    D[48][10]=D[5][2];      D[48][11]=D[6][2];
+	D[48][12]=D[7][2];   D[48][13]=D[20][2];     D[48][14]=D[21][2];
+	D[48][15]=D[23][2];  D[48][16]=D[24][2];     D[48][17]=D[26][2];
+	D[48][18]=D[27][2];  D[48][19]=D[29][2];     D[48][20]=D[30][2];
+	D[48][21]=angleLabelName;   D[48][22]=xLabelName;     D[48][23]=yLabelName;
+	D[48][24]=D[12][2];  D[48][25]=D[13][2];     D[48][26]=D[32][2];
+	D[48][27]=D[34][2];  D[48][28]=D[36][2];     D[48][29]=D[38][2];
+	D[48][30]=D[40][2];  D[48][31]=D[42][2];     D[48][32]=D[44][2];
+	D[48][33]=D[46][2];
 	return 1
 
 End
@@ -568,9 +601,9 @@ Function IAFu_4DViewer_Button(BS): ButtonControl
 				String Name_ij=Diagram_i[j][2]
 				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
-						EDeltaArg=Diagram_i[j][30]
-						ADeltaArg=Diagram_i[j][31]
-						xDeltaArg=Diagram_i[j][32]
+						EDeltaArg=Diagram_i[j][27]
+						ADeltaArg=Diagram_i[j][29]
+						xDeltaArg=Diagram_i[j][31]
 						yDeltaArg=Diagram_i[j][33]
 						break
 					Endif
@@ -696,9 +729,9 @@ Function IAFu_4DViewer_Keyboard(s)
 				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						EDeltaArg=Diagram_i[j][26]
-						ADeltaArg=Diagram_i[j][27]
-						xDeltaArg=Diagram_i[j][28]
-						yDeltaArg=Diagram_i[j][29]
+						ADeltaArg=Diagram_i[j][28]
+						xDeltaArg=Diagram_i[j][30]
+						yDeltaArg=Diagram_i[j][32]
 						break
 					Endif
 				ENdif

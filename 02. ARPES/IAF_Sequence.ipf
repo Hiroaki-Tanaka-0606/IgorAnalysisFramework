@@ -158,9 +158,38 @@ Function IAFf_ExtractVariable(argumentList)
 	String valueArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
-	NvAR index=$indexArg
+	NVAR index=$indexArg
 	Variable/G $valueArg=input[index]
 	
+End
+
+
+//Function ExtractWave1D: get a Wave1D input[index][] from a Wave2D 
+Function/S IAFf_ExtractWave1DX_Definition()
+	return "3;0;0;1;Wave2D;Variable;Wave1D"
+End
+
+Function IAFf_ExtractWave1DX(argumentList)
+	String argumentList
+	
+	//0th argument: input wave
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: index
+	String indexArg=StringFromList(1,argumentList)
+	
+	//2nd argument: outputWave
+	String outputArg=StringFromList(2,argumentList)
+	
+	Wave/D input=$inputArg
+	NVAR index=$indexArg
+	Variable offset2=DimOffset(input,1)
+	Variable delta2=DimDelta(input,1)
+	Variable size2=DimSize(input,1)
+	Make/O/D/N=(size2) $outputArg
+	Wave/D output=$outputArg
+	SetScale/P x, offset2, delta2, output
+	output[]=input[index][p]
 End
 
 
@@ -199,6 +228,50 @@ Function IAFf_StoreVariable(argumentList)
 	
 End
 
+
+//Function StoreVariable2D: save a value in a Wave2D
+Function/S IAFf_StoreVariable2D_Definition()
+	return "6;0;0;0;0;0;1;Wave1D;Wave1D;Variable;Variable;Variable;Wave2D"
+End
+
+Function IAFf_StoreVariable2D(argumentList)
+	String argumentList
+	
+	//0th argument: waveinfo of the output wave 1st axis
+	String xInfoArg=StringFromList(0,argumentList)
+	
+	//1st argument: waveinfo of 2nd axis
+	String yInfoArg=StringFromList(1,argumentList)
+	
+	//2nd argument: x index
+	String xIndexArg=StringFromList(2,argumentList)
+	
+	//3rd argument: y index
+	String yIndexArg=StringFromList(3,argumentList)
+	
+	//4th argument: value
+	String valueArg=StringFromList(4,argumentList)
+	
+	//3rd argument: output wave
+	String outputArg=StringFromList(5,argumentList)
+	
+	Wave/D xInfo=$xInfoArg
+	Wave/D yInfo=$yInfoArg
+	NVAR xIndex=$xIndexArg
+	NVAR yIndex=$yIndexArg
+	NVAR value=$valueArg
+	
+	Wave/D output=$outputArg
+	
+	//check the existence of the output with the same size specified by waveinfo input
+	If(Waveexists(output)==0 || DimSize(output,0)!=xInfo[2] || DimSize(output,1)!=yInfo[2])
+		Make/O/D/N=(xInfo[2],yInfo[2]) $outputArg
+		Wave/D output=$outputArg
+		SetScale/P x, xInfo[0], xInfo[1], output
+		SetScale/P y, yInfo[0], yInfo[1], output
+	Endif
+	output[xIndex][yIndex]=value
+End
 
 //Function ExtractString: get a value from a TextWave
 Function/S IAFf_ExtractString_Definition()

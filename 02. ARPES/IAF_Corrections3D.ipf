@@ -1,5 +1,43 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
+//Function ValidArea2D: determine valid area of 2D (theta_x-theta_y) map
+Function/S IAFf_ValidArea2D_Definition()
+	return "2;0;1;Wave2D;Wave2D"
+End
+
+Function IAFf_ValidArea2D(argumentList)
+	String argumentList
+	
+	//0th argument: input
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument: output, list of indices of valid area, [i][0]=x index, [i][1]=y index
+	String outputArg=StringFromList(1,argumentList)
+	
+	Wave/D input=$inputArg
+	Variable size1=DimSize(input,0)
+	Variable size2=DimSize(input,1)
+	Variable numPoints=size1*size2
+	
+	Make/O/D/N=(numPoints,2) $outputArg
+	Wave/D output=$outputArg
+	
+	Variable index=0
+	Variable i,j
+	For(i=0;i<size1;i+=1)
+		For(j=0;j<size2;j+=1)
+			//positive intensity -> valid, negative intensity ->invalid
+			if(input[i][j]>0)
+				output[index][0]=i
+				output[index][1]=j
+				index+=1
+			endif
+		endfor
+	endfor
+	
+	Deletepoints index, numPoints-index, output
+End
+
 //Module CorrectInt_fx3D: return intensity of fixed 3D data [i][j][k] normalized by 2D normalization reference [i][j]
 Function/S IAFm_CorrectInt_fx3D_Definition()
 	return "3;0;0;2;Wave3D;Wave2D;Index3D"
@@ -109,6 +147,65 @@ Function/S IAFm_CorrectInt_sw3D(argumentList)
 		index3=indices[i][2]
 		//range check
 		If(index1<0 || size1<=index1 || index2<0 || size2<=index2 || index3<0 || size3<=index3)
+			output[i]=0
+		Else
+			output[i]=raw[index1][index2][index3]/ref[index2]
+		Endif
+	Endfor
+	return outputPath
+End
+
+
+//Module CorrectInt_sw3t: return intensity of fixed 3D data [i][j][k] normalized by 1D normalization reference [j]
+//with threshold
+Function/S IAFm_CorrectInt_sw3t_Definition()
+	return "4;0;0;0;2;Wave3D;Wave1D;Variable;Index3D"
+End
+
+Function/S IAFm_CorrectInt_sw3t(argumentList)
+	String argumentList
+	
+	//0th argument: raw data
+	String rawArg=StringFromList(0,argumentList)
+	
+	//1st argument: normalization reference
+	String refArg=StringFromList(1,argumentList)
+	
+	//2nd argument: threshold
+	String thresholdArg=StringFromList(2,argumentList)
+	
+	//3rd argument: indices wave passed through socket
+	String indicesArg=StringFromList(3,argumentList)
+	
+	Wave/D raw=$rawArg
+	Wave/D ref=$refArg
+	NVAR threshold=$thresholdArg
+	
+	//size check
+	if(DimSize(raw,1)!=DimSize(ref,0))
+		print("CorrectInt_sw3t Warning: sizes of ref is larger than that of raw")
+	Endif
+	
+	Variable size1=DimSize(raw,0)
+	Variable size2=DimSize(raw,1)
+	Variable size3=DimSize(raw,2)
+	
+	Wave/D indices=$indicesArg
+	Variable dataSize=DimSize(indices,0)
+	
+	//output wave (the name of it is returned)
+	String outputPath="::TempData:CorrectInt_sw3D_Output"
+	Make/O/D/N=(dataSize) $outputPath
+	Wave/D output=$outputPath
+	
+	Variable i
+	Variable index1,index2,index3
+	For(i=0;i<dataSize;i+=1)
+		index1=indices[i][0]
+		index2=indices[i][1]
+		index3=indices[i][2]
+		//range check
+		If(index1<0 || size1<=index1 || index2<0 || size2<=index2 || index3<0 || size3<=index3 || ref[index2]<threshold)
 			output[i]=0
 		Else
 			output[i]=raw[index1][index2][index3]/ref[index2]
@@ -448,6 +545,106 @@ Function/S IAFm_CorrectEf3D(argumentList)
 	return socketOutputPath
 	
 End
+
+
+//Module CorrectEf3D2: set fermi energy to zero
+Function/S IAFm_CorrectEf3D2_Definition()
+	return "4;0;0;0;2;Variable;Wave2D;Coordinate3D;Coordinate3D"
+End
+
+Function/S IAFm_CorrectEf3D2(argumentList)
+	String argumentList
+	
+	//0th argument: fermi edge calculation mode
+	//0: nearest point
+	//1: interpolation of surrounding 4 points
+	//in case of out-of-range, Ef is substituted by Ef[0] or Ef[-1]
+	String calculateModeArg=StringFromList(0,argumentList)
+	
+	//1st argument: two-dimensional Ef wave
+	String EfWaveArg=StringFromList(1,argumentList)
+
+	//2nd argument: socket to which an coordinates wave is passed
+	String coordsSocketName=StringFromList(2,argumentList)
+	
+	//3rd argument: coordinates wave passed through socket
+	String coordsArg=StringFromList(3,argumentList)
+	
+	NVAR calculateMode=$calculateModeArg
+	Wave/D EfWave=$EfWaveArg
+	
+	Variable EfOffset1=DimOffset(EfWave,0)
+	Variable EfDelta1=DimDelta(EfWave,0)
+	Variable EfSize1=DimSize(EfWave,0)
+	
+	Variable EfOffset2=DimOffset(EfWave,1)
+	Variable EfDelta2=DimDelta(EfWave,1)
+	Variable EfSize2=DimSize(EfWave,1)
+	
+	Wave/D coordinates=$coordsArg
+	Variable coordinatesSize=DimSize(coordinates,0)
+	
+	String socketInputPath="::TempData:CorrectEf3D_Input"
+	Duplicate/O coordinates $socketInputPath
+	Wave/D socketInput=$socketInputPath
+	
+	Variable i
+	For(i=0;i<coordinatesSize;i+=1)
+		Variable fracIndex1=(socketInput[i][1]-EfOffset1)/EfDelta1
+		Variable fracIndex2=(socketInput[i][2]-EfOffset2)/EfDelta2
+		If(calculateMode==1)
+			//interpolation
+			Variable floorIndex1=floor(fracIndex1)
+			Variable fracPart1=fracIndex1-floorIndex1
+			if(floorIndex1<0)
+				floorIndex1=0
+				fracPart1=0
+			Endif
+			if(floorIndex1>=EfSize1-1)
+				floorIndex1=EfSize1-2
+				fracPart1=1
+			Endif
+			
+			Variable floorIndex2=floor(fracIndex2)
+			Variable fracPart2=fracIndex2-floorIndex2
+			if(floorIndex2<0)
+				floorIndex2=0
+				fracPart2=0
+			Endif
+			if(floorIndex2>=EfSize2-1)
+				floorIndex2=EfSize2-2
+				fracPart2=1
+			Endif
+			
+			socketInput[i][0]+=(1-fracPart1)*(1-fracPart2)*EfWave[floorIndex1][floorIndex2]
+			socketInput[i][0]+=(1-fracPart1)*fracPart2*EfWave[floorIndex1][floorIndex2+1]
+			socketInput[i][0]+=fracPart1*fracPart2*EfWave[floorIndex1+1][floorIndex2+1]
+			socketInput[i][0]+=fracPart1*(1-fracPart2)*EfWave[floorIndex1+1][floorIndex2]
+		Else
+			//nearest
+			Variable intIndex1=round(fracIndex1)
+			Variable intIndex2=round(fracIndex2)
+			if(intIndex1<0)
+				intIndex1=0
+			Endif
+			if(intIndex1>=EfSize1)
+				intIndex1=EfSize1-1
+			Endif
+			if(intIndex2<0)
+				intIndex2=0
+			Endif
+			if(intIndex2>=EfSIze2)
+				intIndex2=EfSize2-1
+			Endif
+			socketInput[i][0]+=EfWave[intIndex1][intIndex2]
+		Endif
+	Endfor
+	
+	String socketOutputPath=IAFc_CallSocket(coordsSocketName, socketInputPath)
+	killWaves socketInput
+	return socketOutputPath
+	
+End
 	
 //Function CorrectEf3D_F: Format function of Module CorrectEf3D
 Function/S IAFf_CorrectEf3D_F_Definition()
@@ -516,6 +713,88 @@ Function IAFf_CorrectEf3D_F(argumentList)
 		if(TempShift[i]>maxShift)
 			maxShift=TempShift[i]
 		Endif
+	Endfor
+	//!!minShift<0!!
+	outWaveInfo1[0]=outWaveInfo1[0]-averageEf+minShift*inWaveInfo1[1]
+	outWaveInfo1[2]=outWaveInfo1[2]+maxShift-minShift
+	
+	killwaves TempShift
+End
+
+
+
+//Function CorrectEf3D2_F: Format function of Module CorrectEf3D2
+Function/S IAFf_CorrectEf3D2_F_Definition()
+	return "7;0;0;0;0;1;1;1;Wave1D;Wave1D;Wave1D;Wave2D;Wave1D;Wave1D;Wave1D"
+End
+
+Function IAFf_CorrectEf3D2_F(argumentList)
+	String argumentList
+	
+	//0th argument: input WaveInfo for 1st index
+	String inWaveInfo1Arg=StringFromList(0,argumentList)
+	
+	//1st argument: input WaveInfo for 2nd index
+	String inWaveInfo2Arg=StringFromList(1,argumentList)
+	
+	//2nd argument: input WaveInfo for 3rd index
+	String inWaveInfo3Arg=StringFromList(2,argumentList)
+	
+	//3rd argument: two-dimensional Ef wave
+	String EfWaveArg=StringFromList(3,argumentList)
+
+	//4td argument: output WaveInfo for 1st index
+	String outWaveInfo1Arg=StringFromList(4,argumentList)
+	
+	//5th argument: output WaveInfo for 2nd index (same as inWaveInfo2)
+	String outWaveInfo2Arg=StringFromList(5,argumentList)
+	
+	//6th argument: output WaveInfo for 3rd index (same as inWaveInfo3)
+	String outWaveInfo3Arg=StringFromList(6,argumentList)
+	
+	Wave/D inWaveInfo1=$inWaveInfo1Arg
+	Wave/D inWaveInfo2=$inWaveInfo2Arg
+	Wave/D inWaveInfo3=$inWaveInfo3Arg
+	Wave/D EfWave=$EfWaveArg
+	
+	//Angle: kept same
+	Duplicate/O inWaveInfo2 $outWaveInfo2Arg
+	Duplicate/O inWaveInfo3 $outWaveInfo3Arg
+	
+	//Energy: to be modified
+	Duplicate/O inWaveInfo1 $outWaveInfo1Arg
+	Wave/D outWaveInfo1=$outWaveInfo1Arg
+	
+	//calculate average Ef
+	Variable totalEf=0
+	Variable i,j
+	Variable EfWaveSize1=DimSize(EfWave,0)
+	Variable EfWaveSize2=DimSize(EfWave,1)
+	For(i=0;i<EfWaveSize1;i+=1)
+		For(j=0;j<EfWaveSize2;j+=1)
+			totalEf+=EfWave[i][j]
+		Endfor
+	Endfor
+	Variable averageEf=totalEf/(EfWaveSize1*EfWaveSize2)
+	
+	//calculate shift (in unit of index)
+	//averageEf position has zero shift
+	String TempShiftPath="::TempData:CorrectEf3D_F_shift"
+	Duplicate/O EfWave $TempShiftPath
+	Wave/D TempShift=$TempShiftPath
+	TempShift[][]=round((EfWave[p][q]-averageEf)/inWaveInfo1[1])
+	//obtain min and max shifts
+	Variable minShift=TempShift[0][0]
+	Variable maxShift=TempShift[0][0]
+	For(i=0;i<EfWaveSIze1;i+=1)
+		For(j=0;j<EfWaveSize2;j+=1)
+			If(TempShift[i][j]<minShift)
+				minShift=TempShift[i][j]
+			Endif
+			if(TempShift[i][j]>maxShift)
+				maxShift=TempShift[i][j]
+			Endif
+		Endfor
 	Endfor
 	//!!minShift<0!!
 	outWaveInfo1[0]=outWaveInfo1[0]-averageEf+minShift*inWaveInfo1[1]
