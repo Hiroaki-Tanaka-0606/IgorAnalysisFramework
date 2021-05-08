@@ -21,3 +21,4 @@
 #include "IAF_Resonant"
 #include "IAF_Concatenate"
 #include "IAF_Scale"
+#include "IAF_Viewer"
