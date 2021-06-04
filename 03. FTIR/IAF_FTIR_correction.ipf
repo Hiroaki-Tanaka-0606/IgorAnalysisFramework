@@ -232,3 +232,41 @@ Function IAFf_Permittivity(argumentList)
 	Permit[][1]=RefIndex[p][1]^2-RefIndex[p][2]^2
 	Permit[][2]=2*RefIndex[p][1]*RefIndex[p][2]
 End
+
+//Function DXFormat: convert the spectrum to DX format
+Function/S IAFf_DXFormat_Definition()
+	return "2;0;1;Wave2D;Wave2D"
+End
+
+Function IAFf_DXFormat(argumentList)
+	String argumentList
+	
+	//0th: input
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st: output
+	String outputArg=StringFromList(1,argumentList)
+	
+	Wave/D input=$inputArg
+	Variable size=DimSize(input,0)
+	
+	Variable dataPerRow=11
+	Variable numRows=Ceil(size/dataPerRow)
+	
+	Make/O/D/N=(numRows, dataPerRow+1) $outputArg
+	Wave/D output=$outputArg
+	
+	Variable i
+	Variable row=0, column=0
+	For(i=0; i<size; i+=1)
+		if(column==0)
+			output[row][0]=input[i][0]
+		Endif
+		output[row][column+1]=round(input[i][1]*1000)
+		column+=1
+		if(column==dataPerRow)
+			column=0
+			row+=1
+		Endif
+	Endfor
+End
