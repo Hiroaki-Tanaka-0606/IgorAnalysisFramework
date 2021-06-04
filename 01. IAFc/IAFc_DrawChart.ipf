@@ -4,7 +4,7 @@
 
 //IAFcu_FontSize: return font size
 Function IAFcu_FontSize()
-	return 16
+	return 10
 End
 
 //IAFcu_HeightRatio: return height/fontSize of a letter

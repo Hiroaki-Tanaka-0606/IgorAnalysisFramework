@@ -424,7 +424,7 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	
 	
 	//empty graph
-	NewPanel/K=1/W=(0,0,700,800) as PanelTitle
+	NewPanel/K=1/W=(0,0,700,500) as PanelTitle
 	
 	cd ::
 	String gPanelName="IAF_"+PanelName+"_Name"
@@ -433,16 +433,16 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	cd Data
 		
 	//Control bar (not actual ControlBar created by the command "ControlBar")
-	Variable ControlBarHeight=100
-	
+	Variable ControlsHeight=18
+	Variable ControlBarHeight=ControlsHeight*3
 	IAFcu_DrawSetVariable(30,0,"EDC Start",4,edcStartIndexArg,0,1,-inf,inf,1)
 	IAFcu_DrawSetVariable(200,0,"End",4,edcEndIndexArg,0,1,-inf,inf,1)
 	IAFcu_DrawSetVariable(300,0,"Center",5,edcCenterArg,1,1,-inf,inf,0)
 	IAFcu_DrawSetVariable(450,0,"Width",5,edcWidthArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(30,30,"MDC Start",4,mdcStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,30,"End",4,mdcEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,30,"Center",5,mdcCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,30,"Width",5,mdcWidthArg,1,1,-inf,inf,0)
+	IAFcu_DrawSetVariable(30,ControlsHeight,"MDC Start",4,mdcStartIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(200,ControlsHeight,"End",4,mdcEndIndexArg,0,1,-inf,inf,1)
+	IAFcu_DrawSetVariable(300,ControlsHeight,"Center",5,mdcCenterArg,1,1,-inf,inf,0)
+	IAFcu_DrawSetVariable(450,ControlsHeight,"Width",5,mdcWidthArg,1,1,-inf,inf,0)
 	
 	String command
 	String format
@@ -462,16 +462,16 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	sprintf command format,"EDCNarrow",580,0,"-"
 	Execute command
 		
-	sprintf command format,"MDCWide",610,30,"+"
+	sprintf command format,"MDCWide",610,ControlsHeight,"+"
 	Execute command
 	
-	sprintf command format,"MDCNarrow",580,30,"-"
+	sprintf command format,"MDCNarrow",580,ControlsHeight,"-"
 	Execute command
 
 	Variable sliderInitial=0.6
 	
-	Slider vertSlider pos={0,0},size={50,50},limits={0,1,0},ticks=0,vert=1,side=1,value=sliderInitial,proc=IAFu_Guide_Slider
-	Slider horizSlider pos={0,60},size={50,50},limits={0,1,0},ticks=0,vert=0,side=2,value=sliderInitial,proc=IAFu_Guide_Slider
+	Slider vertSlider pos={0,0},size={ControlsHeight*1.5,ControlsHeight*1.5},limits={0,1,0},ticks=0,vert=1,side=1,value=sliderInitial,proc=IAFu_Guide_Slider
+	Slider horizSlider pos={0,ControlsHeight*2},size={ControlsHeight*1.5,ControlsHeight*1.5},limits={0,1,0},ticks=0,vert=0,side=2,value=sliderInitial,proc=IAFu_Guide_Slider
 	
 	//Define Guide
 	DefineGuide vertTop={FT,ControlBarHeight}
