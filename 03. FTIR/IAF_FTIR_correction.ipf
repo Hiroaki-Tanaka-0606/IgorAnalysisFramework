@@ -270,3 +270,32 @@ Function IAFf_DXFormat(argumentList)
 		Endif
 	Endfor
 End
+
+//Function joinNK: join n and k waves into complex refractive index
+Function/S IAFf_joinNK_Definition()
+	return "3;0;0;1;Wave2D;Wave2D;Wave2D"
+End
+
+Function IAFf_joinNK(argumentList)
+	String argumentList
+	
+	//0th: n
+	String nArg=StringFromList(0,argumentList)
+	
+	//1st: k
+	String kArg=StringFromList(1,argumentList)
+	
+	//2nd: output
+	String outputArg=StringFromList(2,argumentList)
+	
+	Wave/D n=$nArg
+	Wave/D k=$kArg
+	
+	Duplicate/O n $outputArg
+	Wave/D output=$outputArg
+	Redimension/N=(-1,3) output
+	output[][2]=k[p][1]
+End
+	
+	
+	
