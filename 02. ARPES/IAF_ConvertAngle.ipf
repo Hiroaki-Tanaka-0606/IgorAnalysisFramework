@@ -44,7 +44,13 @@ Function/S IAFm_ConvAngle2D(argumentList)
 	Variable E2kConstant=IAFu_E2kConstant()
 	For(i=0;i<listSize;i+=1)
 		Variable Kph=sqrt(Eph_Ef+input[i][0])*E2kConstant
-		input[i][1]=theta0+(180.0/pi)*asin(input[i][1]/Kph)
+		if(input[i][1]/Kph>=1)
+			input[i][1]=theta0+90
+		Elseif(input[i][1]/Kph<=-1)
+			input[i][1]=theta0-90
+		Else
+			input[i][1]=theta0+(180.0/pi)*asin(input[i][1]/Kph)
+		Endif
 	Endfor
 	
 	return IAFc_CallSocket(EdegSocketName, inputPath)
