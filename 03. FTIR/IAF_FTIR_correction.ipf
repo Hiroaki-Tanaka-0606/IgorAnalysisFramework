@@ -298,4 +298,30 @@ Function IAFf_joinNK(argumentList)
 End
 	
 	
+//Function OneDimensionalize: Convert 2D ([][0]=x, [][1]=y) to 1D ([]=y, x in offset, delta, size)
+Function/S IAFf_OneDimensionalize_Definition()
+	return "2;0;1;Wave2D;Wave1D"
+End
+
+Function IAFf_OneDimensionalize(argumentList)
+	String argumentList
 	
+	//0th: input
+	String inArg=StringFromList(0, argumentList)
+	
+	//1st: output
+	String outArg=StringFromList(1, argumentList)
+	
+	Wave/D in=$inArg
+	
+	Variable size=DimSize(in, 0)
+	
+	Variable xOffset=in[0][0]
+	Variable xLast=in[size-1][0]
+	
+	Make/O/D/N=(size) $outArg
+	Wave/D out=$outArg
+	SetScale/I x, xOffset, xLast, out
+	out[]=in[p][1]
+	
+End

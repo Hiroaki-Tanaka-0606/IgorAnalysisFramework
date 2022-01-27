@@ -48,3 +48,85 @@ Function IAFf_DivideWave2D(argumentList)
 	Endfor
 	
 End
+
+//Function DivideByFD: divide by Fermi-Dirac distribution 1/(exp(beta(e-EF))+1)
+Function/S IAFf_DivideByFD_Definition()
+	return "3;0;0;1;Wave2D;Variable;Wave2D"
+End
+
+Function IAFf_DivideByFD(argumentList)
+	String argumentList
+	
+	//0th argument: input
+	String inputArg=StringFromList(0, argumentList)
+	
+	//1st argument: temperature(K)
+	String tempArg=StringFromList(1, argumentList)
+	
+	//2nd argument: output
+	String outputArg=StringFromList(2, argumentList)
+	
+	Wave/D input=$inputArg
+	Duplicate/O input $outputArg
+	Wave/D output=$outputArg
+	NVAR temp=$tempArg
+	
+	Variable beta=11604.53/temp
+	output[][]*=(exp(beta*x)+1)
+End
+
+//Function DivideByFDGauss: divide by Fermi-Dirac distribution convolved by Gaussian
+//see IAF_FermiEdgeFit.ipf for IAFu_GaussianWave
+Function/S IAFf_DivideByFDGauss_Definition()
+	return "4;0;0;0;1;Wave2D;Variable;Variable;Wave2D"
+End
+
+Function IAFf_DivideByFDGauss(argumentList)
+	String argumentList
+	//0th argument: input
+	String inputArg=StringFromList(0, argumentList)
+	
+	//1st argument: temperature(K)
+	String tempArg=StringFromList(1, argumentList)
+	
+	//2nd argument: dE (eV, FWHM)
+	String dEArg=StringFromList(2, argumentList)
+	
+	//3rd argument: output
+	String outputArg=StringFromList(3, argumentList)
+	
+	Wave/D input=$inputArg
+	Duplicate/O input $outputArg
+	Wave/D output=$outputArg
+	NVAR temp=$tempArg
+	NVAR dE=$dEArg
+	
+	Variable EOffset=DimOffset(output, 0)
+	Variable EDelta=DimDelta(output, 0)
+	Variable ESize=DimSize(output, 0)
+	
+	Variable beta=11604.53/temp
+	cd ::TempData
+	Variable gaussianRange=5
+	Variable gaussianWidth=IAFu_GaussianWave(dE/(2*sqrt(2*ln(2))*EDelta),gaussianRange,"tempGaussian")
+	
+	Variable EStart=EOffset-gaussianWidth*EDelta
+	Make/O/D/N=(ESize+2*gaussianWidth) tempTrial
+	Wave/D FDTrial=tempTrial
+	SetScale/P x, EStart,EDelta,FDTrial
+	
+	FDTrial[]=1.0/(1+exp(beta*x))
+	
+	Convolve/A $"tempGaussian" FDTrial
+	
+	Make/O/D/N=(ESize) FD
+	Wave/D FD=FD
+	SetScale/P x, EOffset, EDelta, FD
+	FD[]=FDTrial[gaussianWidth+p]
+	cd ::Data
+	
+	output[][]/=FD[p]
+	
+	KillWaves FD, FDTrial
+	
+End

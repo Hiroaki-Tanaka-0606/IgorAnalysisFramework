@@ -22,3 +22,4 @@
 #include "IAF_Concatenate"
 #include "IAF_Scale"
 #include "IAF_Viewer"
+#include "IAF_gaussFit"

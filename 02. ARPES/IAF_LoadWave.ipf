@@ -477,3 +477,183 @@ Function IAFf_StoreWave3D(argumentList)
 		return 0
 	Endif
 End
+
+//Function CombineWave1D: load 1D waves using relative path from the current folder, combine them
+Function/S IAFf_CombineWave1D_Definition()
+	return "2;0;1;TextWave;Wave1D"
+End
+
+Function IAFf_CombineWave1D(argumentList)
+	String argumentList
+	
+	//0th argument: list of wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathsArg=StringFromList(0,argumentList)
+	
+	Wave/T wavePaths=$wavePathsArg
+	String wavePath0=wavePaths[0]
+	String relativeWavePath="::"+wavePath0
+		
+	//1st argument: Wave name
+	String waveNameArg=StringFromList(1,argumentList)
+	
+	Wave/D loadedWave=$relativeWavePath
+	If(!WaveExists(loadedWave))
+		Print("CombineWave1D Error: Wave "+wavePath0+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)==0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $waveNameArg
+	Else
+		//not ok
+		Print("CombineWave1D Error: Wave "+wavePath0+" is not one-dimensional")
+		return 0
+	Endif
+	
+	Wave/D output=$waveNameArg
+	Variable i
+	for(i=1; i<DimSize(wavePaths,0); i+=1)
+		relativeWavePath="::"+wavePaths[i]
+		Wave/D loadedWave=$relativeWavePath
+		If(!WaveExists(loadedWave))
+			Print("CombineWave1D Error: wave "+wavePaths[i]+" does not exist")
+			return 0
+		endif
+		//dimension check
+		If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)==0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+			// size check
+			if(DimSize(loadedWave, 0)==DimSize(output, 0))
+				//add to the output
+				output[]+=loadedWave[p]
+			else
+				Print("CombineWave1D error: Size error in wave "+wavePaths[i])
+				return 0
+			endif
+		else
+			Print("CombineWave1D error: Wave "+wavePaths[i]+" is not one-dimensional")
+		endif
+	endfor
+End
+
+//Function CombineWave2D: load 2D waves using relative path from the current folder, combine them
+Function/S IAFf_CombineWave2D_Definition()
+	return "2;0;1;TextWave;Wave2D"
+End
+
+Function IAFf_CombineWave2D(argumentList)
+	String argumentList
+	
+	//0th argument: list of wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathsArg=StringFromList(0,argumentList)
+	
+	Wave/T wavePaths=$wavePathsArg
+	String wavePath0=wavePaths[0]
+	String relativeWavePath="::"+wavePath0
+		
+	//1st argument: Wave name
+	String waveNameArg=StringFromList(1,argumentList)
+	
+	Wave/D loadedWave=$relativeWavePath
+	If(!WaveExists(loadedWave))
+		Print("CombineWave2D Error: Wave "+wavePath0+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $waveNameArg
+	Else
+		//not ok
+		Print("CombineWave2D Error: Wave "+wavePath0+" is not two-dimensional")
+		return 0
+	Endif
+	
+	Wave/D output=$waveNameArg
+	Variable i
+	for(i=1; i<DimSize(wavePaths,0); i+=1)
+		relativeWavePath="::"+wavePaths[i]
+		Wave/D loadedWave=$relativeWavePath
+		If(!WaveExists(loadedWave))
+			Print("CombineWave2D Error: wave "+wavePaths[i]+" does not exist")
+			return 0
+		endif
+		//dimension check
+		If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)==0 && DimSize(loadedWave,3)==0)
+			// size check
+			if(DimSize(loadedWave, 0)==DimSize(output, 0) && DimSize(loadedWave, 1)==DimSize(output,1))
+				//add to the output
+				output[][]+=loadedWave[p][q]
+			else
+				Print("CombineWave2D error: Size error in wave "+wavePaths[i])
+				return 0
+			endif
+		else
+			Print("CombineWave2D error: Wave "+wavePaths[i]+" is not two-dimensional")
+		endif
+	endfor
+End
+
+//Function CombineWave3D: load 3D waves using relative path from the current folder, combine them
+Function/S IAFf_CombineWave3D_Definition()
+	return "2;0;1;TextWave;Wave3D"
+End
+
+Function IAFf_CombineWave3D(argumentList)
+	String argumentList
+	
+	//0th argument: list of wavePath
+	//starts from the foldername (or directly waveName), not starts from ":"
+	String wavePathsArg=StringFromList(0,argumentList)
+	
+	Wave/T wavePaths=$wavePathsArg
+	String wavePath0=wavePaths[0]
+	String relativeWavePath="::"+wavePath0
+		
+	//1st argument: Wave name
+	String waveNameArg=StringFromList(1,argumentList)
+	
+	Wave/D loadedWave=$relativeWavePath
+	If(!WaveExists(loadedWave))
+		Print("CombineWave3D Error: Wave "+wavePath0+" does not exist")
+		return 0
+	Endif
+	
+	//dimension check
+	If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)>0 && DimSize(loadedWave,3)==0)
+		//ok
+		Duplicate/O loadedWave $waveNameArg
+	Else
+		//not ok
+		Print("CombineWave3D Error: Wave "+wavePath0+" is not three-dimensional")
+		return 0
+	Endif
+	
+	Wave/D output=$waveNameArg
+	Variable i
+	for(i=1; i<DimSize(wavePaths,0); i+=1)
+		relativeWavePath="::"+wavePaths[i]
+		Wave/D loadedWave=$relativeWavePath
+		If(!WaveExists(loadedWave))
+			Print("CombineWave3D Error: wave "+wavePaths[i]+" does not exist")
+			return 0
+		endif
+		//dimension check
+		If(DimSize(loadedWave,0)>0 && DimSize(loadedWave,1)>0 && DimSize(loadedWave,2)>0 && DimSize(loadedWave,3)==0)
+			// size check
+			if(DimSize(loadedWave, 0)==DimSize(output, 0) && DimSize(loadedWave, 1)==DimSize(output,1) && DimSize(loadedWave, 2)==DimSize(output,2))
+				//add to the output
+				output[][][]+=loadedWave[p][q][r]
+			else
+				Print("CombineWave3D error: Size error in wave "+wavePaths[i])
+				return 0
+			endif
+		else
+			Print("CombineWave3D error: Wave "+wavePaths[i]+" is not three-dimensional")
+		endif
+	endfor
+End
