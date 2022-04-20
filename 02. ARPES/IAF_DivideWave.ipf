@@ -49,6 +49,39 @@ Function IAFf_DivideWave2D(argumentList)
 	
 End
 
+//Function DivideWave21DY: divide a[i][j] by b[j]
+Function/S IAFf_DivideWave21DY_Definition()
+	return "3;0;0;1;Wave2D;Wave1D;Wave2D"
+End
+
+Function IAFf_DivideWave21DY(argumentList)
+	String argumentList
+	
+	//0th argument: a[][]
+	String aWaveArg=StringFromList(0, argumentList)
+	
+	//1st argument: b[]
+	String bWaveArg=StringFromList(1, argumentList)
+	
+	//2nd argument: output
+	String cWaveArg=StringFromList(2, argumentList)
+	
+	Wave/D aWave=$aWaveArg
+	Wave/D bWave=$bWaveArg
+	
+	//size check
+	if(DimSize(aWave,1)!=DimSize(bWave,0))
+		print("DivideWave21DY error: size mismatch")
+		abort
+	Endif
+	
+	Duplicate/O aWave $cWaveArg
+	Wave/D cWave=$cWaveArg
+	
+	cWave[][]/=bWave[q]
+	
+End
+
 //Function DivideByFD: divide by Fermi-Dirac distribution 1/(exp(beta(e-EF))+1)
 Function/S IAFf_DivideByFD_Definition()
 	return "3;0;0;1;Wave2D;Variable;Wave2D"
