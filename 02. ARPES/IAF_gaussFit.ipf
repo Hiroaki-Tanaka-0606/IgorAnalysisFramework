@@ -3,7 +3,6 @@
 //Function gaussFit: fit the input wave by multiple gauss functions
 
 //=p[0]+p[1]*x+gauss(x-p[3], p[2])*p[4]+gauss(x-p[5], p[2])*p[6]+...
-//x=energy-p[4]
 
 //Output (6th argument): fitting parameters
 //param[0]: Background

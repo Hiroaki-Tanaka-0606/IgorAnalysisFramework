@@ -23,3 +23,4 @@
 #include "IAF_Scale"
 #include "IAF_Viewer"
 #include "IAF_gaussFit"
+#include "IAF_Average"
