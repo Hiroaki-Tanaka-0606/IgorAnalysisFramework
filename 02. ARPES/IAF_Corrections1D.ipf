@@ -25,3 +25,28 @@ Function IAFf_CorrectEf1D(argumentList)
 	SetScale/P x, (offset1-EfValue), delta1, outWave
 End
 
+Function/S IAFf_Normalize1D_Definition()
+	return "2;0;1;Wave1D;Wave1D"
+End
+
+Function	IAFf_Normalize1D(argumentList)
+	String argumentList
+	
+	//0th argument: input
+	String inputArg=StringFromList(0, argumentList)
+	
+	//1st argument: output
+	String outputArg=StringFromList(1, argumentList)
+	
+	Wave/D input=$inputArg
+	Duplicate/O input $outputArg
+	Wave/D output=$outputArg
+	
+	Variable sum=0
+	Variable i
+	for(i=0; i<dimsize(input, 0); i++)
+		sum+=input[i]
+	endfor
+	Variable ave=sum/dimsize(input, 0)
+	output/=ave
+End
