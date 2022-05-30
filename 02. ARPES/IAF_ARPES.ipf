@@ -24,3 +24,4 @@
 #include "IAF_Viewer"
 #include "IAF_gaussFit"
 #include "IAF_Average"
+#include "IAF_CropWave"
