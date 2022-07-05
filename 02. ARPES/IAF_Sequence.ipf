@@ -427,7 +427,7 @@ Function IAFf_StoreWave12D(argumentList)
 	
 	Wave/D output=$outputArg
 	//check the existence of the output with the same size specified by waveinfo input
-	If(Waveexists(output)==0 || DimSize(output,0)!=waveInfo1[2] || DimSize(output,1)!=waveInfo2[2])
+	If(Waveexists(output)==0 || DimSize(output,0)<waveInfo1[2] || DimSize(output,1)!=waveInfo2[2])
 		Make/O/D/N=(waveInfo1[2], waveInfo2[2]) $outputArg
 		Wave/D output=$outputArg
 		SetScale/P x, waveInfo1[0], waveInfo1[1], output
@@ -437,7 +437,12 @@ Function IAFf_StoreWave12D(argumentList)
 		Print("StoreWave12D Error: size mismatch")
 		abort
 	Endif
-	output[][index2]=valueWave[p]
+	variable jmax=min(dimsize(output,0), dimsize(valuewave,0))
+	variable j
+	output[][index2]=0
+	for(j=0; j<jmax; j++)
+		output[j][index2]=valueWave[j]
+	endfor
 	
 End
 
