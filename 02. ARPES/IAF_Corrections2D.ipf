@@ -760,9 +760,13 @@ Function IAFf_CompositeEhn(argumentList)
 		intensity[i]=0
 		Wave/D input_i=$("::"+list[i])
 		offsetSum+=DimOffset(input_i,0)
-		For(j=StartIndex;j<=EndIndex;j+=1)
-			intensity[i]+=input_i[j]
-		Endfor
+		if(StartIndex>=0)
+			For(j=StartIndex	;j<=EndIndex;j+=1)
+				intensity[i]+=input_i[j]
+			Endfor
+		else
+			intensity[i]=1
+		endif
 		intensitySum+=intensity[i]
 	Endfor
 	Variable intensityAverage=intensitySum/listSize
@@ -781,6 +785,8 @@ Function IAFf_CompositeEhn(argumentList)
 			maxShift=shift
 		Endif
 	Endfor
+	//print(minShift)
+	//print(maxShift)
 	
 	Make/O/D/N=(ESize-minShift+maxShift,listSize) $OutputArg
 	Wave/D output=$OutputArg
@@ -788,9 +794,11 @@ Function IAFf_CompositeEhn(argumentList)
 	SetScale/P y, DimOffset(list,0), DimDelta(list,0), output
 	output[][]=0
 	For(i=0;i<listSize;i+=1)
-		For(j=0;j<ESize;j+=1)
-			Wave/D input_i=$("::"+list[i])
-			shift=round((DimOffset(input_i,0)-offsetAverage)/EDelta)
+		Wave/D input_i=$("::"+list[i])
+		Variable ESize_i=dimsize(input_i, 0)
+		shift=round((DimOffset(input_i,0)-offsetAverage)/EDelta)
+		//print(shift)
+		For(j=0;j<ESize_i;j+=1)
 			output[j+shift-minShift][i]=input_i[j]*intensityAverage/intensity[i]
 		Endfor
 	Endfor
