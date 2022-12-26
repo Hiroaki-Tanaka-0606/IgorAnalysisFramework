@@ -21,7 +21,7 @@ You need to add the ```#include "IAF"``` directive in Procedure to load the core
 1. Add raw data in the folder. We recommend to create another folder for raw data such as **raw_data**.
 1. Edit diagrams as you want to analyze the data. Be careful that the diagrams are **case-sensitive**. READMEs and examples below will help you.
 1. Select **ConfigureNames** and **ConfigureDependency** in this order. The former is unnecessary if you are sure that there is no mistake in the names of the parts.
-1. If you want to visualize the chart, select **ConfigureChart** and **CallChart** in thie order. A window for the flowchart of the diagrams appears. Each rectangle representing a part can be moved by dragging it.
+1. If you want to visualize the chart, select **ConfigureChart** and **CallChart** in this order. A window for the flowchart of the diagrams appears. Each rectangle representing a part can be moved by dragging it.
 1. Select **CreateData** and set appropriate values in global variables and strings.
 1. Select **ExecuteAll** to perform the analysis.
 

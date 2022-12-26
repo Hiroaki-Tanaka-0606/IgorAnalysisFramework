@@ -1,34 +1,57 @@
 # Structure of the software
-Igor上で、生データからグラフまでの処理をフローチャート的に構築する。
+# Role of the folders
+The folders created in the **SetUp** process have the following roles.
+- The **Diagrams** folder includes **diagram wave**s (Text, 2D). All two-dimensional text waves are used as diagram waves.
+- The **Data** folder includes data (waves) and parameters (global variables and strings). To avoid a mess, we recommend not to put raw data in the **Data** folder. Instead, we put a *String* specifying the path to the raw data and use *Function*s such as **LoadWave1D** to load the raw data in the **Data** folder.
+- The **Configurations** includes the dependency relationships between the parts and configurations for the flowchart.
+- The **TempData** includes temporary data passed via a *Socket*.
 
-## 構成
-- カレントフォルダ直下に以下のフォルダを用意する。
-  - **Diagrams** フローチャートを記述するWave(Text, 2D, 複数可)を格納する。
-  - **Data** データを格納する。
-  - **Configurations** 依存関係、フローチャートの見た目などの設定情報を格納する。
-  - **TempData** 一時的なデータ（ソケットで受け渡すWaveなど）を格納する。
+# *Part*s
+Each row in the **diagram wave**s represent a *Part*.
 
-## フローチャート
-フローチャートを記述するWaveでは、以下の順で部品の性質を並べる。
-- 0列目: 部品の種類(Data, Function, Module, Panel)
-- 1列目: 部品の型(\[A-Za-z0-9\]のみで構成される。混乱を招かないためには他の種類も含めて重複しないようにした方がよいが、重複してもプログラム上は不具合がない)
-- 2列目: 部品の名前(他のWaveにある部品を含めて、重複不可。空欄、または重複であれば初期化時に**部品の型**+**数字**で命名される。1文字目が_（アンダースコア）であれば、フローチャートに表示されないことがある(条件は後述)。)
-- 3列目以降: 部品のプロパティ(入出力)
+## Description of *Part*s in the diagram waves
+A *Part* is descibed by the following rules.
+- The 0th column describes the *Kind* of the *Part*: **Data**, **Function**, **Module**, or **Panel**.
+- The 1st column describes the *Type* of the *Part*. Allowd values for the *Type* depends on the *Kind* and are described below in more detail.
+- The 2nd column describes the *Name* of the *Part*. The *Name* must be unique. If *Name*s are duplicated or the *Name* cell is left blank, the **ConfigureNames** process (```IAFc_ConfigureNames()```) modify the *Name*s appropriately.
+- The following columns descibe the *Name*s of *Part*s used as the input or the output.
 
-ソケットは関数・モジュール間の接続関係として定まるので、部品として記述する必要はない。
+There is another *Kind* not listed above: **Socket**.
+However, **Socket**s don't appear in the **diagram wave**s because they are automatically described between modules and functions.
 
-### 部品の種類
-#### Data(データ)
-以下の型を持つ。プロパティはない。
-- **Variable**: 数
-- **String**: 文字列
-- **Wave1D**, **Wave2D**, **Wave3D**: 1, 2, 3次元Wave(Double Precision)
-- **TextWave**: 1次元Text Wave
+## *Kind*s of *Part*s
+### Data
+A **Data** *Part* is literally a parameter or a set of data.
+**Data** can have the following *Type*s.
+- **Variable** is a number, used as a parameter.
+- **String** is a string, mainly used to specify the wave path.
+- **Wave1D**, **Wave2D**, **Wave3D**, and **Wave4D** are number waves.
+- **TextWave** is a text wave, used as a list of strings. It is useful to perform sequential analysis.
 
-#### Function(関数)
-- いくつかのデータを入力しいくつかのデータを出力する。
-- 型が関数の種類に対応する。
-- 3列目以降は、引数となるデータ名を必要な個数だけ順番に並べる。
+Some **Wave1D** parts have a special purpose; they contain only three elements describing the offset, delta, and size of a wave.
+Such waves are generated from information functions such as **WaveInfo1D** and used as inputs of various functions.
+
+**Data** *Part*s are global variables (**Variable**), global strings (**String**) and waves (**Wave*X*D** and **TextWave**) in the **Data** folder.
+
+### Function
+A **Function** *Part* connects **Data** *Part*s.
+The *Type* of the **Function** specifies a pair of functions **Function/S IAFf\_*Type*\_Defintion()** and **Function IAFf\_*Type*(argumentList)**.
+
+**IAFf\_*Type*\_Defintion()** returns a string list according to the following rule.
+- The 0th element specifies the number of related *Part*s **n** (both inputs and outputs are included).
+- The successive **n** elements specify whether the *Part* is the input ("0") or the output ("1").
+- The successive **n** elements specify the *Type* of the *Part*. 
+  - When the *Part* is **Data**, the corresponding element simply represents the *Type*.
+  - When the *Part* is **Module**, the elements represents the *Type* of the **Socket** which the **Module** *Part* has as the waiting socket.
+
+For example, ```"2;0;1;Wave2D;Wave1D"``` represents that the **Function** has one input of **Wave2D** and one output of **Wave1D**.
+
+**IAFf\_*Type*(argumentList)** is the main executable of the **Function**.
+**argumentList** is the list of argument names.
+The function does not return any value, because it can directly modify the output **Data** *Part*s based on the names in the list.
+
+The **ConfigureDependency** process (```IAFf_ConfigureDependency()```) checkes whether the *Part*s listed in the 3rd and successive columns of a **Function** *Part* row have correct *Type*s.
+If not, the function raises an error.
 
 #### Module(モジュール)
 - いくつかのデータを入力に持つ。
@@ -107,7 +130,7 @@ Waveを参照する場合は**TempData**に用意する。
   - \[i\]\[2\]: 横幅
   - \[i\]\[3\]: 縦幅
   
-#### Variables for　Flowchart and Panels
+#### Variables for Flowchart and Panels
 パネル操作時の情報がカレントフォルダ直下にGlobal Variables / Strings として保存されている。
 - **IAF_Flowchart_ChartLeft**, **IAF_Flowchart_ChartTop**: クリックされている部品の初期位置
 - **IAF_Flowchart_Clicked**: 部品がクリックされていれば1、そうでなければ0
