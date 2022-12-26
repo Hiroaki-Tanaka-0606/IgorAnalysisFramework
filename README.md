@@ -25,9 +25,9 @@ You need to add the ```#include "IAF"``` directive in Procedure to load the core
 1. Select **CreateData** and set appropriate values in global variables and strings.
 1. Select **ExecuteAll** to perform the analysis.
 
-If the diagrams include *Panel*s, you can call them from **CallPanel**.
-The difference between **CallPanel** and **ReCallPanel** is that the former kills the window and then call the *Panel* when the window already exists.
-**ReCallPanel** is useful when you modify *Variable*s used to draw the *Panel* window.
+If the diagrams include **Panel**s, you can call them from **CallPanel**.
+The difference between **CallPanel** and **ReCallPanel** is that the former kills the window and then call the **Panel** when the window already exists.
+**ReCallPanel** is useful when you modify **Variable**s used to draw the **Panel** window.
 
 **LoadTemplate** command imports a template diagrams in the current **Diagrams** folder.
 
@@ -36,6 +36,8 @@ The difference between **CallPanel** and **ReCallPanel** is that the former kill
 ## How it works
 
 See **docs/Structure.md** to see how the software construct analysis diagrams.
+
+Also, **docs/GettingStarted.md** explains how to use the software with examples.
 
 ## README for included functions
 
