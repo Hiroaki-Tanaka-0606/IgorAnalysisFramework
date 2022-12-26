@@ -1,4 +1,4 @@
-# IgorAnalysisFramework
+# Structure of the software
 Igor上で、生データからグラフまでの処理をフローチャート的に構築する。
 
 ## 構成
