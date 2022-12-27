@@ -31,14 +31,14 @@ Function IAFp_Sequence(argumentList,PanelName,PanelTitle)
 	cd Data
 	
 	//put a setvariable
-	IAFcu_DrawSetVariable(0,0,indexArg,4,indexArg,1,1,minIndex,maxIndex,1)
+	IAFu_DrawSetVariable(0,0,indexArg,4,indexArg,1,1,minIndex,maxIndex,1)
 	
 	//sequentially increase, decrease buttons
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(1)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(1)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	String command
 	String format
@@ -104,7 +104,7 @@ Function IAFu_Sequence_Button(BS): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						indexArg=Diagram_i[j][3]
 						minIndexArg=Diagram_i[j][4]

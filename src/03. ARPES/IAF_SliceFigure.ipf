@@ -114,16 +114,16 @@ Function IAFp_SliceFigure_E(argumentList, PanelName, PanelTitle)
 	cd Data
 	
 	//put a setVariable
-	IAFcu_DrawSetVariable(0,0,directionArg,2,directionArg,1,1,0,1,1)
-	IAFcu_DrawSetVariable(0,30,minOffsetArg,6,minOffsetArg,0,0,0,inf,0)
-	IAFcu_DrawSetVariable(0,60,marginArg,4,marginArg,1,1,-1,inf,0)
+	IAFu_DrawSetVariable(0,0,directionArg,2,directionArg,1,1,0,1,1)
+	IAFu_DrawSetVariable(0,30,minOffsetArg,6,minOffsetArg,0,0,0,inf,0)
+	IAFu_DrawSetVariable(0,60,marginArg,4,marginArg,1,1,-1,inf,0)
 	
 	//put a "draw graph" button
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(12)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(12)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	String command
 	String format
@@ -183,7 +183,7 @@ Function IAFu_SliceFigure_Button(BS): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						offsetMapArg=Diagram_i[j][6]
 						break
@@ -335,16 +335,16 @@ Function IAFp_SliceFigure_k(argumentList, PanelName, PanelTitle)
 	cd Data
 	
 	//put a setVariable
-	IAFcu_DrawSetVariable(0,0,directionArg,2,directionArg,1,1,0,1,1)
-	IAFcu_DrawSetVariable(0,30,minOffsetArg,6,minOffsetArg,0,0,0,inf,0)
-	IAFcu_DrawSetVariable(0,60,marginArg,4,marginArg,1,1,-1,inf,0)
+	IAFu_DrawSetVariable(0,0,directionArg,2,directionArg,1,1,0,1,1)
+	IAFu_DrawSetVariable(0,30,minOffsetArg,6,minOffsetArg,0,0,0,inf,0)
+	IAFu_DrawSetVariable(0,60,marginArg,4,marginArg,1,1,-1,inf,0)
 	
 	//put a "draw graph" button
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(12)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(12)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	String command
 	String format

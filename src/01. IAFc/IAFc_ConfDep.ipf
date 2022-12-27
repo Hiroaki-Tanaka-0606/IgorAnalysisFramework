@@ -1,7 +1,5 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-#include "IAFcu_VerifyKindType"
-
 //IFAc_ConfigureNames: check names of parts
 Function IAFc_ConfigureNames()
 	Print("[IAFc_ConfigureNames]")
@@ -30,17 +28,17 @@ Function IAFc_ConfigureNames()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Name_ij,"")==0 || WhichListItem(Name_ij,nameList)!=-1)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij, "", 1)==0 || WhichListItem(Name_ij,nameList)!=-1)
 					//Name is blank ("") or duplicated
 					//so, create new name
 					String newName=IAFcu_CreateNewName(Type_ij,nameList)
-					Print("Replace name \""+Diagram_i[j][2]+"\" to \""+newName+"\" in row "+num2str(j)+" of Diagram Wave \""+DiagramWaveName+"\"")
+					Printf "Replace name \"%s\" to \"%s\" in row %d of Diagram Wave \"%d\"", Diagram_i[j][2], newName, j, DiagramWaveName
 					Diagram_i[j][2]=newName
 				Endif
 				nameList=AddListItem(Diagram_i[j][2],nameList)
 			Else
-				Print("Skip row "+num2str(j)+" of Diagram Wave \""+DiagramWaveName+"\" (Kind: \""+Kind_ij+"\", Type: \""+Type_ij+"\")")
+				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\"", j, DiagramWaveName, Kind_ij, Type_ij
 			Endif
 		Endfor
 	Endfor
@@ -92,7 +90,7 @@ Function IAFc_ConfigureDependency()
 		For(j=0;j<WaveSize_i;j+=1)
 			Kind_ij=Diagram_i[j][0]
 			Type_ij=Diagram_i[j][1]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr("Data",Kind_ij)==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr("Data",Kind_ij,1)==0)
 				numData+=1
 			Endif
 		Endfor
@@ -117,7 +115,7 @@ Function IAFc_ConfigureDependency()
 			Kind_ij=Diagram_i[j][0]
 			Type_ij=Diagram_i[j][1]
 			Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr("Data",Kind_ij)==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr("Data",Kind_ij,1)==0)
 				DataOrigin[index][0]=Type_ij
 				DataOrigin[index][1]=Name_ij
 				index+=1
@@ -141,18 +139,16 @@ Function IAFc_ConfigureDependency()
 			Kind_ij=Diagram_i[j][0]
 			Type_ij=Diagram_i[j][1]
 			Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				StrSwitch(Kind_ij)
-				Case "Data":
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				if(cmpstr(Kind_ij, "Data", 1)==0)
 					//nothing to be verified
-					break
-				Case "Function":
+				elseif(cmpstr(Kind_ij, "Function", 1)==0)
 					numFunctions+=1
 					String FuncDef=IAFc_Function_Definition(Type_ij)
 					//Verify Definition of the Function
-					If(IAFcu_VerifyFunctionDefinition(FuncDef)==0)
+					If(IAFc_VerifyFunctionDefinition(FuncDef)==0)
 						//ill-defined
-						Print("Error: Function \""+Type_ij+"\" is ill-defined")
+						Printf "Error: Function \"%s\" is ill-defined", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -162,71 +158,68 @@ Function IAFc_ConfigureDependency()
 						inout_k=StringFromList(k+1,FuncDef)
 						Type_k=StringFromList(numArgs+k+1,FuncDef)
 						Name_ijk=Diagram_i[j][k+3]
-						Switch(IAFcu_JudgeDataSocket(Type_k))
+						Switch(IAFc_JudgeDataSocket(Type_k))
 						Case 1:
 							//data
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//Data exists
 							Type_ijk=DataOrigin[DataOriginIndex][0]
-							If(cmpstr(Type_k,Type_ijk)!=0)
+							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Print("Error: invalid type of data argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//types match
-							StrSwitch(inout_k)
-							Case "0":
+							if(cmpstr(inout_k, "0", 1)==0)
 								//input, do nothing
-								break
-							Case "1":
+							elseif(cmpstr(inout_k, "1", 1)==0)
 								//output, write column 2 in DataOrigin
-								If(cmpstr(DataOrigin[DataOriginIndex][2],"")==0)
+								If(cmpstr(DataOrigin[DataOriginIndex][2],"", 1)==0)
 									//not filled
 									DataOrigin[DataOriginIndex][2]=Name_ij
 								Else
 									//already filled, conflict
-									Print("Error: Data \""+Name_ijk+"\" is output by multiple Functions")
+									Printf "Error: Data \"%s\" is output by multiple Functions", Name_ijk
 									numErrors+=1
 								Endif
-								break
-							Default:
+							else
 								//something strange
 								Print("Unexpected error")
 								numErrors+=1
 								break
-							Endswitch
+							endif
 							break
 						Case 2:
 							//(data-sending) socket
-							If(cmpstr(inout_k,"0")!=0)
+							If(cmpstr(inout_k,"0", 1)!=0)
 								Print("Unexpected error")
 								numErrors+=1
 								break
 							Endif
 							//find the type of the socket to receive the data
 							Type_ijk=IAFcu_GetSocketType(Name_ijk)
-							If(cmpstr(Type_ijk,"module not found")==0)
+							If(cmpstr(Type_ijk,"module not found", 1)==0)
 								//Module Name_ijk does not exist
-								Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
-							If(cmpstr(Type_ijk,"socket not found")==0)
+							If(cmpstr(Type_ijk,"socket not found", 1)==0)
 								//the Module does not have a socket
-								Print("Error: Module \""+Name_ijk+"\" in argument["+num2str(k)+"] does not have a socket (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: Module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")", Name_ijk, k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
-							If(cmpstr(Type_ijk,Type_k)!=0)
+							If(cmpstr(Type_ijk,Type_k,1)!=0)
 								//types do not match
-								Print("Error: invalid type of socket argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -234,13 +227,12 @@ Function IAFc_ConfigureDependency()
 							break
 						Endswitch
 					Endfor
-					break
-				Case "Module":
+				elseif(cmpstr(Kind_ij, "Module", 1)==0)
 					String ModuleDef=IAFc_Module_Definition(Type_ij)
 					//Verify Definition of the Module
-					If(IAFcu_VerifyModuleDefinition(ModuleDef)==0)
+					If(IAFc_VerifyModuleDefinition(ModuleDef)==0)
 						//ill-defined
-						Print("Error: Module \""+Type_ij+"\" is ill-defined")
+						Printf "Error: Module \"%s\" is ill-defined", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -250,87 +242,78 @@ Function IAFc_ConfigureDependency()
 						inout_k=StringFromList(k+1,ModuleDef)
 						Type_k=StringFromList(numArgs+k+1,ModuleDef)
 						Name_ijk=Diagram_i[j][k+3]
-						Switch(IAFcu_JudgeDataSocket(Type_k))
+						Switch(IAFc_JudgeDataSocket(Type_k))
 						Case 1:
 							//data (input, not output)
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//Data exists
 							Type_ijk=DataOrigin[DataOriginIndex][0]
-							If(cmpstr(Type_k,Type_ijk)!=0)
+							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Print("Error: invalid type of data argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//types match
-							StrSwitch(inout_k)
-							Case "0":
+							if(cmpstr(inout_k, "0", 1)==0)
 								//input, do nothing
-								break
-							Case "1":
+							elseif(cmpstr(inout_k, "1", 1)==0)
 								//output, error
-								Print("Error: Module \""+Type_ij+"\" has output data")
+								Printf "Error: Module \"%s\" has output data", Type_ij
 								numErrors+=1
-								break
-							Default:
+							else
 								//something strange
 								Print("Unexpected error")
 								numErrors+=1
-								break
-							Endswitch
+							endif
 							break
 						Case 2:
 							//socket
-							StrSwitch(inout_k)
-							Case "0":
+							if(cmpstr(inout_k, "0", 1)==0)
 								//data-sending
 								//find the type of the socket to receive the data
 								Type_ijk=IAFcu_GetSocketType(Name_ijk)
-								If(cmpstr(Type_ijk,"module not found")==0)
+								If(cmpstr(Type_ijk,"module not found", 1)==0)
 									//Module Name_ijk does not exist
-									Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+									Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
-								If(cmpstr(Type_ijk,"socket not found")==0)
+								If(cmpstr(Type_ijk,"socket not found", 1)==0)
 									//the Module does not have a socket
-									Print("Error: module \""+Name_ijk+"\" in argument["+num2str(k)+"] does not have a socket (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+									Printf "Error: module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")", Name_ijk, k, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
-								If(cmpstr(Type_ijk,Type_k)!=0)
+								If(cmpstr(Type_ijk,Type_k,1)!=0)
 									//types do not match
-									Print("Error: invalid type of socket argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+									Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
 								//types match -> ok
-								break
-							Case "2":
+							elseif(cmpstr(inout_k, "2", 1)==0)
 								//data-receiving
-								break
-							Default:
+							else
 								//something strange
 								Print("Unexpected error")
 								numErrors+=1
-								break
-							EndSwitch
+							endif
 							break
 						Endswitch
 					Endfor
-					break
-				Case "Panel":
+				elseif(cmpstr(Kind_ij, "Panel", 1)==0)
 					String PanelDef=IAFc_Panel_Definition(Type_ij)
 					//Verify Definition of the Panel
-					If(IAFcu_VerifyPanelDefinition(PanelDef)==0)
+					If(IAFc_VerifyPanelDefinition(PanelDef)==0)
 						//ill-defined
-						Print("Error: Panel \""+Type_ij+"\" is ill-defined")
+						Printf "Error: Panel \"%s\" is ill-defined", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -340,58 +323,51 @@ Function IAFc_ConfigureDependency()
 						inout_k=StringFromList(k+1,PanelDef)
 						Type_k=StringFromList(numArgs+k+1,PanelDef)
 						Name_ijk=Diagram_i[j][k+3]
-						Switch(IAFcu_JudgeDataSocket(Type_k))
+						Switch(IAFc_JudgeDataSocket(Type_k))
 						Case 1:
 							//data (input, not output)
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Print("Error: argument["+num2str(k)+"]=\""+Name_ijk+"\" does not exist (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//Data exists
 							Type_ijk=DataOrigin[DataOriginIndex][0]
-							If(cmpstr(Type_k,Type_ijk)!=0)
+							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Print("Error: invalid type of data argument["+num2str(k)+"] (row "+num2str(j)+", Diagram Wave \""+DiagramWaveName+"\")")
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							//types match
-							StrSwitch(inout_k)
-							Case "0":
+							if(cmpstr(inout_k, "0", 1)==0)
 								//input, do nothing
-								break
-							Case "1":
+							elseif(cmpstr(inout_k, "1", 1)==0)
 								//output, error
-								Print("Error: Panel \""+Type_ij+"\" has output data")
+								Printf "Error: Panel \"%s\" has output data", Type_ij
 								numErrors+=1
-								break
-							Default:
+							else
 								//something strange
 								Print("Unexpected error")
 								numErrors+=1
-								break
-							Endswitch
+							endif
 							break
 						Case 2:
 							//socket
-							Print("Error: Panel \""+Type_ij+"\" has socket")
+							Printf "Error: Panel \"%s\" has socket", Type_ij
 							numErrors+=1
 							break
 						Endswitch
 					Endfor
-					break
-				Default:
+				else
 					//never occur (already verified by IAFcu_VerifyKindType)
 					Print("Unexpected error")
 					numErrors+=1
-					break
-				Endswitch
-			
+				endif
 			Else
-				Print("Skip row "+num2str(j)+" of Diagram Wave \""+DiagramWaveName+"\" (Kind: \""+Kind_ij+"\", Type: \""+Type_ij+"\" is ill-defined)")
+				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\" is ill-defined)", j, DiagramWaveName, Kind_ij, Type_ij
 			Endif
 		Endfor
 	Endfor
@@ -453,7 +429,7 @@ Function IAFc_ConfigureDependency()
 			DescendFunctions=IAFcu_RemoveDuplicity(DescendFunctions_new)
 			DescendModules=IAFcu_RemoveDuplicity(DescendModules_new)
 			
-			If(cmpstr(DescendData,"")==0 && cmpstr(DescendFunctions,"")==0 && cmpstr(DescendModules,"")==0)
+			If(cmpstr(DescendData,"",1)==0 && cmpstr(DescendFunctions,"",1)==0 && cmpstr(DescendModules,"",1)==0)
 				break
 			Endif
 		while(1)
@@ -479,7 +455,7 @@ Function IAFc_ConfigureDependency()
 			Kind_ij=Diagram_i[j][0]
 			Type_ij=Diagram_i[j][1]
 			Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function",1)==0)
 				Ascend[index][0]=Name_ij
 				For(k=0;k<numData;k+=1)
 					If(WhichListItem(Name_ij,Descend[k][1])!=-1)
@@ -506,7 +482,7 @@ Function IAFcu_GetDataOriginIndex(name,currentFolder)
 	Variable numData=DimSize(DataOrigin,0)
 	Variable i
 	For(i=0;i<numData;i+=1)
-		If(cmpstr(DataOrigin[i][1],name)==0)
+		If(cmpstr(DataOrigin[i][1],name,1)==0)
 			return i
 		Endif
 	Endfor
@@ -529,12 +505,12 @@ Function/S IAFcu_GetSocketType(name)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Name_ij,name)==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Name_ij,name,1)==0)
 				String ModuleDef=IAFc_Module_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,ModuleDef))
 				Variable k
 				For(k=0;k<numArgs;k+=1)
-					If(cmpstr(StringFromList(k+1,ModuleDef),"2")==0)
+					If(cmpstr(StringFromList(k+1,ModuleDef),"2",1)==0)
 						return StringFromList(numArgs+k+1,ModuleDef)
 					Endif
 				Endfor
@@ -561,11 +537,11 @@ Function/S IAFcu_InputParts_Function(name)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function",1)==0)
 				String FuncDef=IAFc_Function_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,FuncDef))
 				For(k=0;k<numArgs;k+=1)
-					If(cmpstr(Diagram_i[j][k+3],name)==0 && cmpstr(StringFromList(k+1,FuncDef),"0")==0)
+					If(cmpstr(Diagram_i[j][k+3],name,1)==0 && cmpstr(StringFromList(k+1,FuncDef),"0",1)==0)
 						FunctionList=AddListItem(Name_ij,FunctionList)
 						break
 					Endif
@@ -592,11 +568,11 @@ Function/S IAFcu_InputParts_Module(name)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Module")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Module",1)==0)
 				String ModuleDef=IAFc_Module_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,ModuleDef))
 				For(k=0;k<numArgs;k+=1)
-					If(cmpstr(Diagram_i[j][k+3],name)==0 && cmpstr(StringFromList(k+1,ModuleDef),"0")==0)
+					If(cmpstr(Diagram_i[j][k+3],name,1)==0 && cmpstr(StringFromList(k+1,ModuleDef),"0",1)==0)
 						ModuleList=AddListItem(Name_ij,ModuleList)
 						break
 					Endif
@@ -623,11 +599,11 @@ Function/S IAFcu_OutputParts(name)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function")==0 && cmpstr(Name_ij,name)==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Function",1)==0 && cmpstr(Name_ij,name,1)==0)
 				String FuncDef=IAFc_Function_definition(Type_ij)
 				Variable numArgs=str2num(StringFromList(0,FuncDef))
 				For(k=0;k<numArgs;k+=1)
-					If(cmpstr(StringFromList(k+1,FuncDef),"1")==0)
+					If(cmpstr(StringFromList(k+1,FuncDef),"1",1)==0)
 						DataList=AddListItem(Diagram_i[j][k+3],DataList)
 					Endif
 				Endfor

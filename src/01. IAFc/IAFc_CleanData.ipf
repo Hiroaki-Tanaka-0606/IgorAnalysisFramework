@@ -1,9 +1,8 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-//IAFc_CreateData: create Variable(s) and String(s) in Data folder
+//IAFc_CleanData: remove unused Variable(s) and String(s) in Data folder
 Function IAFc_CleanData()
 	Print("[IAFc_CleanData]")
-	
 	If(!DataFolderExists("Diagrams"))
 		Print("Error: folder Diagrams does not exist")
 		return 0
@@ -29,24 +28,18 @@ Function IAFc_CleanData()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Data")==0)
-				strswitch(Type_ij)
-				case "String":
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Data", 1)==0)
+				if(cmpstr(Type_ij, "String", 1)==0)
 					StringsList=addlistitem(Name_ij,StringsList)
-					break
-				Case "Variable":
+				elseif(cmpstr(Type_ij, "Variable", 1)==0)
 					VariablesList=addListItem(Name_ij,VariablesList)
-					break
-				Case "Wave1D":
-				Case "Wave2D":
-				Case "Wave3D":
-				Case "Wave4D":
-				Case "TextWave":
+				elseif(cmpstr(Type_ij, "Wave1D", 1)==0 || \
+						cmpstr(Type_ij, "Wave2D", 1)==0 || \
+						cmpstr(Type_ij, "Wave3D", 1)==0 || \
+						cmpstr(Type_ij, "Wave4D", 1)==0 || \
+						cmpstr(Type_ij, "TextWave", 1)==0)
 					WavesList=addListItem(Name_ij,WavesList)
-					break
-				Default:
-					break
-				endswitch
+				endif
 			Endif
 		Endfor
 	Endfor

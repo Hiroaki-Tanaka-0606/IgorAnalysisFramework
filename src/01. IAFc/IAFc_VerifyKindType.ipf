@@ -1,22 +1,20 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-//IAFcu_VerifyKindType: verify a pair of Kind and Type
+//IAFc_VerifyKindType: verify a pair of Kind and Type
 //Usage:
 //kind, type: kind, type of a part
 //Return 1 when valid, 0 when invalid
-Function IAFcu_VerifyKindType(kind,type)
+Function IAFc_VerifyKindType(kind,type)
 	String kind, type
 	
-	StrSwitch(kind)
-	Case "Data":
+	if(cmpstr(kind, "Data", 1)==0)
 		String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;Wave4D;TextWave"
 		If(WhichListItem(type,DataTypeList)==-1)
 			return 0 //invalid type
 		Else
 			return 1 //valid type
 		Endif
-		break
-	Case "Function":
+	elseif(cmpstr(kind, "Function", 1)==0)
 		Variable FuncDefinition=Exists("IAFf_"+type+"_Definition")
 		Variable FuncExecution=Exists("IAFf_"+type)
 		If(FuncDefinition==6 && FuncExecution==6)
@@ -24,8 +22,7 @@ Function IAFcu_VerifyKindType(kind,type)
 		Else
 			return 0 //not both exist
 		Endif
-		break
-	Case "Module":
+	elseif(cmpstr(kind, "Module", 1)==0)
 		Variable ModuleDefinition=Exists("IAFm_"+type+"_Definition")
 		Variable ModuleExecution=Exists("IAFm_"+type)
 		//In the verification, we don't check existence of IAFm_[ModuleName]_Format
@@ -34,8 +31,7 @@ Function IAFcu_VerifyKindType(kind,type)
 		Else
 			return 0 //not both exist
 		Endif
-		break
-	Case "Panel":
+	elseif(cmpstr(kind, "Panel", 1)==0)
 		Variable PanelDefinition=Exists("IAFp_"+type+"_Definition")
 		Variable PanelExecution=Exists("IAFp_"+type)
 		If(PanelDefinition==6 && PanelExecution==6)
@@ -43,16 +39,14 @@ Function IAFcu_VerifyKindType(kind,type)
 		Else
 			return 0 //not both exist
 		Endif
-		break
-	Default:
+	else
 		return 0
-	Endswitch
-	
+	endif
 End
 
 //judge whether the type is data or socket
 //return 1 when data, 2 when socket, 0 otherwise
-Function IAFcu_JudgeDataSocket(type)
+Function IAFc_JudgeDataSocket(type)
 	String type
 	
 	String DataTypeList="Variable;String;Wave1D;Wave2D;Wave3D;Wave4D;TextWave"		
@@ -69,7 +63,7 @@ End
 
 //Verify Definition of the Function
 //return 0 when not ok, 1 when ok
-Function IAFcu_VerifyFunctionDefinition(FuncDef)
+Function IAFc_VerifyFunctionDefinition(FuncDef)
 	String FuncDef
 	Variable i
 	Variable numArgs=str2num(StringFromList(0,FuncDef))
@@ -78,7 +72,7 @@ Function IAFcu_VerifyFunctionDefinition(FuncDef)
 	For(i=0;i<numArgs;i+=1)
 		inout_i=str2num(StringFromList(i+1,FuncDef))
 		Type_i=StringFromList(numArgs+i+1,FuncDef)
-		Switch(IAFcu_JudgeDataSocket(Type_i))
+		Switch(IAFc_JudgeDataSocket(Type_i))
 		Case 1:
 			//data
 			//input or output
@@ -105,7 +99,7 @@ End
 
 //Verify Definition of the Module
 //return 0 when not ok, 1 when ok
-Function IAFcu_VerifyModuleDefinition(ModuleDef)
+Function IAFc_VerifyModuleDefinition(ModuleDef)
 	String ModuleDef
 	Variable i
 	Variable numArgs=str2num(StringFromList(0,ModuleDef))
@@ -115,7 +109,7 @@ Function IAFcu_VerifyModuleDefinition(ModuleDef)
 	For(i=0;i<numArgs;i+=1)
 		inout_i=str2num(StringFromList(i+1,ModuleDef))
 		Type_i=StringFromList(numArgs+i+1,ModuleDef)
-		Switch(IAFcu_JudgeDataSocket(Type_i))
+		Switch(IAFc_JudgeDataSocket(Type_i))
 		Case 1:
 			//data
 			//input (data output does not exist in Module)
@@ -149,7 +143,7 @@ End
 
 //Verify Definition of the Panel
 //return 0 when not ok, 1 when ok
-Function IAFcu_VerifyPanelDefinition(PanelDef)
+Function IAFc_VerifyPanelDefinition(PanelDef)
 	String PanelDef
 	Variable i
 	Variable numArgs=str2num(StringFromList(0,PanelDef))
@@ -158,7 +152,7 @@ Function IAFcu_VerifyPanelDefinition(PanelDef)
 	For(i=0;i<numArgs;i+=1)
 		inout_i=str2num(StringFromList(i+1,PanelDef))
 		Type_i=StringFromList(numArgs+i+1,PanelDef)
-		Switch(IAFcu_JudgeDataSocket(Type_i))
+		Switch(IAFc_JudgeDataSocket(Type_i))
 		Case 1:
 			//data
 			//input (data output does not exist in Panel)

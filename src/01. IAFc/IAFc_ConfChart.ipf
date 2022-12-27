@@ -1,7 +1,5 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-#include "IAFcu_VerifyKindType"
-
 //IAFc_ConfigureChart: create ChartIndex & ChartPosition in folder "Configurations"
 Function IAFc_ConfigureChart()
 	Print("[IAFc_ConfigureChart]")
@@ -34,7 +32,7 @@ Function IAFc_ConfigureChart()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 				TypeList=AddListItem(Type_ij,TypeList)
 				NameList=AddListItem(Name_ij,NameList)
 				OriginList=AddListItem(DiagramWaveName,OriginList)
@@ -83,7 +81,7 @@ Function IAFc_ConfigureChart()
 	
 	//also see IAFc_DrawChart()
 	Variable offsetX=10
-	Variable offsetY=(IAFcu_CalcCHartHeight(1)+10)*2
+	Variable offsetY=(IAFc_CalcChartHeight(1)+10)*2
 	
 	For(i=0;i<remainingNumParts;i+=1)
 		PartName=StringFromList(i,remainingPartsList)
@@ -93,8 +91,8 @@ Function IAFc_ConfigureChart()
 		String OriginName=StringFromList(index,OriginList)
 		newChartIndex[newIndex][1]=OriginName
 		Variable LetterLength=max(strlen(PartName),strlen(TypeName))
-		Variable width=IAFcu_CalcChartWidth(LetterLength)
-		Variable height=IAFcu_CalcChartHeight(2)
+		Variable width=IAFc_CalcChartWidth(LetterLength)
+		Variable height=IAFc_CalcChartHeight(2)
 		newChartPosition[newIndex][0]=offsetX+width/2
 		newChartPosition[newIndex][1]=offsetY+height/2
 		newChartPosition[newIndex][2]=width
@@ -110,6 +108,3 @@ Function IAFc_ConfigureChart()
 	
 	cd $currentFolder
 End
-
-//////////
-//////////

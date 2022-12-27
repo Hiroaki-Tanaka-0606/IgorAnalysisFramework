@@ -235,9 +235,9 @@ Function IAFp_SmoothingCtrl2D(argumentList, PanelName, PanelTitle)
 	cd Data
 	
 	//put a setvariable
-	IAFcu_DrawSetVariable(0,0,length1Arg,4,length1Arg,1,1,1,inf,1)
-	IAFcu_DrawSetVariable(0,30,length2Arg,4,length2Arg,1,1,1,inf,1)
-	IAFcu_DrawSetVariable(0,60,noOverlapArg,4,noOverlapArg,1,1,0,1,1)
+	IAFu_DrawSetVariable(0,0,length1Arg,4,length1Arg,1,1,1,inf,1)
+	IAFu_DrawSetVariable(0,30,length2Arg,4,length2Arg,1,1,1,inf,1)
+	IAFu_DrawSetVariable(0,60,noOverlapArg,4,noOverlapArg,1,1,0,1,1)
 
 End
 
@@ -530,9 +530,9 @@ Function IAFp_SmoothingCtrl3D(argumentList, PanelName, PanelTitle)
 	cd Data
 	
 	//put a setvariable
-	IAFcu_DrawSetVariable(0,0,length1Arg,4,length1Arg,1,1,1,inf,1)
-	IAFcu_DrawSetVariable(0,30,length2Arg,4,length2Arg,1,1,1,inf,1)
-	IAFcu_DrawSetVariable(0,60,length3Arg,4,length3Arg,1,1,1,inf,1)
-	IAFcu_DrawSetVariable(0,90,noOverlapArg,4,noOverlapArg,1,1,0,1,1)
+	IAFu_DrawSetVariable(0,0,length1Arg,4,length1Arg,1,1,1,inf,1)
+	IAFu_DrawSetVariable(0,30,length2Arg,4,length2Arg,1,1,1,inf,1)
+	IAFu_DrawSetVariable(0,60,length3Arg,4,length3Arg,1,1,1,inf,1)
+	IAFu_DrawSetVariable(0,90,noOverlapArg,4,noOverlapArg,1,1,0,1,1)
 
 End

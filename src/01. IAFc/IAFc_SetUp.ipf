@@ -18,10 +18,10 @@ Function IAFc_SetUp(numArgs)
 	Print("Number of arguments: "+num2str(numArgs))
 	
 	//create folders
-	IAFcu_createFolder("Diagrams")
-	IAFcu_createFolder("Data")
-	IAFcu_createFolder("Configurations")
-	IAFcu_createFolder("TempData")
+	IAFu_createFolder("Diagrams")
+	IAFu_createFolder("Data")
+	IAFu_createFolder("Configurations")
+	IAFu_createFolder("TempData")
 	
 	//create sample of Diamgram wave named "Diagram0"
 	//if it exists, do nothing
@@ -35,8 +35,8 @@ Function IAFc_SetUp(numArgs)
 	cd $currentFolder
 End
 
-//IAFcu_createFolder: check existence and create folder in the current folder
-Function IAFcu_createFolder(folderName)
+//IAFu_createFolder: check existence and create folder in the current folder
+Function IAFu_createFolder(folderName)
 	String folderName
 	If(DataFolderExists(folderName))
 		Print("Warning: Data Folder \""+folderName+"\" already exists.")

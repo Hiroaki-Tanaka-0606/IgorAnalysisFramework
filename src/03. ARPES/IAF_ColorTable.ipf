@@ -161,14 +161,14 @@ Function IAFp_ColorTableCtrl(argumentList,PanelName,PanelTitle)
 	cd Data
 	
 	//put a setvariable
-	IAFcu_DrawSetVariable(0,0,"Data Min",6,dataMinArg,0,0,-inf,inf,0)
-	IAFcu_DrawSetVariable(200,0,"Data Max",6,dataMaxArg,0,0,-inf,inf,0)
+	IAFu_DrawSetVariable(0,0,"Data Min",6,dataMinArg,0,0,-inf,inf,0)
+	IAFu_DrawSetVariable(200,0,"Data Max",6,dataMaxArg,0,0,-inf,inf,0)
 	
-	IAFcu_DrawSetVariable(0,30,"Color Min",6,colorMinArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(200,30,"Color Max",6,colorMaxArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(0,30,"Color Min",6,colorMinArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(200,30,"Color Max",6,colorMaxArg,1,1,-inf,inf,0)
 	
 	
-	IAFcu_DrawSetVariable(0,60,"Gamma",6,gammaValueArg,1,1,0,inf,0)
-	IAFcu_DrawSetVariable(200,60,"Steps",6,numStepsArg,1,1,0,inf,1)
+	IAFu_DrawSetVariable(0,60,"Gamma",6,gammaValueArg,1,1,0,inf,0)
+	IAFu_DrawSetVariable(200,60,"Steps",6,numStepsArg,1,1,0,inf,1)
 
 End

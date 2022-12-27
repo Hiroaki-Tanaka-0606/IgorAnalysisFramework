@@ -444,27 +444,27 @@ Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	Variable ControlsHeight=18
 	Variable ControlBarHeight=ControlsHeight*4	
 	
-	IAFcu_DrawSetVariable(30,0,"Ex Start",4,ExStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,0,"End",4,ExEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,0,"Center",5,ExCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,0,"Width",5,ExWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,0,"Ex Start",4,ExStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,0,"End",4,ExEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,0,"Center",5,ExCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,0,"Width",5,ExWidthArg,1,1,-inf,inf,0)
 
-	IAFcu_DrawSetVariable(30,ControlsHeight,"Ey Start",4,EyStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,ControlsHeight,"End",4,EyEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,ControlsHeight,"Center",5,EyCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,ControlsHeight,"Width",5,EyWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,ControlsHeight,"Ey Start",4,EyStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,ControlsHeight,"End",4,EyEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,ControlsHeight,"Center",5,EyCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,ControlsHeight,"Width",5,EyWidthArg,1,1,-inf,inf,0)
 	
-	IAFcu_DrawSetVariable(30,ControlsHeight*2,"xy Start",4,xyStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,ControlsHeight*2,"End",4,xyEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,ControlsHeight*2,"Center",5,xyCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,ControlsHeight*2,"Width",5,xyWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,ControlsHeight*2,"xy Start",4,xyStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,ControlsHeight*2,"End",4,xyEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,ControlsHeight*2,"Center",5,xyCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,ControlsHeight*2,"Width",5,xyWidthArg,1,1,-inf,inf,0)
 	
 	//Wide & Narrow button
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(1)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(1)
+	Variable height=IAFc_CalcChartHeight(1)
 	String command
 	String format
 	
@@ -597,7 +597,7 @@ Function IAFu_3DViewer_Button(BS): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						ExDeltaArg=Diagram_i[j][26]
 						EyDeltaArg=Diagram_i[j][27]
@@ -708,7 +708,7 @@ Function IAFu_3DViewer_Keyboard(s)
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						ExDeltaArg=Diagram_i[j][23]
 						EyDeltaArg=Diagram_i[j][24]

@@ -435,24 +435,24 @@ Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	//Control bar (not actual ControlBar created by the command "ControlBar")
 	Variable ControlsHeight=18
 	Variable ControlBarHeight=ControlsHeight*3
-	IAFcu_DrawSetVariable(30,0,"EDC Start",4,edcStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,0,"End",4,edcEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,0,"Center",5,edcCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,0,"Width",5,edcWidthArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(30,ControlsHeight,"MDC Start",4,mdcStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,ControlsHeight,"End",4,mdcEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,ControlsHeight,"Center",5,mdcCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,ControlsHeight,"Width",5,mdcWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,0,"EDC Start",4,edcStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,0,"End",4,edcEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,0,"Center",5,edcCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,0,"Width",5,edcWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,ControlsHeight,"MDC Start",4,mdcStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,ControlsHeight,"End",4,mdcEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,ControlsHeight,"Center",5,mdcCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,ControlsHeight,"Width",5,mdcWidthArg,1,1,-inf,inf,0)
 	
 	String command
 	String format
 	
 	//Wide & Narrow button
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(1)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(1)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	sprintf format "Button %%s pos={%%g,%%g},font=\"%s\",fsize=%g,title=\"%%s\",proc=%s,size={%g,%g}",fn,fs,"IAFu_2DViewer_Button",width,height
 	
@@ -566,7 +566,7 @@ Function IAFu_2DViewer_Keyboard(s)
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						edcDeltaArg=Diagram_i[j][17]
 						mdcDeltaArg=Diagram_i[j][18]
@@ -690,7 +690,7 @@ Function IAFu_2DViewer_Button(BS): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						edcDeltaArg=Diagram_i[j][19]
 						mdcDeltaArg=Diagram_i[j][20]

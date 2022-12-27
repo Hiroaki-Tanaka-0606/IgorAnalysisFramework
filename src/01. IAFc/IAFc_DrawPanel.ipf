@@ -34,7 +34,7 @@ Function IAFc_CallPanel(PanelName)
 				return 0
 			Endif
 			
-			If(cmpstr(winTitle,PanelTitle)==0)
+			If(cmpstr(winTitle,PanelTitle,1)==0)
 				//The intended window exists
 			Else
 				//not exist
@@ -74,8 +74,8 @@ Function IAFc_CallPanelDialog()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Kind_ij,"Panel")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Kind_ij,"Panel",1)==0)
 					PanelList=AddListItem(Name_ij,PanelList)
 				Endif
 			ENdif
@@ -98,7 +98,7 @@ End
 Function IAFc_ReCallPanel(PanelName)
 	String PanelName
 	String currentFolder=GetDataFolder(1)
-	Print("[IAFc_CallPanel]")
+	Print("[IAFc_ReCallPanel]")
 	
 	String SVARName="IAF_"+PanelName+"_Name"
 	String PanelTitle=PanelName+" in "+currentFolder
@@ -126,7 +126,7 @@ Function IAFc_ReCallPanel(PanelName)
 				return 0
 			Endif
 			
-			If(cmpstr(winTitle,PanelTitle)==0)
+			If(cmpstr(winTitle,PanelTitle,1)==0)
 				//The intended window exists
 				KillWindow $gPanelName
 			Endif
@@ -160,8 +160,8 @@ Function IAFc_ReCallPanelDialog()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Kind_ij,"Panel")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Kind_ij,"Panel",1)==0)
 					PanelList=AddListItem(Name_ij,PanelList)
 				Endif
 			ENdif
@@ -180,16 +180,18 @@ Function IAFc_ReCallPanelDialog()
 	IAFc_ReCallPanel(PanelName)	
 End
 
-Function IAFcu_DrawSetVariable(x,y,title,variableWidth,variableName,visibility,autoUpdate,low,high,inc)
+// Put a SetVariable on a panel
+// if autoUpdate is set to 1, the value change triggers IAFc_Update(variable)
+Function IAFu_DrawSetVariable(x,y,title,variableWidth,variableName,visibility,autoUpdate,low,high,inc)
 	Variable x,y,variableWidth,visibility,autoUpdate,low,high,inc
 	String title,variableName
 	
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(strlen(title)+variableWidth)
-	Variable bodyWidth=IAFcu_CalcChartWidth(variableWidth)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(strlen(title)+variableWidth)
+	Variable bodyWidth=IAFc_CalcChartWidth(variableWidth)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	String command
 	sprintf command, "SetVariable %s pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},bodyWidth=%g,value=\'%s\',title=\"%s\",limits={%g,%g,%g}","SV"+variableName,x,y,fn,fs,width,height,bodyWidth,variableName,title,low,high,inc
@@ -197,26 +199,26 @@ Function IAFcu_DrawSetVariable(x,y,title,variableWidth,variableName,visibility,a
 		command=command+",disable=2"
 	Endif
 	If(autoUpdate==1)
-		command=command+",proc=IAFcu_Panel_SetVariable"
+		command=command+",proc=IAFu_Panel_SetVariable"
 	Endif
 	Execute command
 End
 
-Function IAFcu_DrawUpdateButton(x,y)
+Function IAFu_DrawUpdateButton(x,y)
 	Variable x,y
 	
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(6)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(6)
+	Variable height=IAFc_CalcChartHeight(1)
 	
 	String command
-	sprintf command, "Button updateButton pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},title=\"Update\",proc=IAFcu_Panel_Button",x,y,fn,fs,width,height
+	sprintf command, "Button updateButton pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},title=\"Update\",proc=IAFu_Panel_Button",x,y,fn,fs,width,height
 	Execute command
 End
 
-Function IAFcu_Panel_SetVariable(SV): SetVariableControl
+Function IAFu_Panel_SetVariable(SV): SetVariableControl
 	STRUCT WMSetVariableAction &SV
 	
 	If(SV.eventCode==1 || SV.eventCode==2)
@@ -259,7 +261,7 @@ Function IAFcu_Panel_SetVariable(SV): SetVariableControl
 	
 End
 
-Function IAFcu_Panel_Button(BV): ButtonControl
+Function IAFu_Panel_Button(BV): ButtonControl
 	STRUCT WMButtonAction &BV
 	If(BV.eventCode==2)
 		String currentFolder=getDataFolder(1)
@@ -302,12 +304,12 @@ Function IAFcu_Panel_Button(BV): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,PanelName)==0)
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+					If(cmpstr(Kind_ij,"Panel",1)==0 && cmpstr(Name_ij,PanelName,1)==0)
 						String Definition=IAFc_Panel_Definition(Type_ij)
 						Variable numArgs=str2num(StringFromList(0,Definition))
 						For(k=0;k<numArgs;k+=1)
-							If(IAFcu_JudgeDataSocket(StringFromList(1+numArgs+k,Definition))==1)
+							If(IAFc_JudgeDataSocket(StringFromList(1+numArgs+k,Definition))==1)
 								DataList=AddListItem(Diagram_i[j][k+3],DataList)
 							Endif
 						Endfor

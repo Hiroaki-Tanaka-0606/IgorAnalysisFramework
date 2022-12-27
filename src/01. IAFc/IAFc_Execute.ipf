@@ -1,8 +1,5 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-#include "IAFcu_VerifyKindType"
-
-
 Function/S IAFc_Prototype_Definition()
 End
 
@@ -67,8 +64,8 @@ Function IAFc_Execute(FuncName)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Name_ij,FuncName)==0 && cmpstr(Kind_ij,"Function")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij,FuncName,1)==0 && cmpstr(Kind_ij,"Function",1)==0)
 					String Definition=IAFc_Function_Definition(Type_ij)					
 					String FuncFullName="IAFf_"+Type_ij
 					FUNCREF IAFc_Prototype f = $FuncFullName
@@ -84,45 +81,40 @@ Function IAFc_Execute(FuncName)
 					Variable numArgs=str2num(StringFromList(0,Definition))
 					Variable k
 					For(k=0;k<numArgs;k+=1)
-						If(cmpstr(StringFromList(1+k,Definition),"0")==0)
-							StrSwitch(StringFromList(1+numArgs+k,Definition))
-							Case "Variable":
+						If(cmpstr(StringFromList(1+k,Definition),"0",1)==0)
+							String Type_k=StringFromList(1+numArgs+k,Definition)
+							if(cmpstr(Type_k, "Variable", 1)==0)
 								NVAR v=$Diagram_i[j][k+3]
 								If(!NVAR_exists(v))
-									Print("Error: Variable \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Variable \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "String":
+							elseif(cmpstr(Type_k, "String", 1)==0)
 								SVAR s=$Diagram_i[j][k+3]
 								If(!SVAR_exists(s))
-									Print("Error: String \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: String \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "Wave1D":
-							Case "Wave2D":
-							Case "Wave3D":
-							Case "Wave4D":
+							elseif(cmpstr(Type_k, "Wave1D", 1)==0 || \
+									cmpstr(Type_k, "Wave2D", 1)==0 || \
+									cmpstr(Type_k, "Wave3D", 1)==0 || \
+									cmpstr(Type_k, "Wave4D", 1)==0)
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
-									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Variable Wave \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "TextWave":
+							elseif(cmpstr(Type_k, "TextWave", 1)==0)
 								Wave/T t=$Diagram_i[j][k+3]
 								If(!WaveExists(t))
-									Print("Error: Text Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Text Wave \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Default:
-							Endswitch
+							endif
 						Endif
 						
 					Endfor
@@ -139,7 +131,7 @@ Function IAFc_Execute(FuncName)
 			Endif
 		Endfor
 	Endfor	
-	Print("Error: Function Part \""+FuncName+"\" does not exist")
+	Printf "Error: Function Part \"%s\" does not exist", FuncName
 	cd ::
 	return 0
 End
@@ -171,8 +163,8 @@ Function/S IAFc_CallSocket(ModuleName,valueWaveName)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Name_ij,ModuleName)==0 && cmpstr(Kind_ij,"Module")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij,ModuleName,1)==0 && cmpstr(Kind_ij,"Module",1)==0)
 					String FuncFullName="IAFm_"+Type_ij
 					String Definition=IAFc_Module_Definition(Type_ij)	
 					FUNCREF IAFc_Prototype_Module f = $FuncFullName			
@@ -189,48 +181,43 @@ Function/S IAFc_CallSocket(ModuleName,valueWaveName)
 					Variable k
 					String argumentsList=""
 					For(k=0;k<numArgs;k+=1)
-						If(cmpstr(StringFromList(1+k,Definition),"0")==0)
-							StrSwitch(StringFromList(1+numArgs+k,Definition))
-							Case "Variable":
+						If(cmpstr(StringFromList(1+k,Definition),"0",1)==0)
+							String Type_k=StringFromList(1+numArgs+k, Definition)
+							if(cmpstr(Type_k, "Variable", 1)==0)
 								NVAR v=$Diagram_i[j][k+3]
 								If(!NVAR_exists(v))
 									Print("Error: Variable \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
 									return ""
 								Endif
-								break
-							Case "String":
+							elseif(cmpstr(Type_k, "String", 1)==0)
 								SVAR s=$Diagram_i[j][k+3]
 								If(!SVAR_exists(s))
 									Print("Error: String \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
 									return ""
 								Endif
 								break
-							Case "Wave1D":
-							Case "Wave2D":
-							Case "Wave3D":
-							Case "Wave4D":
+							elseif(cmpstr(Type_k, "Wave1D", 1)==0 || \
+								cmpstr(Type_k, "Wave2D", 1)==0 || \
+								cmpstr(Type_k, "Wave3D", 1)==0 || \
+								cmpstr(Type_k, "Wave4D", 1)==0)
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
 									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
 									return ""
 								Endif
-								break
-							Case "TextWave":
+							elseif(cmpstr(Type_k, "TextWave", 1)==0)
 								Wave/T t=$Diagram_i[j][k+3]
 								If(!WaveExists(t))
 									Print("Error: Text Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
 									return ""
 								Endif
-								break
-							Default:
-							Endswitch
+							endif
 						Endif
-
 					Endfor
 					
 					//get argumentsList
 					For(k=0;k<numArgs;k+=1)
-						If(cmpstr(StringFromList(1+(numArgs-k-1),Definition),"2")==0)
+						If(cmpstr(StringFromList(1+(numArgs-k-1),Definition),"2",1)==0)
 							//socket
 							argumentsList=addListItem(valueWaveName,argumentsList)
 						Else
@@ -244,7 +231,7 @@ Function/S IAFc_CallSocket(ModuleName,valueWaveName)
 		Endfor
 	Endfor
 	
-	Print("Error: Function Part \""+ModuleName+"\" does not exist")
+	Printf "Error: Module Part \"%s\" does not exist", ModuleName
 	cd ::Data
 	return ""
 End
@@ -287,7 +274,7 @@ Function IAFc_ExecuteList(FuncList)
 			inputs_i="" //input of Function_i
 			flag=0
 			For(j=0;j<AscendSize;j+=1)
-				If(cmpstr(Ascend[j][0],Function_i)==0)
+				If(cmpstr(Ascend[j][0],Function_i,1)==0)
 					inputs_i=Ascend[j][1]
 					flag=1
 					break
@@ -295,7 +282,7 @@ Function IAFc_ExecuteList(FuncList)
 			Endfor
 			If(flag==0)
 				//not found
-				Print("Error: Function \""+Function_i+"\" does not exist in Ascend")
+				Printf "Error: Function \"%s\" does not exist in Ascend", Function_i
 				return 0
 			Endif
 			inputSize=ItemsInList(inputs_i)
@@ -305,7 +292,7 @@ Function IAFc_ExecuteList(FuncList)
 				input_ij=StringFromList(j,inputs_i)
 				flag2=0
 				For(k=0;k<DataOriginSize;k+=1)
-					If(cmpstr(input_ij,DataOrigin[k][1])==0)
+					If(cmpstr(input_ij,DataOrigin[k][1],1)==0)
 						Function_ij=DataOrigin[k][2]
 						flag2=1
 						If(WhichListItem(Function_ij,FuncList)!=-1)
@@ -317,7 +304,7 @@ Function IAFc_ExecuteList(FuncList)
 				Endfor
 				If(flag2==0)
 					//not found
-					Print("Error: Data\""+input_ij+"\" does not exist in DataOrigin")
+					Printf "Error: Data\"%s\" does not exist in DataOrigin", input_ij
 					return 0
 				Endif
 				If(flag==0)
@@ -379,14 +366,14 @@ Function IAFc_Update(DataList)
 		Data_i=StringFromList(i,DataList)
 		flag=0
 		For(j=0;j<DescendSize;j+=1)
-			If(cmpstr(Data_i,Descend[j][0])==0)
+			If(cmpstr(Data_i,Descend[j][0],1)==0)
 				Funcs_i=Descend[j][1]
 				flag=1
 				break
 			Endif
 		Endfor
 		If(flag==0)
-			Print("Error: Data \""+Data_i+"\" does not exist in Descend")
+			Printf "Error: Data \"%s\" does not exist in Descend", Data_i
 			return 0
 		Endif
 		FuncSize=ItemsInList(Funcs_i)
@@ -427,8 +414,8 @@ Function IAFc_DrawPanel(PanelName,PanelTitle)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Name_ij,PanelName)==0 && cmpstr(Kind_ij,"Panel")==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij,PanelName,1)==0 && cmpstr(Kind_ij,"Panel",1)==0)
 					String Definition=IAFc_Panel_Definition(Type_ij)					
 					String FuncFullName="IAFp_"+Type_ij
 					FUNCREF IAFc_Panel_Prototype f = $FuncFullName
@@ -444,45 +431,40 @@ Function IAFc_DrawPanel(PanelName,PanelTitle)
 					Variable numArgs=str2num(StringFromList(0,Definition))
 					Variable k
 					For(k=0;k<numArgs;k+=1)
-						If(cmpstr(StringFromList(1+k,Definition),"0")==0)
-							StrSwitch(StringFromList(1+numArgs+k,Definition))
-							Case "Variable":
+						If(cmpstr(StringFromList(1+k,Definition),"0",1)==0)
+							String Type_k=StringFromList(1+numArgs+k,Definition)
+							if(cmpstr(Type_k, "Variable", 1)==0)
 								NVAR v=$Diagram_i[j][k+3]
 								If(!NVAR_exists(v))
-									Print("Error: Variable \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Variable \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "String":
+							elseif(cmpstr(Type_k, "String", 1)==0)
 								SVAR s=$Diagram_i[j][k+3]
 								If(!SVAR_exists(s))
-									Print("Error: String \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: String \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "Wave1D":
-							Case "Wave2D":
-							Case "Wave3D":
-							Case "Wave4D":
+							elseif(cmpstr(Type_k, "Wave1D", 1)==0 || \
+									cmpstr(Type_k, "Wave2D", 1)==0 || \
+									cmpstr(Type_k, "Wave3D", 1)==0 || \
+									cmpstr(Type_k, "Wave4D", 1)==0)
 								Wave/D w=$Diagram_i[j][k+3]
 								If(!WaveExists(w))
-									Print("Error: Variable Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Variable Wave \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Case "TextWave":
+							elseif(cmpstr(Type_k, "TextWave", 1)==0)
 								Wave/T t=$Diagram_i[j][k+3]
 								If(!WaveExists(t))
-									Print("Error: Text Wave \""+Diagram_i[j][k+3]+"\" does not exist in folder Data")
+									Printf "Error: Text Wave \"%s\" does not exist in folder Data", Diagram_i[j][k+3]
 									cd ::
 									return 0
 								Endif
-								break
-							Default:
-							Endswitch
+							endif
 						Endif
 						
 					Endfor
@@ -499,7 +481,7 @@ Function IAFc_DrawPanel(PanelName,PanelTitle)
 			Endif
 		Endfor
 	Endfor	
-	Print("Error: Function Part \""+PanelName+"\" does not exist")
+	Printf "Error: Panel Part \"%s\" does not exist", PanelName
 	cd ::
 	return 0
 End

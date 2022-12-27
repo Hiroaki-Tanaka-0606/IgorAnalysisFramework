@@ -1,55 +1,53 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-#include "IAFcu_VerifyKindType"
-
-//IAFcu_FontSize: return font size
-Function IAFcu_FontSize()
+//IAFc_FontSize: return font size
+Function IAFc_FontSize()
 	return 16
 End
 
-//IAFcu_HeightRatio: return height/fontSize of a letter
-Function IAFcu_HeightRatio()
+//IAFc_HeightRatio: return height/fontSize of a letter
+Function IAFc_HeightRatio()
 	return 1
 End
 
-//IAFcu_WidthRatio: return width/fontSize of a letter
-Function IAFcu_WidthRatio()
+//IAFc_WidthRatio: return width/fontSize of a letter
+Function IAFc_WidthRatio()
 	return 0.7
 End
 
-//IAFcu_FrameMargin: return margin of the frame of the flowchart [px]
-Function IAFcu_FrameMargin()
+//IAFc_FrameMargin: return margin of the frame of the flowchart [px]
+Function IAFc_FrameMargin()
 	return 10
 End
 
-//IAFcu_FontName: return font name
-Function/S IAFcu_FontName()
+//IAFc_FontName: return font name
+Function/S IAFc_FontName()
 	return "Courier New"
 End
 
-//IAFcu_CalcChartWidth: calculate width of chart from length of letter
-Function IAFcu_CalcChartWidth(length)
+//IAFc_CalcChartWidth: calculate width of chart based on the length of the string
+Function IAFc_CalcChartWidth(length)
 	Variable length
 	Variable margin=1
 	
-	Variable fs=IAFcu_FontSize()
-	Variable wr=IAFcu_WidthRatio()
+	Variable fs=IAFc_FontSize()
+	Variable wr=IAFc_WidthRatio()
 	return fs*wr*(length+margin)	
 End
 
-//IAFcu_CalcChartHeight: calculate height
-Function IAFcu_CalcChartHeight(rows)
+//IAFc_CalcChartHeight: calculate height
+Function IAFc_CalcChartHeight(rows)
 	Variable rows
 	Variable margin=0.5
-	Variable fs=IAFcu_FontSize()
-	Variable hr=IAFcu_HeightRatio()
+	Variable fs=IAFc_FontSize()
+	Variable hr=IAFc_HeightRatio()
 	return fs*hr*(rows+margin)
 End
 
-//IAFcu_CalcUnitHeight: height of one row
-Function IAFcu_CalcUnitHeight()
-	Variable fs=IAFcu_FontSIze()
-	Variable hr=IAFcu_HeightRatio()
+//IAFc_CalcUnitHeight: height of one row
+Function IAFc_CalcUnitHeight()
+	Variable fs=IAFc_FontSIze()
+	Variable hr=IAFc_HeightRatio()
 	return fs*hr
 End
 
@@ -65,7 +63,33 @@ Function IAFc_CallChart()
 		DoWindow $PanelName
 		If(V_flag==0)
 			needCreation=1
-		Endif
+		Else
+			//There is possibility where another panel named $PanelName exists
+			Execute "GetWindow kwTopWin,activeSW"
+			//if there is no subwindow, SWpath is the name of the window
+			SVAR SWpath=S_value
+			
+			If(!SVAR_exists(SWpath))
+				return 0
+			Endif
+			
+			//Get Parent window name
+			String windowName=StringFromList(0,SWpath,"#")
+			
+			//Get Parent window title
+			Execute "GetWindow "+windowName+",title"
+			SVAR winTitle=S_value
+			If(!SVAR_exists(winTitle))
+				return 0
+			Endif
+			
+			If(cmpstr(winTitle,PanelTitle,1)==0)
+				//The intended window exists
+			Else
+				//not exist
+				needCreation=1
+			Endif
+		endif
 	Else
 		needCreation=1
 	Endif
@@ -82,14 +106,15 @@ Function IAFc_CallChart()
 		//set background white and add Update button
 		//65535,65535,65535 is not white but transparent?
 		ModifyPanel cbRGB=(65534,65535,65535)
-		SetWindow $PanelName,hook(flowHook)=IAFcu_Flowchart_Hook
+		SetWindow $PanelName,hook(flowHook)=IAFc_Flowchart_Hook
 		IAFc_UpdateChart(1)
 	Else
 		IAFc_UpdateChart(0)
 	Endif
 End
 
-Function IAFcu_Flowchart_Hook(s)
+// Event handler for the Flowchart
+Function IAFc_Flowchart_Hook(s)
 	STRUCT WMWinHookStruct &s
 	STRUCT Point mouseLoc
 	mouseLoc=s.mouseLoc
@@ -139,7 +164,7 @@ Function IAFcu_Flowchart_Hook(s)
 		FrameCoordinate[][]=NaN
 		
 		For(i=0;i<size;i+=1)
-			If(visibility==0 && cmpstr((ChartIndex[i][0])[0,0],"_")==0)
+			If(visibility==0 && cmpstr((ChartIndex[i][0])[0,0],"_",1)==0)
 				continue
 			Endif
 			Variable left  =(ChartPosition[i][0]-ChartPosition[i][2]/2)*zoom
@@ -154,7 +179,7 @@ Function IAFcu_Flowchart_Hook(s)
 			String partName=ChartIndex[i][0]
 			Variable FrameIndex=whichlistitem(partOrigin,OriginList)
 			If(FrameIndex==-1)
-				Print("Error: origin of \""+partName+"\" not found")
+				Printf "Error: origin of \"%s\" not found", partName
 				continue
 			Endif
 			//update frame coordinate
@@ -179,7 +204,7 @@ Function IAFcu_Flowchart_Hook(s)
 		Else
 			//check whethehr a frame is selected
 			Variable selectedFrameIndex=-1
-			Variable margin=IAFcu_FrameMargin()*zoom
+			Variable margin=IAFc_FrameMargin()*zoom
 			For(i=0;i<DimSize(FrameCoordinate,0);i+=1)
 				If(numtype(FrameCoordinate[i][0])==2)
 					continue
@@ -233,12 +258,12 @@ Function IAFcu_Flowchart_Hook(s)
 		Elseif(oldSelectedIndex==-1)
 			Wave/T ChartIndex=$":Configurations:ChartIndex"
 			Wave/D oldChartPosition=$":Configurations:oldChartPosition"
-			If(!SVAR_exists(oldSelectedFrame) || cmpstr(oldSelectedFrame,"")==0)
+			If(!SVAR_exists(oldSelectedFrame) || cmpstr(oldSelectedFrame,"",1)==0)
 				cd $datafolder
 				return 0
 			Endif
 			For(i=0;i<DimSize(ChartIndex,0);i+=1)
-				if(cmpstr(oldSelectedFrame,ChartIndex[i][1])==0)
+				if(cmpstr(oldSelectedFrame,ChartIndex[i][1],1)==0)
 					ChartPosition[i][0]=oldChartPosition[i][0]+(mouseLeft-oldMouseLeft)/zoom
 					ChartPosition[i][1]=oldChartPosition[i][1]+(mouseTop-oldMouseTop)/zoom
 				Endif
@@ -283,7 +308,7 @@ Function IAFc_UpdateChart(updateControl)
 	Endif
 	cd $path
 	
-	String fn=IAFcu_FontName()
+	String fn=IAFc_FontName()
 	NVAR zoom=IAF_Flowchart_Zoom
 	If(!NVAR_Exists(zoom))
 		Variable/G IAF_Flowchart_Zoom=1
@@ -295,7 +320,7 @@ Function IAFc_UpdateChart(updateControl)
 	Endif
 	NVAR visibility=IAF_Flowchart_Visibility
 	
-	Variable fs=IAFcu_FontSize()*zoom
+	Variable fs=IAFc_FontSize()*zoom
 	
 	If(updateControl==1)
 		//remove controls
@@ -304,17 +329,17 @@ Function IAFc_UpdateChart(updateControl)
 		KillControl visibilityCheckBox
 		//create controls
 		Variable margin=10*zoom
-		Variable width1=IAFcu_CalcChartWidth(6)*zoom
-		Variable width2=IAFcu_CalcChartWidth(10)*zoom
-		Variable width3=IAFcu_CalcChartWidth(15)*zoom
-		Variable height=IAFcu_CalcChartHeight(1)*zoom
+		Variable width1=IAFc_CalcChartWidth(6)*zoom
+		Variable width2=IAFc_CalcChartWidth(10)*zoom
+		Variable width3=IAFc_CalcChartWidth(15)*zoom
+		Variable height=IAFc_CalcChartHeight(1)*zoom
 		String command
-		sprintf command,"Button updateButton pos={%g,%g},font=\"%s\", fsize=%g, size={%g,%g}, title=\"Update\",proc=IAFcu_Flowchart_Update",margin,margin,fn,fs,width1,height
+		sprintf command,"Button updateButton pos={%g,%g},font=\"%s\", fsize=%g, size={%g,%g}, title=\"Update\",proc=IAFc_Flowchart_Update",margin,margin,fn,fs,width1,height
 		//Print(command)
 		Execute command
-		sprintf command,"SetVariable zoomVariable pos={%g,%g},font=\"%s\",fsize=%g, size={%g,%g},title=\"Zoom:\",limits={0.1,10,0.05},value=IAF_Flowchart_Zoom,proc=IAFcu_Flowchart_zoomUpdate",margin*2+width1,margin,fn,fs,width2,height
+		sprintf command,"SetVariable zoomVariable pos={%g,%g},font=\"%s\",fsize=%g, size={%g,%g},title=\"Zoom:\",limits={0.1,10,0.05},value=IAF_Flowchart_Zoom,proc=IAFc_Flowchart_zoomUpdate",margin*2+width1,margin,fn,fs,width2,height
 		Execute command
-		sprintf command,"CheckBox visibilityCheckBox pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},title=\"Show all parts\",variable=IAF_Flowchart_Visibility,proc=IAFcu_Flowchart_visibUpdate",margin*4+width1+width2,margin,fn,fs,width3,height
+		sprintf command,"CheckBox visibilityCheckBox pos={%g,%g},font=\"%s\",fsize=%g,size={%g,%g},title=\"Show all parts\",variable=IAF_Flowchart_Visibility,proc=IAFc_Flowchart_visibUpdate",margin*4+width1+width2,margin,fn,fs,width3,height
 		Execute command
 	Endif
 	
@@ -346,7 +371,7 @@ Function IAFc_UpdateChart(updateControl)
 	SetDrawEnv fillfgc=(65535,65535,65535)
 	SetDrawEnv save
 	
-	Variable unitHeight=IAFcu_CalcUnitHeight()
+	Variable unitHeight=IAFc_CalcUnitHeight()
 	Variable i
 	String PartsList=""
 	String OriginList=""
@@ -380,33 +405,28 @@ Function IAFc_UpdateChart(updateControl)
 	For(i=0;i<numParts;i+=1)
 		String partName=ChartIndex[i][0]
 		String partOrigin=ChartIndex[i][1]
-		if(cmpstr(partName[0,0],"_")==0 && visibility==0)
+		if(cmpstr(partName[0,0],"_",1)==0 && visibility==0)
 			continue
 		Endif
 
-		String DiagramInfoList=IAFcu_DiagramInfo(partName,DiagramWaveList)
-		If(cmpstr(DiagramInfoList,"Diagram not found")==0)
-			Print("Error: Diagram \""+partName+"\" not found")
+		String DiagramInfoList=IAFc_DiagramInfo(partName,DiagramWaveList)
+		If(cmpstr(DiagramInfoList,"Diagram not found",1)==0)
+			Printf "Error: Diagram \"%s\" not found", partName
 			continue
 		Endif
 		String partKind=StringFromList(0,DiagramInfoList)
 		String partType=StringFromList(1,DiagramInfoList)		
 		//rectangle
 		SetDrawEnv linethick=2 //for parts rectangles
-		StrSwitch(partKind)
-		Case "Data":
+		if(cmpstr(partKind, "Data", 1)==0)
 			SetDrawEnv linefgc=(0,0,0) //black
-			break
-		Case "Function":
+		elseif(cmpstr(partKind, "Function", 1)==0)
 			SetDrawEnv linefgc=(0,0,65535) //blue
-			break
-		Case "Module":
+		elseif(cmpstr(partKind, "Mdule", 1)==0)
 			SetDrawEnv linefgc=(65535,0,0) //red
-			break
-		Case "Panel":
+		elseif(cmpstr(partKind, "Panel", 1)==0)
 			SetDrawEnv linefgc=(0,65535,0) //green
-			break
-		EndSwitch
+		endif
 		//rectangle
 		Variable left  =(ChartPosition[i][0]-ChartPosition[i][2]/2)*zoom
 		Variable top   =(ChartPosition[i][1]-ChartPosition[i][3]/2)*zoom
@@ -416,7 +436,7 @@ Function IAFc_UpdateChart(updateControl)
 		//check frame
 		Variable FrameIndex=whichlistitem(partOrigin,OriginList)
 		If(FrameIndex==-1)
-			Print("Error: origin of \""+partName+"\" not found")
+			Printf "Error: origin of \"%s\" not found", partName
 			continue
 		Endif
 		//update frame coordinate
@@ -447,67 +467,63 @@ Function IAFc_UpdateChart(updateControl)
 		SetDrawEnv save
 		String Definition=""
 		//Print("\""+partName+"\"")
-		StrSwitch(partKind)
-		Case "Data":
+		if(cmpstr(partKind, "Data", 1)==0)
 			//no connection
-			break
-		Case "Function":
-			Definition=IAFc_Function_Definition(partType)
-		Case "Module":
-			If(cmpstr(Definition,"")==0)
+		else
+			if(cmpstr(partKind, "Function", 1)==0)
+				Definition=IAFc_Function_Definition(partType)
+			elseif(cmpstr(partKind, "Module", 1)==0)
 				Definition=IAFc_Module_Definition(partType)
-			Endif
-		Case "Panel":
-			If(cmpstr(Definition,"")==0)
+			elseif(cmpstr(partKind, "Panel", 1)==0)
 				Definition=IAFc_Panel_Definition(partType)
-			Endif
+			else
+				continue
+			endif
+			
 			Variable numArgs=str2num(StringFromList(0,Definition))
 			Variable j
 			For(j=0;j<numArgs;j+=1)
 				//Print(StringFromList(1+j,Definition))
-				StrSwitch(StringFromList(1+j,Definition))
-					Case "0":
-						//input
-						Switch(IAFcu_JudgeDataSocket(StringFromList(1+numArgs+j,Definition)))
-						Case 1:
-							//data
-							SetDrawEnv linefgc=(0,0,0)
-							break
-						Case 2:
-							//socket
-							SetDrawEnv linefgc=(65535,0,65535)
-							break
-						Endswitch
-						String startPartName=StringFromList(3+j,DiagramInfoList)
-						If(cmpstr(startPartName[0,0],"_")==0 && visibility==0)
-							continue
-						endif
-						//Print("startPart "+startPartName)
-						Variable start_index=WhichListItem(startPartName,PartsList)
-						Variable start_left=(ChartPosition[start_index][0]+ChartPosition[start_index][2]/2)*zoom
-						Variable start_top=(ChartPosition[start_index][1])*zoom
-						Variable end_left=(ChartPosition[i][0]-ChartPosition[i][2]/2)*zoom
-						Variable end_top=ChartPosition[i][1]*zoom
-						DrawLine start_left,start_top,end_left,end_top
-						break
-					Case "1":
-						//output
+				String inout_j=StringFromList(1+j,Definition)
+				if(cmpstr(inout_j, "0", 1)==0)
+					//input
+					Switch(IAFc_JudgeDataSocket(StringFromList(1+numArgs+j,Definition)))
+					Case 1:
+						//data
 						SetDrawEnv linefgc=(0,0,0)
-						String endPartName=StringFromList(3+j,DiagramInfoList)
-						If(cmpstr(endPartName[0,0],"_")==0 && visibility==0)
-							continue
-						endif
-						Variable end_index=WhichListItem(StringFromList(3+j,DiagramInfoList),PartsList)
-						end_left=(ChartPosition[end_index][0]-ChartPosition[end_index][2]/2)*zoom
-						end_top=(ChartPosition[end_index][1])*zoom
-						start_left=(ChartPosition[i][0]+ChartPosition[i][2]/2)*zoom
-						start_top=ChartPosition[i][1]*zoom
-						DrawLine start_left,start_top,end_left,end_top
 						break
-				EndSwitch
+					Case 2:
+						//socket
+						SetDrawEnv linefgc=(65535,0,65535)
+						break
+					Endswitch
+					String startPartName=StringFromList(3+j,DiagramInfoList)
+					If(cmpstr(startPartName[0,0],"_",1)==0 && visibility==0)
+						continue
+					endif
+					//Print("startPart "+startPartName)
+					Variable start_index=WhichListItem(startPartName,PartsList)
+					Variable start_left=(ChartPosition[start_index][0]+ChartPosition[start_index][2]/2)*zoom
+					Variable start_top=(ChartPosition[start_index][1])*zoom
+					Variable end_left=(ChartPosition[i][0]-ChartPosition[i][2]/2)*zoom
+					Variable end_top=ChartPosition[i][1]*zoom
+					DrawLine start_left,start_top,end_left,end_top
+				elseif(cmpstr(inout_j, "1", 1)==0)
+					//output
+					SetDrawEnv linefgc=(0,0,0)
+					String endPartName=StringFromList(3+j,DiagramInfoList)
+					If(cmpstr(endPartName[0,0],"_",1)==0 && visibility==0)
+						continue
+					endif
+					Variable end_index=WhichListItem(StringFromList(3+j,DiagramInfoList),PartsList)
+					end_left=(ChartPosition[end_index][0]-ChartPosition[end_index][2]/2)*zoom
+					end_top=(ChartPosition[end_index][1])*zoom
+					start_left=(ChartPosition[i][0]+ChartPosition[i][2]/2)*zoom
+					start_top=ChartPosition[i][1]*zoom
+					DrawLine start_left,start_top,end_left,end_top
+				endif
 			Endfor
-			break
-		Endswitch
+		Endif
 		
 	Endfor
 	
@@ -516,7 +532,7 @@ Function IAFc_UpdateChart(updateControl)
 	SetDrawEnv linefgc=(32768,32768,32768) //gray
 	SetDrawEnv fillpat=0
 	SetDrawEnv save
-	margin=IAFcu_FrameMargin()*zoom
+	margin=IAFc_FrameMargin()*zoom
 	For(i=0;i<DimSize(FrameCoordinate,0);i+=1)
 		If(numtype(FrameCoordinate[i][0])==2)
 			continue
@@ -529,7 +545,7 @@ End
 
 
 //called when updatebutton is clicked (mouse-up)
-Function IAFcu_Flowchart_Update(BV): ButtonControl
+Function IAFc_Flowchart_Update(BV): ButtonControl
 	STRUCT WMButtonAction &BV
 	If(BV.eventCode==2)
 		IAFc_UpdateChart(1)
@@ -537,7 +553,7 @@ Function IAFcu_Flowchart_Update(BV): ButtonControl
 End
 
 //called when zoom setvariable is updated
-Function IAFcu_Flowchart_zoomUpdate(SV): SetVariableControl
+Function IAFc_Flowchart_zoomUpdate(SV): SetVariableControl
 	STRUCT WMSetVariableAction &SV
 	If(SV.eventCode==1 || SV.eventCode==2)
 		IAFc_UpdateChart(1)
@@ -545,16 +561,16 @@ Function IAFcu_Flowchart_zoomUpdate(SV): SetVariableControl
 End
 
 //called when zoom setvariable is updated
-Function IAFcu_Flowchart_visibUpdate(CB): CheckBoxControl
+Function IAFc_Flowchart_visibUpdate(CB): CheckBoxControl
 	STRUCT WMCheckboxAction &CB
 	If(CB.eventCode==2)
 		IAFc_UpdateChart(0)
 	Endif
 End
 
-//IAFcu_DiagramInfo: find infomation in Diagrams
+//IAFc_DiagramInfo: find infomation in Diagrams
 //currentFolder is Configurations
-Function/S IAFcu_DiagramInfo(partName,DiagramWaveList)
+Function/S IAFc_DiagramInfo(partName,DiagramWaveList)
 	String partname,DiagramWaveList
 	
 	Variable numWaves=ItemsInList(DiagramWaveList)
@@ -570,8 +586,8 @@ Function/S IAFcu_DiagramInfo(partName,DiagramWaveList)
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
-				If(cmpstr(Name_ij,partName)==0)
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij))
+				If(cmpstr(Name_ij,partName,1)==0)
 					For(k=size2-1;k>=0;k-=1)
 						InfoList=AddListItem(Diagram_i[j][k],InfoList)
 					Endfor

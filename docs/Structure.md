@@ -91,7 +91,8 @@ A **Panel** *Part* calls window(s) with variables or graphs.
 A **Panel** is not only for visualization; a **Panel** can have input boxes which users can enter values.
 Entering values can immediately change the analysis result, as we describe later.
 
-The defintion function for a **Panel** is **Function/S IAFp\_** ***PanelType*** **\_Definition()**, and the execution function is **Function IAFp\_*Type*(argumentList)**.
+The defintion function for a **Panel** is **Function/S IAFp\_** ***PanelType*** **\_Definition()**, and the execution function is **Function IAFp\_*Type*(argumentList, PanelName, PanelTitle)**.
+**PanelName** is the **Name** of the **Panel** *Part*, and **PanelTitle** is **"*PanelName* in *FolderPath*"**, displayed on the window.
 Since a **Panel** does not return a value or have a socket, all connected **Data** or **Socket** *Part*s are input.
 
 ## Templates
@@ -113,3 +114,4 @@ The next alphabet determines the occasion where the function is used.
 - ```IAFm_~~``` is the name of the functions representing a **Module** part.
 - ```IAFp_~~``` is the name of the functions representing a **Panel** part.
 - ```IAFt_~~``` is the name of the functions for **Template**s.
+- ```IAFu_~~``` is the name of other utility functions, such as keyboard and button event handlers.

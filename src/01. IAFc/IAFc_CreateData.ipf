@@ -28,17 +28,12 @@ Function IAFc_CreateData()
 			String Kind_ij=Diagram_i[j][0]
 			String Type_ij=Diagram_i[j][1]
 			String Name_ij=Diagram_i[j][2]
-			If(IAFcu_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Data")==0)
-				strswitch(Type_ij)
-				case "String":
+			If(IAFc_VerifyKindType(Kind_ij,Type_ij) && cmpstr(Kind_ij,"Data",1)==0)
+				if(cmpstr(Type_ij, "String", 1)==0)
 					StringsList=addlistitem(Name_ij,StringsList)
-					break
-				Case "Variable":
+				elseif(cmpstr(Type_ij, "Variable", 1)==0)
 					VariablesList=addListItem(Name_ij,VariablesList)
-				Default:
-					//wave, do nothing
-					break
-				endswitch
+				endif
 			Endif
 		Endfor
 	Endfor

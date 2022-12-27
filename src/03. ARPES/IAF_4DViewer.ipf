@@ -454,32 +454,32 @@ Function IAFp_4DViewer(argumentList,PanelName,PanelTitle)
 	Variable ControlBarHeight=150
 	
 	//setvariables
-	IAFcu_DrawSetVariable(30,0,"E Start",4,EStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,0,"End",4,EEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,0,"Center",5,ECenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,0,"Width",5,EWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,0,"E Start",4,EStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,0,"End",4,EEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,0,"Center",5,ECenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,0,"Width",5,EWidthArg,1,1,-inf,inf,0)
 	
-	IAFcu_DrawSetVariable(30,30,"A Start",4,AStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,30,"End",4,AEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,30,"Center",5,ACenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,30,"Width",5,AWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,30,"A Start",4,AStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,30,"End",4,AEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,30,"Center",5,ACenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,30,"Width",5,AWidthArg,1,1,-inf,inf,0)
 
-	IAFcu_DrawSetVariable(30,60,"x Start",4,xStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,60,"End",4,xEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,60,"Center",5,xCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,60,"Width",5,xWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,60,"x Start",4,xStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,60,"End",4,xEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,60,"Center",5,xCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,60,"Width",5,xWidthArg,1,1,-inf,inf,0)
 		
-	IAFcu_DrawSetVariable(30,90,"y Start",4,yStartIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(200,90,"End",4,yEndIndexArg,0,1,-inf,inf,1)
-	IAFcu_DrawSetVariable(300,90,"Center",5,yCenterArg,1,1,-inf,inf,0)
-	IAFcu_DrawSetVariable(450,90,"Width",5,yWidthArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(30,90,"y Start",4,yStartIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(200,90,"End",4,yEndIndexArg,0,1,-inf,inf,1)
+	IAFu_DrawSetVariable(300,90,"Center",5,yCenterArg,1,1,-inf,inf,0)
+	IAFu_DrawSetVariable(450,90,"Width",5,yWidthArg,1,1,-inf,inf,0)
 	
 	//Wide & Narrow button
-	Variable fs=IAFcu_FontSize()
-	String fn=IAFcu_FontName()
+	Variable fs=IAFc_FontSize()
+	String fn=IAFc_FontName()
 	
-	Variable width=IAFcu_CalcChartWidth(1)
-	Variable height=IAFcu_CalcChartHeight(1)
+	Variable width=IAFc_CalcChartWidth(1)
+	Variable height=IAFc_CalcChartHeight(1)
 	String command
 	String format
 	
@@ -599,7 +599,7 @@ Function IAFu_4DViewer_Button(BS): ButtonControl
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						EDeltaArg=Diagram_i[j][27]
 						ADeltaArg=Diagram_i[j][29]
@@ -726,7 +726,7 @@ Function IAFu_4DViewer_Keyboard(s)
 				String Kind_ij=Diagram_i[j][0]
 				String Type_ij=Diagram_i[j][1]
 				String Name_ij=Diagram_i[j][2]
-				If(IAFcu_VerifyKindType(Kind_ij,Type_ij))
+				If(IAFc_VerifyKindType(Kind_ij,Type_ij))
 					If(cmpstr(Kind_ij,"Panel")==0 && cmpstr(Name_ij,panelName)==0)
 						EDeltaArg=Diagram_i[j][26]
 						ADeltaArg=Diagram_i[j][28]

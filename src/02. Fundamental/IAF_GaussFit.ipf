@@ -1,8 +1,8 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-//Function gaussFit: fit the input wave by multiple gauss functions
+//Function GaussFit: fit the input wave by multiple Gauss functions
 
-//=p[0]+p[1]*x+gauss(x-p[3], p[2])*p[4]+gauss(x-p[5], p[2])*p[6]+...
+//=p[0]+p[1]*x+Gauss(x-p[3], p[2])*p[4]+Gauss(x-p[5], p[2])*p[6]+...
 
 //Output (6th argument): fitting parameters
 //param[0]: Background
@@ -11,11 +11,11 @@
 //param[3], param[4]: center and height of gaussian 1
 //param[5], param[6]: those of gaussian 2
 
-Function/S IAFf_gaussFit_Definition()
+Function/S IAFf_GaussFit_Definition()
 	return "8;0;0;0;0;0;0;1;1;Wave1D;Variable;Variable;Wave1D;Variable;String;Wave1D;Wave1D"
 End
 
-Function IAFf_gaussFit(argumentList)
+Function IAFf_GaussFit(argumentList)
 	String argumentList
 	
 	//0th argument: wave 
@@ -93,17 +93,17 @@ Function IAFf_gaussFit(argumentList)
 		
 	//duplicate the input in the range of [fitMin, fitMax]
 	Duplicate/O/R=[fitMin,fitMax] input yTemp
-	FuncFit/H=(holdParams)/Q/W=2/N IAFu_gaussTrialFunc params yTemp
+	FuncFit/H=(holdParams)/Q/W=2/N IAFu_GaussTrialFunc params yTemp
 	
 	killwaves peakInfo2
 	
 	//output fitCurve
 	Duplicate/O input $fitCurveArg
 	Wave/D fitCurve=$fitCurveArg
-	fitCurve[]=IAFu_gaussTrialFunc(params, x)
+	fitCurve[]=IAFu_GaussTrialFunc(params, x)
 End
 
-Function IAFu_gaussTrialFunc(params, x): FitFunc
+Function IAFu_GaussTrialFunc(params, x): FitFunc
 	Wave/D params
 	Variable x
 	variable paramsSize=dimsize(params, 0)
