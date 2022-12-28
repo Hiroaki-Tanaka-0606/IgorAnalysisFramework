@@ -28,7 +28,7 @@ There is a wave named ```Diagram0``` in the **Diagrams** folder, so you can past
 | Function | WaveInfo2D | WI2 | EkMap | EInfo | kInfo |
 
 When you select **ConfigureDependency** and **CreateData** in this order, the global string **EkMapName** will appear in the **Data** folder (green rectangle in **Figure 1**).
-You may need to check **Waves**, **Variables**, and **Strings** checkboxes in the left column of Data Browser (blue circles in **Figure 1**) to display all variables.
+You may need to check **Waves**, **Variables**, and **Strings** checkboxes in the left column of Data Browser (blue circles in **Figure 1**) to display everything.
 
 ![DataBrowser](Images/Example1_1.png)
 
@@ -57,6 +57,7 @@ If the wave is in the folder named **folder1**, the value is ```folder1:EkMapSam
 ## Perform analysis
 After setting the parameter, you select **ExecuteAll** to perform the analysis.
 Three new waves named **EkMap**, **EInfo**, and **kInfo** will appear in the **Data** folder.
+We note that the execution order is determined to be **LoadWave2D** -> **WaveInfo2D** due to the dependency relation.
 
 **EkMap** is the output of **LoadWave2D** using **EkMapName** as the input.
 **LoadWave2D** is defined in **IAF_LoadWave.ipf**.
@@ -135,11 +136,11 @@ In addition to the diagram wave, you need to prepare the following things.
 After the preparation, you select **LoadTemplate** in the **IAF** menu to load the **2DViewer** template, which can visualize the 2D color map, energy distribution curve (EDC), and momentum distribution curve (MDC) in one panel.
 After the popup window appears, enter ```"2DViewer"``` in **Template**, ```"EkMapView;EkMap;xLabel"``` in **List of arguments**; in the list of arguments, two arguments are separated by a semicolon.
 The following is the rule of arguments, as described in **IAF_2DViewer.ipf**.
-- The 0th argument is the name of the panel. Although the value is ```"EkMapView"``` in the above description, you can change it unless the conflict of names happens.
+- The 0th argument is the name of the panel. Although the value is ```"EkMapView"``` in the above description, you can change it unless the name conflict happens.
 - The 1st argument is the name of the 2D waves to show. The value should be ```"EkMap"``` from the diagram.
 - The 2nd argument is the name of the **String** *Part*s corresponding to the horizontal axis label.
 
-If the template is loaded successfully, the new diagram wave named **EkMapView** is created in the **Diagrams** folder.
+If the template is loaded successfully, the new diagram wave named ```EkMapView``` is created in the **Diagrams** folder.
 The **diagram wave** includes the **2DViewer** *Panel* and necessary *Part*s for the **2DViewer** *Panel*.
 
 ## Flowchart
@@ -163,7 +164,7 @@ That is because **kIndex** is zero and the EDC for the index 0 is created.
 When you call the **Sequence** *Panel* named **Seq** from the **CallPanel** in the **IAF** menu, a new panel like **Figure 4** will appear.
 You can change the value of **kIndex** by entering the value or clicking small triangle buttons in the top row.
 Immediately after the value is changed, ```IAFc_Update("kIndex")``` is automatically executed.
-The function executes **Function** *Part*s which are affectedby **kIndex**; they are in the green loop in **Figure 3**.
+The function executes **Function** *Part*s which are affected by **kIndex**; they are in the green loop in **Figure 3**.
 
 The large triangle buttons in the bottom row of the **Sequence** *Panel* change the **kIndex** value sequentially until the value becomes the minimum or maximum.
 The minimum and maximum values are determined by **kMin** and **kMax**, which are inputs of the **Sequence** *Panel*.
@@ -180,3 +181,101 @@ You can choose EDC and MDC cut positions by changing **Center** and **Width** va
 ![2DViewer](Images/Example2_3.png)
 
 **Figure 5**: **2DViewer** *Panel*.
+
+# Example 3: Module
+
+In Example 3, we use **Module** *Part*s to remove experimental artifacts and convert the kinetic energy to the binding energy (energy from the Fermi level).
+Here we explain why **Function** *Part*s cannot perform such analyses and **Module** *Part*s are necessary.
+
+## Preparation
+The following **Table 4** shows the diagram wave for Example 3.
+
+**Table 4**: Diagram wave for Example 3.
+
+| 0: *Kind* | 1: *Type* | 2: *Name* | 3: arguments | 4 | 5 | 6 | 7 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Data | String | EkMapName	| | | | | |
+| Data | Wave2D | EkMap	| | | | | |
+| Function | LoadWave2D | LW2 | EkMapName | EkMap | | | |
+| Data | String | MDCRefName | | | | | |
+| Data | Wave1D | MDCRef | | | | |
+| Function | LoadWave1D | LW1_1 | MDCRefName | MDCRef | | | |
+| Data | String | EfWaveName | | | | | |
+| Data | Wave1D | EfWave | | | | | |
+| Function | LoadWave1D | LW1_2 | EfWaveName | EfWave | | | |
+| Data | Wave1D | EInfo1 | | | | | |
+| Data | Wave1D | kInfo1 | | | | | |
+| Function | WaveInfo2D | WI2 | EkMap | EInfo1 | kInfo1 | | |
+| Module | CorrectInt_sw2D | CIs2 | EkMap | MDCRef | | | |
+| Data | Variable | ConvertMode | | | | | |
+| Module | ConvertIndex2D | CI2 | ConvertMode | EInfo1 | kInfo1 | CIs2 | |
+| Data | Variable | EfCalcMode | | | | | |
+| Module | CorrectEf2D | CE2 | EfCalcMode | EfWave | CI2 | | | 
+| Data | Wave1D | EInfo2 | | | | | |
+| Data | Wave1D | kInfo2 | | | | | |
+| Function | CorrectEf2D_F | CE2F | EInfo1 | kInfo1 | EfWave | EInfo2 | kInfo2 |
+| Data | Wave2D | EkMap_EfCorrected1 | | | | | |
+| Function | Make2D_Coord | M2C_1 | EInfo2 | kInfo2 | CE2 | EkMap_EfCorrected1 | |
+| Data | Wave2D | EkMap_EfCorrected2 | | | | | |
+
+In addition to **EkMapSample**, you need to load other two waves; **MDCRefSample** (Figure 6 left) and **EfWaveSample** (Figure 6 right).
+They are available from **MDCRefSample.ibw** and **EfWaveSample.ibw** respectively.
+
+![MDCRefSample](Images/MDCRefSample.png) ![EfWaveSample](Images/EfWaveSample.png)
+
+**Figure 6**: **MDCRefSample** (left) and **EfWaveSample** (right).
+
+After **ConfigureDependency** and **CreateData**, you need to set appropriate values for the following **Data** *Part*s.
+- **EkMapName** is the path to **EkMapSample**.
+- **MDCRefName** is the path to **MDCRefSample**.
+- **EfWaveName** is the path to **EfWaveSample**.
+- For **ConvertMode**, the default value ```0``` is ok. Later you will change the value.
+- For **EfCalcMode**, the default value ```0``` is ok.
+
+**Figure 7** is the flowchart for Example 3.
+In the flowchart, **Module** *Part*s are represented by the red rectangles, and the socket connections between **Module**s and **Function**s are represented by the magenta arrows.
+
+![Flowchart](Images/Example3_1.png)
+
+**Figure 7** Flowchart for Example 3. We note that three additional *Part*s named **EInfo3**, **M2C_2** and **EkMap_EfCorrected2** are already displayed; these *Part*s are introduced below.
+
+The roles of three **Module**s used are as follows.
+Since the raw data is a 2D wave (Kinetic energy, angle) with experimental inhomogenity, the following process gives (E-Ef, angle) map without the inhomogenity.
+- **CorrectInt_sw2D** receives a list of points described by **Index2D** form (p, q) and returns the values at these points. Here, the values are not of raw data at the corresponding points but those without the intensity inhomogenity. The removal of the intensity inhomogenity is achieved by dividing the raw data (**EkMap**) by the reference wave (**MDCRef**). Since the inhomogenity is only along the angle direction in the swept mode of ARPES measurements, the reference is 1D along the angle direction like the MDC.
+- **ConvertIndex2D** receives a list of points described by **Coordinate2D** (x, y) and returns the values at these points. The module converts the **Coordinate2D** (x, y) to **Index2D** (p, q) based on **InfoWave**s (**EInfo1** and **kInfo1**) using either of two **ConvertMode**s. One is the nearest-neighbor mode (```ConvertMode=0```), where (p, q) is the nearest point to (x, y). The other is the interpolation mode (```ConvertMode=1```), where the value at (x, y) is calcuated from the surrounding four points.
+- **CorrectEf2D** receives a list of points described by **Coordinate2D** (E-Ef, angle) and returns the values at these points. The module converts (E-Ef, angle) to (Kinetic energy, angle) based on the Fermi level information (**EfWave**). Since the Fermi level can slightly depends on the emission angle due to the photoelectron analyzer condition, it is not appropriate to simply modify the energy offset. **EfCalcMode** determines how to calculate the Fermi level at the specified angle (nearest-neighbor or interpolation), but the choice negligibly affects the analysis result.
+
+The **Make2D_Coord** *Function* makes the analysis result (**Figure 8**).
+The function makes a list of points (E-Ef, angle) based on the input **InfoWave**s (**EInfo2** or **EInfo3** and **kInfo2**) and pass the list to the **CorrectEf2D** *Module* via the **Socket**.
+The function receives the values at the points from the module and fill the 2D wave by the received values.
+
+**Figure 8**: Schematic of analysis using **Module**s and the **Make2D_Coord** *Function*.
+
+Here, we can explain why we need **Module**s to perform this analysis.
+If we only want to remove the intensity inhomogenity, we can define a **Function** with raw data and reference being the input and corrected data being the output.
+However, after the Fermi level correction, the data points in 2D waves before and after the correction don't have one-to-one correspondence (**Figure 9**).
+Similar situation happens when we want to convert the angle to the momentum (sine or cosine of the angle).
+That means the analyzed results may differ depending on how we want to make waves after the analysis.
+
+**Figure 9** The schematic of broken one-to-one correspondence before and after the Fermi level correction.
+
+Although we provide one suggestion about the export form by the **CorrectEf2D_F** *Function* and the output **InfoWave**s (**EInfo2** and **kInfo2**), the choice might not be appropriate in some situations.
+As shown in **Table 5**, **EInfo2** is determined to cover the whole energy range with keeping the **delta** value.
+Since the **delta** is 0.1 eV, the exported data (**Figure 10**) cannot reflect the energy shift smaller than 0.1 eV.
+
+**Table 5**: **EInfo2** data.
+| | EInfo2 |
+| --- | --- |
+| 0: offset | -0.9 |
+| 1: delta | 0.1 |
+| 2: size | 14 |
+
+![EkMap_EfCorrected1](Images/EkMap_corrected_NN1.png)
+
+**Figure 10**: Color map of **EkMap_EfCorrected1**.
+
+| 0: *Kind* | 1: *Type* | 2: *Name* | 3: arguments | 4 | 5 | 6 |
+| --- | --- | --- | --- | --- | --- | --- |
+| Data | Wave1D | EInfo3 | | | | | |
+| Function | Make2D_Coord | M2C_2 | EInfo3 | kInfo2 | CE2 | EkMap_EfCorrected2 |
+

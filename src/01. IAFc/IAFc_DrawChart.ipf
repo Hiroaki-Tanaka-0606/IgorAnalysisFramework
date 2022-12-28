@@ -140,6 +140,7 @@ Function IAFc_Flowchart_Hook(s)
 		Variable/G IAF_Flowchart_Clicked=1
 		Variable/G IAF_Flowchart_MouseLeft=mouseLoc.h
 		Variable/G IAF_Flowchart_MouseTop=mouseLoc.v
+		// printf "Mouse %d %d\n", IAF_Flowchart_MouseLeft, IAF_Flowchart_MouseTop
 		If(!DataFolderExists("Configurations"))
 			cd dataFolder
 			return 0
@@ -422,7 +423,7 @@ Function IAFc_UpdateChart(updateControl)
 			SetDrawEnv linefgc=(0,0,0) //black
 		elseif(cmpstr(partKind, "Function", 1)==0)
 			SetDrawEnv linefgc=(0,0,65535) //blue
-		elseif(cmpstr(partKind, "Mdule", 1)==0)
+		elseif(cmpstr(partKind, "Module", 1)==0)
 			SetDrawEnv linefgc=(65535,0,0) //red
 		elseif(cmpstr(partKind, "Panel", 1)==0)
 			SetDrawEnv linefgc=(0,65535,0) //green
@@ -537,6 +538,7 @@ Function IAFc_UpdateChart(updateControl)
 		If(numtype(FrameCoordinate[i][0])==2)
 			continue
 		Endif
+		// printf "Frame %d %d %d %d\n", FrameCoordinate[i][0], FrameCoordinate[i][1], FrameCoordinate[i][2], FrameCoordinate[i][3]
 		DrawRect FrameCoordinate[i][0]-margin, FrameCoordinate[i][1]-margin, FrameCoordinate[i][2]+margin, FrameCoordinate[i][3]+margin
 	Endfor
 	KillWaves FrameCoordinate
