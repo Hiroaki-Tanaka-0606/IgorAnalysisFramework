@@ -216,7 +216,6 @@ The following **Table 4** shows the diagram wave for Example 3.
 | Function | CorrectEf2D_F | CE2F | EInfo1 | kInfo1 | EfWave | EInfo2 | kInfo2 |
 | Data | Wave2D | EkMap_EfCorrected1 | | | | | |
 | Function | Make2D_Coord | M2C_1 | EInfo2 | kInfo2 | CE2 | EkMap_EfCorrected1 | |
-| Data | Wave2D | EkMap_EfCorrected2 | | | | | |
 
 In addition to **EkMapSample**, you need to load other two waves; **MDCRefSample** (Figure 6 left) and **EfWaveSample** (Figure 6 right).
 They are available from **MDCRefSample.ibw** and **EfWaveSample.ibw** respectively.
@@ -243,11 +242,13 @@ The roles of three **Module**s used are as follows.
 Since the raw data is a 2D wave (Kinetic energy, angle) with experimental inhomogenity, the following process gives (E-Ef, angle) map without the inhomogenity.
 - **CorrectInt_sw2D** receives a list of points described by **Index2D** form (p, q) and returns the values at these points. Here, the values are not of raw data at the corresponding points but those without the intensity inhomogenity. The removal of the intensity inhomogenity is achieved by dividing the raw data (**EkMap**) by the reference wave (**MDCRef**). Since the inhomogenity is only along the angle direction in the swept mode of ARPES measurements, the reference is 1D along the angle direction like the MDC.
 - **ConvertIndex2D** receives a list of points described by **Coordinate2D** (x, y) and returns the values at these points. The module converts the **Coordinate2D** (x, y) to **Index2D** (p, q) based on **InfoWave**s (**EInfo1** and **kInfo1**) using either of two **ConvertMode**s. One is the nearest-neighbor mode (```ConvertMode=0```), where (p, q) is the nearest point to (x, y). The other is the interpolation mode (```ConvertMode=1```), where the value at (x, y) is calcuated from the surrounding four points.
-- **CorrectEf2D** receives a list of points described by **Coordinate2D** (E-Ef, angle) and returns the values at these points. The module converts (E-Ef, angle) to (Kinetic energy, angle) based on the Fermi level information (**EfWave**). Since the Fermi level can slightly depends on the emission angle due to the photoelectron analyzer condition, it is not appropriate to simply modify the energy offset. **EfCalcMode** determines how to calculate the Fermi level at the specified angle (nearest-neighbor or interpolation), but the choice negligibly affects the analysis result.
+- **CorrectEf2D** receives a list of points described by **Coordinate2D** (E-Ef, angle) and returns the values at these points. The module converts (E-Ef, angle) to (Kinetic energy, angle) based on the Fermi level information (**EfWave**). The Fermi level can slightly depends on the emission angle due to the photoelectron analyzer condition. **EfCalcMode** determines how to calculate the Fermi level at the specified angle (nearest-neighbor or interpolation), but the choice negligibly affects the analysis result.
 
 The **Make2D_Coord** *Function* makes the analysis result (**Figure 8**).
 The function makes a list of points (E-Ef, angle) based on the input **InfoWave**s (**EInfo2** or **EInfo3** and **kInfo2**) and pass the list to the **CorrectEf2D** *Module* via the **Socket**.
 The function receives the values at the points from the module and fill the 2D wave by the received values.
+
+![Schematic](Images/Module_schematic.png)
 
 **Figure 8**: Schematic of analysis using **Module**s and the **Make2D_Coord** *Function*.
 
@@ -256,6 +257,8 @@ If we only want to remove the intensity inhomogenity, we can define a **Function
 However, after the Fermi level correction, the data points in 2D waves before and after the correction don't have one-to-one correspondence (**Figure 9**).
 Similar situation happens when we want to convert the angle to the momentum (sine or cosine of the angle).
 That means the analyzed results may differ depending on how we want to make waves after the analysis.
+
+![Schematic](Images/EfCorrection_schematic.png)
 
 **Figure 9** The schematic of broken one-to-one correspondence before and after the Fermi level correction.
 
@@ -274,8 +277,47 @@ Since the **delta** is 0.1 eV, the exported data (**Figure 10**) cannot reflect 
 
 **Figure 10**: Color map of **EkMap_EfCorrected1**.
 
+Then, what will happen when we use different **InfoWave**s to make the corrected result?
+Duplicate **EInfo2** to another **InfoWave** named **EInfo3** and modify it as shown in **Table 6**.
+Also you need to add two rows (**Table 7**) in the **diagram wave**.
+
+**Table 6**: **EInfo3** data.
+| | EInfo3 |
+| --- | --- |
+| 0: offset | -0.95 |
+| 1: delta | 0.01 |
+| 2: size | 141 |
+
+**Table 7**: Additional *Part*s for Example 3.
 | 0: *Kind* | 1: *Type* | 2: *Name* | 3: arguments | 4 | 5 | 6 |
 | --- | --- | --- | --- | --- | --- | --- |
+| Data | Wave2D | EkMap_EfCorrected2 | | | | | |
 | Data | Wave1D | EInfo3 | | | | | |
 | Function | Make2D_Coord | M2C_2 | EInfo3 | kInfo2 | CE2 | EkMap_EfCorrected2 |
 
+After the execution, you will get **EkMap_EfCorrected2** like **Figure 11**.
+Since the **delta** become 10 times smaller, the corrected map can reflect the small energy shifts due to the angle dependence of the Fermi level.
+However, **EkMap_EfCorrected2** has 10 times more data points than the raw data and **EkMap_EfCorrected1**, so it is not quite good for the further analysis.
+
+![EkMap_EfCorrected2](Images/EkMap_corrected_NN2.png)
+
+**Figure 10**: Color map of **EkMap_EfCorrected2**.
+
+So far, we have used the nearest-neighbor mode in the **ConvertIndex2D** *Module*.
+That is why **Figure 10** virtually retains the energy step of 0.1 eV.
+**Figure 11** is the color map obtained with the interpolation mode.
+The interpolation mode makes the color map more smoother, but the map loses the energy step information of the raw data.
+The EDCs of the color maps (**Figure 12**) highlight the difference between the nearest-neighbor and the interpolation modes.
+
+![EkMap_EfCorrected1](Images/EkMap_corrected_IP2.png)
+
+**Figure 11**: Color map of **EkMap_EfCorrected2**. This color map is obtained by the interpolation mode in the **ConvertIndex2D** *Module*.
+
+![EDCs](Images/EDC_NN2_IP2.png)
+
+**Figure 12**: Energy distribution curves of color maps in **Figures 10 and 11** at 0 deg. The red and blue points represent data points.
+
+In summary, we demonstrate that the color map of the corrected data looks different depending on the choice of the axes.
+We think that there is no perfect answer on how the analyzed data should be presented.
+Therefore, it is important to be able to explain the analysis process.
+We believe that our diagram-based analysis framework helps the transparency and traceability of experimental data analysis.
