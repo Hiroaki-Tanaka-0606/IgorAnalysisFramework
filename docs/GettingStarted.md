@@ -1,7 +1,7 @@
 # Getting Started
 
 In this introduction, we describe how to use the software using a sample 2D wave of a hole band.
-The same data is available from **EkMapSample.ibw**.
+The same data is available from **docs/Sample_data/EkMapSample.ibw**.
 The following figure is the color map of the sample wave.
 
 ![EkMapSample](Images/EkMapSample1.png)
@@ -218,7 +218,7 @@ The following **Table 4** shows the diagram wave for Example 3.
 | Function | Make2D_Coord | M2C_1 | EInfo2 | kInfo2 | CE2 | EkMap_EfCorrected1 | |
 
 In addition to **EkMapSample**, you need to load other two waves; **MDCRefSample** (Figure 6 left) and **EfWaveSample** (Figure 6 right).
-They are available from **MDCRefSample.ibw** and **EfWaveSample.ibw** respectively.
+They are available from **docs/Sample_data/MDCRefSample.ibw** and **docs/Sample_data/EfWaveSample.ibw** respectively.
 
 ![MDCRefSample](Images/MDCRefSample.png) ![EfWaveSample](Images/EfWaveSample.png)
 
