@@ -1,6 +1,6 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-// Panel Sequence: sequentially change an index parameter
+// Panel Sequence: sequentially change the value of a Variable
 Function/S IAFp_Sequence_Definition()
 	return "3;0;0;0;Variable;Variable;Variable"
 End
@@ -8,13 +8,13 @@ End
 Function IAFp_Sequence(argumentList,PanelName,PanelTitle)
 	String argumentList, Panelname, PanelTitle
 	
-	//0th argument: index parameter
+	//0th argument (input): Variable to be controlled
 	String indexArg=StringFromList(0,argumentList)
 	
-	//1st argument: min of index
+	//1st argument (input): min of the Variable
 	String minIndexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: max of index
+	//2nd argument (input): max of the Variable
 	String maxIndexArg=StringFromList(2,argumentList)
 	
 	NVAR index=$indexArg
@@ -148,13 +148,13 @@ End
 Function IAFf_ExtractVariable(argumentList)
 	String argumentList
 	
-	//0th argument: input wave
+	//0th argument (input): input wave
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: index
+	//1st argument (input): index
 	String indexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: value
+	//2nd argument (output): value
 	String valueArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -164,7 +164,7 @@ Function IAFf_ExtractVariable(argumentList)
 End
 
 
-//Function ExtractWave1D: get a Wave1D input[index][] from a Wave2D 
+//Function ExtractWave1DX: get a Wave1D input[index][] from a Wave2D 
 Function/S IAFf_ExtractWave1DX_Definition()
 	return "3;0;0;1;Wave2D;Variable;Wave1D"
 End
@@ -172,13 +172,13 @@ End
 Function IAFf_ExtractWave1DX(argumentList)
 	String argumentList
 	
-	//0th argument: input wave
+	//0th argument (input): input wave
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: index
+	//1st argument (input): index
 	String indexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: outputWave
+	//2nd argument (output): outputWave
 	String outputArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -192,6 +192,34 @@ Function IAFf_ExtractWave1DX(argumentList)
 	output[]=input[index][p]
 End
 
+//Function ExtractWave1DY: get a Wave1D input[][index] from a Wave2D 
+Function/S IAFf_ExtractWave1DY_Definition()
+	return "3;0;0;1;Wave2D;Variable;Wave1D"
+End
+
+Function IAFf_ExtractWave1DY(argumentList)
+	String argumentList
+	
+	//0th argument (input): input wave
+	String inputArg=StringFromList(0,argumentList)
+	
+	//1st argument (input): index
+	String indexArg=StringFromList(1,argumentList)
+	
+	//2nd argument (output): outputWave
+	String outputArg=StringFromList(2,argumentList)
+	
+	Wave/D input=$inputArg
+	NVAR index=$indexArg
+	Variable offset1=DimOffset(input,0)
+	Variable delta1=DimDelta(input,0)
+	Variable size1=DimSize(input,0)
+	Make/O/D/N=(size1) $outputArg
+	Wave/D output=$outputArg
+	SetScale/P x, offset1, delta1, output
+	output[]=input[p][index]
+End
+
 
 //Function StoreVariable: save a value in a Wave1D
 Function/S IAFf_StoreVariable_Definition()
@@ -201,16 +229,16 @@ End
 Function IAFf_StoreVariable(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of the output wave
+	//0th argument (input): infowave of the output wave
 	String outputInfoArg=StringFromList(0,argumentList)
 	
-	//1st argument: index
+	//1st argument (input): index
 	String indexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: value
+	//2nd argument (input): value
 	String valueArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output wave
+	//3rd argument (output): output wave
 	String outputArg=StringFromList(3,argumentList)
 	
 	Wave/D outputInfo=$outputInfoArg
@@ -237,22 +265,22 @@ End
 Function IAFf_StoreVariable2D(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of the output wave 1st axis
+	//0th argument (input): infowave of the output wave 1st axis
 	String xInfoArg=StringFromList(0,argumentList)
 	
-	//1st argument: waveinfo of 2nd axis
+	//1st argument (input): infowave of 2nd axis
 	String yInfoArg=StringFromList(1,argumentList)
 	
-	//2nd argument: x index
+	//2nd argument (input): x index
 	String xIndexArg=StringFromList(2,argumentList)
 	
-	//3rd argument: y index
+	//3rd argument (input): y index
 	String yIndexArg=StringFromList(3,argumentList)
 	
-	//4th argument: value
+	//4th argument (input): value
 	String valueArg=StringFromList(4,argumentList)
 	
-	//3rd argument: output wave
+	//3rd argument (output): output wave
 	String outputArg=StringFromList(5,argumentList)
 	
 	Wave/D xInfo=$xInfoArg
@@ -281,13 +309,13 @@ End
 Function IAFf_ExtractString(argumentList)
 	String argumentList
 	
-	//0th argument: input wave
+	//0th argument (input): input wave
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: index
+	//1st argument (input): index
 	String indexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: value
+	//2nd argument (output): value
 	String valueArg=StringFromList(2,argumentList)
 	
 	Wave/T input=$inputArg
@@ -304,25 +332,25 @@ End
 Function IAFf_StoreWave13D(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of the output wave 1st index
+	//0th argument (input): infowave of the output wave 1st index
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: waveinfo of the output wave 2nd index
+	//1st argument (input): infowave of the output wave 2nd index
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: waveinfo of the output wave 3rd index
+	//2nd argument (input): infowave of the output wave 3rd index
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: 2nd index 
+	//3rd argument (input): 2nd index 
 	String index2Arg=StringFromList(3,argumentList)
 	
-	//4th argument: 3rd index 
+	//4th argument (input): 3rd index 
 	String index3Arg=StringFromList(4,argumentList)
 	
-	//5th argument: wave to be stored
+	//5th argument (input): wave to be stored
 	String valueWaveArg=StringFromList(5,argumentList)
 	
-	//6th argument: output wave
+	//6th argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -358,13 +386,13 @@ End
 Function IAFf_Mod(argumentList)
 	String argumentList
 	
-	//0th argument: a
+	//0th argument (input): a
 	String aArg=StringFromList(0,argumentList)
 	
-	//1st argument: b
+	//1st argument (input): b
 	String bArg=StringFromList(1,argumentList)
 	
-	//2nd argument: c=a%b
+	//2nd argument (output): c=a%b
 	String cArg=StringFromList(2,argumentList)
 	NVAR a=$aArg
 	NVAR b=$bArg
@@ -380,13 +408,13 @@ End
 Function IAFf_Quotient(argumentList)
 	String argumentList
 	
-	//0th argument: a
+	//0th argument (input): a
 	String aArg=StringFromList(0,argumentList)
 	
-	//1st argument: b
+	//1st argument (input): b
 	String bArg=StringFromList(1,argumentList)
 	
-	//2nd argument: c=floor(a/b)
+	//2nd argument (output): c=floor(a/b)
 	String cArg=StringFromList(2,argumentList)
 	
 	NVAR a=$aArg
@@ -404,19 +432,19 @@ End
 Function IAFf_StoreWave12D(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of the output wave 1st index
+	//0th argument (input): waveinfo of the output wave 1st index
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: waveinfo of the output wave 2nd index
+	//1st argument (input): waveinfo of the output wave 2nd index
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: 2nd index 
+	//2nd argument (input): 2nd index 
 	String index2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: wave to be stored
+	//3rd argument (input): wave to be stored
 	String valueWaveArg=StringFromList(3,argumentList)
 	
-	//4th argument: output wave
+	//4th argument (output): output wave
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -455,22 +483,22 @@ End
 Function IAFf_StoreWave23D(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of the output wave 1st index
+	//0th argument (input): infowave of the output wave 1st index
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: waveinfo of the output wave 2nd index
+	//1st argument (input): infowave of the output wave 2nd index
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: waveinfo of the output wave 3rd index
+	//2nd argument (input): infowave of the output wave 3rd index
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: 3rd index 
+	//3rd argument (input): 3rd index 
 	String index3Arg=StringFromList(3,argumentList)
 	
-	//4th argument: wave to be stored
+	//4th argument (input): wave to be stored
 	String valueWaveArg=StringFromList(4,argumentList)
 	
-	//5th argument: output wave
+	//5th argument (output): output wave
 	String outputArg=StringFromList(5,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
