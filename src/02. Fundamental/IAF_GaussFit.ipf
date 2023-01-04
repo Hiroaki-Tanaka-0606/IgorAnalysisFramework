@@ -3,13 +3,20 @@
 //Function GaussFit: fit the input wave by multiple Gauss functions
 
 //=p[0]+p[1]*x+Gauss(x-p[3], p[2])*p[4]+Gauss(x-p[5], p[2])*p[6]+...
+//Gauss(x, s)=exp(-1/2 (x/s)^2) (the 1/sqrt(2pi)/s term is omitted)
 
-//Output (6th argument): fitting parameters
+//3rd argument: initial guess of the Gauss functions (input)
+//guess[0], guess[1]: initial center and height of Gaussian 1
+//guess[2], guess[3]: those of Gaussian 2
+//If the initial height is smaller than zero, the pair is neglected.
+
+//6th argument: fitting parameters (output)
 //param[0]: Background
-//param[1]: Slope of Background [/eV]
-//param[2]: gaussian width [eV]
-//param[3], param[4]: center and height of gaussian 1
-//param[5], param[6]: those of gaussian 2
+//param[1]: Slope of Background [/(x axis unit)]
+//param[2]: Gaussian width [x axis unit]
+//param[3], param[4]: center and height of Gaussian 1
+//param[5], param[6]: those of Gaussian 2
+//param[7], param[8]: ...
 
 Function/S IAFf_GaussFit_Definition()
 	return "8;0;0;0;0;0;0;1;1;Wave1D;Variable;Variable;Wave1D;Variable;String;Wave1D;Wave1D"
@@ -18,29 +25,29 @@ End
 Function IAFf_GaussFit(argumentList)
 	String argumentList
 	
-	//0th argument: wave 
+	//0th argument (input): wave 
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: fitting range (min, including itself) [index]
+	//1st argument (input): fitting range (min, including itself) [index]
 	String fitMinArg=StringFromList(1,argumentList)
 	
-	//2nd argument: fitting range (max, including itself) [index]
+	//2nd argument (input): fitting range (max, including itself) [index]
 	String fitMaxArg=StringFromList(2,argumentList)
 	
-	//3rd argument: initial gaussian info
+	//3rd argument (input): initial gaussian info
 	String peakInfoArg=StringFromList(3, argumentList)
 	
-	//4th argument: initial sigma [eV]
+	//4th argument (input): initial sigma [x axis unit]
 	String sigmaArg=StringFromList(4, argumentList)
 	
-	//5th argument: holdParams 
+	//5th argument (input): holdParams 
 	// a string of letters ("0" or "1"), which determines each parameter is hold constant ("1") or not ("0")
 	String holdParamsArg=StringFromList(5,argumentList)
 	
-	//6th argument: fitting parameters
+	//6th argument (output): fitting parameters
 	String paramsArg=StringFromList(6,argumentList)
 	
-	//7th argument: fitted curve
+	//7th argument (output): fitted curve
 	String fitCurveArg=StringFromList(7,argumentList)
 	
 	Wave/D input=$inputArg
@@ -49,6 +56,7 @@ Function IAFf_GaussFit(argumentList)
 	NVAR sigma=$sigmaArg
 	SVAR holdParams=$holdParamsArg
 	
+	//Validation of the initial guess
 	Wave/D peakInfo=$peakInfoArg
 	Variable peakInfoSize=dimsize(peakInfo, 0)
 	if(mod(peakInfoSize, 2)!=0)
@@ -93,8 +101,8 @@ Function IAFf_GaussFit(argumentList)
 		
 	//duplicate the input in the range of [fitMin, fitMax]
 	Duplicate/O/R=[fitMin,fitMax] input yTemp
+	//Fitting
 	FuncFit/H=(holdParams)/Q/W=2/N IAFu_GaussTrialFunc params yTemp
-	
 	killwaves peakInfo2
 	
 	//output fitCurve

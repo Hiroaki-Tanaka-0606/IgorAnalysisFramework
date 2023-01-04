@@ -40,5 +40,5 @@ See **docs/Structure.md** to see how the software construct analysis diagrams.
 Also, **docs/GettingStarted.md** explains how to use the software with examples.
 
 ## README for included functions
-
+- **Fundamental *Part*s**: see **docs/Fundamental.md** for README.
 - **ARPES data analysis**: see **docs/ARPES.md** for README, **docs/ARPES.xlsx** for example diagrams.

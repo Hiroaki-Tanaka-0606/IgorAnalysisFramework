@@ -180,7 +180,7 @@ Function IAFc_Flowchart_Hook(s)
 			String partName=ChartIndex[i][0]
 			Variable FrameIndex=whichlistitem(partOrigin,OriginList)
 			If(FrameIndex==-1)
-				Printf "Error: origin of \"%s\" not found", partName
+				Printf "Error: origin of \"%s\" not found\n", partName
 				continue
 			Endif
 			//update frame coordinate
@@ -412,7 +412,7 @@ Function IAFc_UpdateChart(updateControl)
 
 		String DiagramInfoList=IAFc_DiagramInfo(partName,DiagramWaveList)
 		If(cmpstr(DiagramInfoList,"Diagram not found",1)==0)
-			Printf "Error: Diagram \"%s\" not found", partName
+			Printf "Error: Diagram \"%s\" not found\n", partName
 			continue
 		Endif
 		String partKind=StringFromList(0,DiagramInfoList)
@@ -437,7 +437,7 @@ Function IAFc_UpdateChart(updateControl)
 		//check frame
 		Variable FrameIndex=whichlistitem(partOrigin,OriginList)
 		If(FrameIndex==-1)
-			Printf "Error: origin of \"%s\" not found", partName
+			Printf "Error: origin of \"%s\" not found\n", partName
 			continue
 		Endif
 		//update frame coordinate

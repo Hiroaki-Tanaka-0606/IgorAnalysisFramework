@@ -33,12 +33,12 @@ Function IAFc_ConfigureNames()
 					//Name is blank ("") or duplicated
 					//so, create new name
 					String newName=IAFcu_CreateNewName(Type_ij,nameList)
-					Printf "Replace name \"%s\" to \"%s\" in row %d of Diagram Wave \"%d\"", Diagram_i[j][2], newName, j, DiagramWaveName
+					Printf "Replace name \"%s\" to \"%s\" in row %d of Diagram Wave \"%d\"\n", Diagram_i[j][2], newName, j, DiagramWaveName
 					Diagram_i[j][2]=newName
 				Endif
 				nameList=AddListItem(Diagram_i[j][2],nameList)
 			Else
-				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\"", j, DiagramWaveName, Kind_ij, Type_ij
+				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\"\n", j, DiagramWaveName, Kind_ij, Type_ij
 			Endif
 		Endfor
 	Endfor
@@ -148,7 +148,7 @@ Function IAFc_ConfigureDependency()
 					//Verify Definition of the Function
 					If(IAFc_VerifyFunctionDefinition(FuncDef)==0)
 						//ill-defined
-						Printf "Error: Function \"%s\" is ill-defined", Type_ij
+						Printf "Error: Function \"%s\" is ill-defined\n", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -164,7 +164,7 @@ Function IAFc_ConfigureDependency()
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")\n", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -172,7 +172,7 @@ Function IAFc_ConfigureDependency()
 							Type_ijk=DataOrigin[DataOriginIndex][0]
 							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")\n", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -186,7 +186,7 @@ Function IAFc_ConfigureDependency()
 									DataOrigin[DataOriginIndex][2]=Name_ij
 								Else
 									//already filled, conflict
-									Printf "Error: Data \"%s\" is output by multiple Functions", Name_ijk
+									Printf "Error: Data \"%s\" is output by multiple Functions\n", Name_ijk
 									numErrors+=1
 								Endif
 							else
@@ -207,19 +207,19 @@ Function IAFc_ConfigureDependency()
 							Type_ijk=IAFcu_GetSocketType(Name_ijk)
 							If(cmpstr(Type_ijk,"module not found", 1)==0)
 								//Module Name_ijk does not exist
-								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")\n", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							If(cmpstr(Type_ijk,"socket not found", 1)==0)
 								//the Module does not have a socket
-								Printf "Error: Module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")", Name_ijk, k, j, DiagramWaveName
+								Printf "Error: Module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")\n", Name_ijk, k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
 							If(cmpstr(Type_ijk,Type_k,1)!=0)
 								//types do not match
-								Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
+								Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")\n", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -232,7 +232,7 @@ Function IAFc_ConfigureDependency()
 					//Verify Definition of the Module
 					If(IAFc_VerifyModuleDefinition(ModuleDef)==0)
 						//ill-defined
-						Printf "Error: Module \"%s\" is ill-defined", Type_ij
+						Printf "Error: Module \"%s\" is ill-defined\n", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -248,7 +248,7 @@ Function IAFc_ConfigureDependency()
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")\n", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -256,7 +256,7 @@ Function IAFc_ConfigureDependency()
 							Type_ijk=DataOrigin[DataOriginIndex][0]
 							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")\n", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -265,7 +265,7 @@ Function IAFc_ConfigureDependency()
 								//input, do nothing
 							elseif(cmpstr(inout_k, "1", 1)==0)
 								//output, error
-								Printf "Error: Module \"%s\" has output data", Type_ij
+								Printf "Error: Module \"%s\" has output data\n", Type_ij
 								numErrors+=1
 							else
 								//something strange
@@ -281,19 +281,19 @@ Function IAFc_ConfigureDependency()
 								Type_ijk=IAFcu_GetSocketType(Name_ijk)
 								If(cmpstr(Type_ijk,"module not found", 1)==0)
 									//Module Name_ijk does not exist
-									Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
+									Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")\n", k, Name_ijk, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
 								If(cmpstr(Type_ijk,"socket not found", 1)==0)
 									//the Module does not have a socket
-									Printf "Error: module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")", Name_ijk, k, j, DiagramWaveName
+									Printf "Error: module \"%s\" in argument[%d] does not have a socket (row %d, Diagram Wave \"%s\")\n", Name_ijk, k, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
 								If(cmpstr(Type_ijk,Type_k,1)!=0)
 									//types do not match
-									Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
+									Printf "Error: invalid type of socket argument[%d] (row %d, Diagram Wave \"%s\")\n", k, j, DiagramWaveName
 									numErrors+=1
 									break
 								Endif
@@ -313,7 +313,7 @@ Function IAFc_ConfigureDependency()
 					//Verify Definition of the Panel
 					If(IAFc_VerifyPanelDefinition(PanelDef)==0)
 						//ill-defined
-						Printf "Error: Panel \"%s\" is ill-defined", Type_ij
+						Printf "Error: Panel \"%s\" is ill-defined\n", Type_ij
 						numErrors+=1
 						break
 					Endif
@@ -329,7 +329,7 @@ Function IAFc_ConfigureDependency()
 							DataOriginIndex=IAFcu_GetDataOriginIndex(Name_ijk,currentFolder)
 							If(DataOriginIndex==-1)
 								//Data does not exist
-								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")", k, Name_ijk, j, DiagramWaveName
+								Printf "Error: argument[%d]=\"%s\" does not exist (row %d, Diagram Wave \"%s\")\n", k, Name_ijk, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -337,7 +337,7 @@ Function IAFc_ConfigureDependency()
 							Type_ijk=DataOrigin[DataOriginIndex][0]
 							If(cmpstr(Type_k,Type_ijk,1)!=0)
 								//types do not match
-								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")", k, j, DiagramWaveName
+								Printf "Error: invalid type of data argument[%d] (row %d, Diagram Wave \"%s\")\n", k, j, DiagramWaveName
 								numErrors+=1
 								break
 							Endif
@@ -346,7 +346,7 @@ Function IAFc_ConfigureDependency()
 								//input, do nothing
 							elseif(cmpstr(inout_k, "1", 1)==0)
 								//output, error
-								Printf "Error: Panel \"%s\" has output data", Type_ij
+								Printf "Error: Panel \"%s\" has output data\n", Type_ij
 								numErrors+=1
 							else
 								//something strange
@@ -356,7 +356,7 @@ Function IAFc_ConfigureDependency()
 							break
 						Case 2:
 							//socket
-							Printf "Error: Panel \"%s\" has socket", Type_ij
+							Printf "Error: Panel \"%s\" has socket\n", Type_ij
 							numErrors+=1
 							break
 						Endswitch
@@ -367,7 +367,7 @@ Function IAFc_ConfigureDependency()
 					numErrors+=1
 				endif
 			Else
-				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\" is ill-defined)", j, DiagramWaveName, Kind_ij, Type_ij
+				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\" is ill-defined)\n", j, DiagramWaveName, Kind_ij, Type_ij
 			Endif
 		Endfor
 	Endfor

@@ -279,7 +279,7 @@ Since the **delta** is 0.1 eV, the exported data (**Figure 10**) cannot reflect 
 
 Then, what will happen when we use different **InfoWave**s to make the corrected result?
 Duplicate **EInfo2** to another **InfoWave** named **EInfo3** and modify it as shown in **Table 6**.
-Also you need to add two rows (**Table 7**) in the **diagram wave**.
+Also you need to add the three rows (**Table 7**) in the **diagram wave**.
 
 **Table 6**: **EInfo3** data.
 | | EInfo3 |
