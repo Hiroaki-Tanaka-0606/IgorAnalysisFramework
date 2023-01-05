@@ -8,19 +8,19 @@ End
 Function IAFf_PolyFit(argumentList)
 	String argumentList
 	
-	//0th argument: a wave to be fitted
+	//0th argument (input): a wave to be fitted
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: dimension of a fitting polynomial
+	//1st argument (input): dimension of a fitting polynomial
 	//1 -> line (k_0 + k_1 x)
 	//2 -> quadratic polynomial (k_0 + k_1 x + k_1 x^2)
 	//and so on
 	String dimArg=StringFromList(1,argumentList)
 	
-	//2nd argument: a wave of fitting parameters k_i (i=[0,dim])
+	//2nd argument (output): a wave of fitting parameters k_i (i=[0,dim])
 	String paramsArg=StringFromList(2,argumentList)
 	
-	//3rd argument: fitted curve
+	//3rd argument (output): fitted curve
 	String fitCurveArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -56,6 +56,7 @@ End
 
 
 //Function PolyFit2: fit by a polynomial
+//When the x coordinates of data points are not equally separated
 Function/S IAFf_PolyFit2_Definition()
 	return "5;0;0;0;1;1;Wave1D;Wave1D;Variable;Wave1D;Wave1D"
 End
@@ -63,22 +64,22 @@ End
 Function IAFf_PolyFit2(argumentList)
 	String argumentList
 	
-	//0th argument: a wave of Y values to be fitted
+	//0th argument (input): a wave of Y values to be fitted
 	String yWaveArg=StringFromList(0,argumentList)
 	
-	//1st argument: a wave of X values to be fitted
+	//1st argument (input): a wave of X values to be fitted
 	String xWaveArg=StringFromList(1,argumentList)
 	
-	//2nd argument: dimension of a fitting polynomial
+	//2nd argument (input): dimension of a fitting polynomial
 	//1 -> line (k_0 + k_1 x)
 	//2 -> quadratic polynomial (k_0 + k_1 x + k_1 x^2)
 	//and so on
 	String dimArg=StringFromList(2,argumentList)
 	
-	//3rd argument: a wave of fitting parameters k_i (i=[0,dim])
+	//3rd argument (output): a wave of fitting parameters k_i (i=[0,dim])
 	String paramsArg=StringFromList(3,argumentList)
 	
-	//4th argument: fitted curve points, with the same X values
+	//4th argument (output): fitted curve points, with the same X values
 	String fitCurveArg=StringFromList(4,argumentList)
 	
 	Wave/D inputY=$yWaveArg
@@ -86,7 +87,7 @@ Function IAFf_PolyFit2(argumentList)
 	NVAR dim=$dimArg
 	dim=round(dim)
 	if(dim<1)
-		print("PolyFit Error: dimension must be a positive integer")
+		print("PolyFit2 Error: dimension must be a positive integer")
 		abort
 	endif
 	
@@ -121,13 +122,13 @@ End
 Function IAFf_ValidPoints1D(argumentList)
 	String argumentList
 	
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: X coordinates of valid points
+	//1st argument (output): X coordinates of valid points
 	String outputXArg=StringFromList(1,argumentList)
 	
-	//2nd argument: Y coordinates of valid points
+	//2nd argument (output): Y coordinates of valid points
 	String outputYArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -164,13 +165,13 @@ End
 Function IAFf_PolyCurve(argumentList)
 	String argumentList
 	
-	//0th argument: waveinfo of output
+	//0th argument (input): infowave of output
 	String waveInfoArg=StringFromList(0,argumentList)
 	
-	//1st argument: FitParams
+	//1st argument (input): FitParams
 	String fitParamsArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output
+	//2nd argument (output): output
 	String outputArg=StringFromList(2,argumentList)
 	
 	Wave/D outputInfo=$waveInfoArg

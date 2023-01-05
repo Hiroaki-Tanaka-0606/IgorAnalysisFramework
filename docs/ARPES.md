@@ -219,4 +219,129 @@ The function is intended to load the peak positions obtained from the EDCs and o
 | 3 | Input | **Variable** | kx value |
 | 4 | Output | **Wave2D** | List of ```(E, kz)``` |
 
+<!-- 10 -->
+## ConvAngle3D_M (Module)
+The **ConvAngle3D_M** *Module* converts the energy-angle-angle map to the energy-kx-ky map.
+The module assumes that the second angle axis is related to the manipulator rotation, not the deflector of the photoelectron analyzer.
+As the other conversion *Module*s do, the module assumes that the Fermi level correction is already performed.
 
+The conversion process is based on the [paper by Ishida and Shin](https://aip.scitation.org/doi/10.1063/1.5007226), although some definitions of angles are different.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | The kinetic energy of the photoelectrons excited from the Fermi level (photon energy - work function) |
+| 1 | Input | **Variable** | Polar offset angle |
+| 2 | Input | **Variable** | Tilt offset angle |
+| 3 | Input | **Variable** | Polar error angle |
+| 4 | Input | **Variable** | Azimuth error angle |
+| 5 | Input | **Variable** | Whether the tilt angle is inverted; if so, the value should be greater than 0 |
+| 6 | Input | **Variable** | Whether the photoemission angle is inverted; if so, the value should be greater than 0 |
+| 7 | Input | **Coordinate3D** | Energy-angle-angle socket |
+| 8 | Socket | **Coordinate3D** | Waiting socket |
+
+
+Here we represent the variables in the argument list by ```EphEf```, ```φ1```, ```θ0```, ```φ2```, ```δ``` and the angles along the first and second axes by ```α``` and ```θ```, respectively.
+These angles are defined in **Figure 2**.
+In **Figure 2**, the analyzer slit is in the center bottom.
+Since the sign of the photoemission angle ```α``` is determined to correspond to this analyzer orientation, you may need to invert the sign if the orientation is different.
+
+![ConvAngle3D_M](Images/ConvAngle3D_M.png)
+
+**Figure 2**: Coordinate systems used in the **ConvAngle3D_M** *Module*.
+
+The photoemission wavevector k is ```(k*sin(α), 0, k*cos(α))``` in the x1y1z1 coordinate system.
+The representation of the same vector in the x2y2z2 coordinate system is obtained by multiplying the 3×3 transformation matrix to the vector.
+Multiplying these transformation matrix sequentially, we can get the values in the x5y5z5 coordinate system.
+
+What the module do is reversed.
+When we get the vector ```(kx, ky, kz)``` in the x5y5z5 system, we convert it to the x3y3z3 coordinate system.
+Then we calculate the rotation angle ```θ``` so that the y2 component (in the x2y2z2 coordinate system) becomes zero.
+After that, we convert the representation to the x1y1z1 coordinate system and obtain ```α```.
+
+The difference between the error angles (```φ2``` and ```δ```) and polar offset ```φ1``` is that the former is to remove the experimental error and the latter is to take into account the experimental setup.
+Therefore, the polar offset ```φ1``` should be zero unless you intentionally rotate the manipulator.
+The tilt offset ```θ0``` includes both roles.
+
+<!-- 11 -->
+## ConvAngle3D_M_F (Function)
+The **ConvAngle3D_M_F** *Function* is the format function for **ConvAngle3D_M**.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | The kinetic energy of the photoelectrons excited from the Fermi level (photon energy - work function) |
+| 1 | Input | **Variable** | Polar offset angle |
+| 2 | Input | **Variable** | Tilt offset angle |
+| 3 | Input | **Variable** | Polar error angle |
+| 4 | Input | **Variable** | Azimuth error angle |
+| 5 | Input | **Variable** | Whether the tilt angle is inverted; if so, the value should be greater than 0 |
+| 6 | Input | **Variable** | Whether the photoemission angle is inverted; if so, the value should be greater than 0 |
+| 7 | Input | **Wave1D** | **InfoWave** for the first axis (energy) |
+| 8 | Input | **Wave1D** | **InfoWave** for the second axis (angle ```α```) |
+| 9 | Input | **Wave1D** | **InfoWave** for the third axis (angle ```θ```) |
+| 10 | Output | **Wave1D** | **InfoWave** for the first axis (energy) |
+| 11 | Output | **Wave1D** | **InfoWave** for the second axis (kx) |
+| 12 | Output | **Wave1D** | **InfoWave** for the thrid axis (ky) |
+
+
+<!-- 12 -->
+## ConvAngle3D_D (Module)
+The **ConvAngle3D_D** *Module* converts the energy-angle-angle map to the energy-kx-ky map.
+The module assumes that the second angle axis is related to the deflector of the photoelectron analyzer, not th manipulator rotation.
+As the other conversion *Module*s do, the module assumes that the Fermi level correction is already performed.
+
+The conversion process is based on the [paper by Ishida and Shin](https://aip.scitation.org/doi/10.1063/1.5007226), although some definitions of angles are different.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | The kinetic energy of the photoelectrons excited from the Fermi level (photon energy - work function) |
+| 1 | Input | **Variable** | Polar offset angle |
+| 2 | Input | **Variable** | Tilt offset angle |
+| 3 | Input | **Variable** | Polar error angle |
+| 4 | Input | **Variable** | Tilt error angle |
+| 5 | Input | **Variable** | Azimuth error angle |
+| 6 | Input | **Coordinate3D** | Energy-angle-angle socket |
+| 7 | Socket | **Coordinate3D** | Waiting socket |
+
+
+Here we represent the variables in the argument list by ```EphEf```, ```φ1```, ```θ1```, ```φ2```, ```θ2```, ```δ``` and the angles along the first and second axes by ```α``` and ```β```, respectively.
+These angles are defined in **Figure 3**.
+In **Figure 3**, the analyzer slit is in the center bottom.
+Since the sign of the photoemission angles ```α``` and ```β``` is determined to correspond to this analyzer orientation, you may need to invert the sign if the orientation is different.
+
+![ConvAngle3D_M](Images/ConvAngle3D_D.png)
+
+**Figure 3**: Coordinate systems used in the **ConvAngle3D_D** *Module*.
+
+The photoemission wavevector k is ```(k*α*sin(η)/η, k*β*sin(η)/η, k*cos(η))``` (from the [paper by Ishida and Shin](https://aip.scitation.org/doi/10.1063/1.5007226)) in the x1y1z1 coordinate system, where only in this equation the angle unit is radian and ```η=sqrt(α^2+β^2)```.
+The transformation can be performed in the similar way as **ConvAngle3D_M**.
+
+What the module do is reversed.
+When we get the vector ```(kx, ky, kz)``` in the x6y6z6 system, we convert it to the x1y1z1 coordinate system ```(kx1, ky1, kz1)```.
+Then we obtain ```α``` and ```β``` from the following equation.
+```
+η=acos(kz1/k)
+α=kx1/k*η/sin(η)
+β=ky1/k*η/sin(η)
+```
+
+The difference between the error angles (```φ2```, ```θ2```, and ```δ```) and offset angles (```φ1``` and ```θ1```) is that the former is to remove the experimental error and the latter is to take into account the experimental setup.
+Therefore, the offset angles should be zero unless you intentionally rotate the manipulator and at least one of the offset angles will be zero in most experimental setups.
+
+<!-- 13 -->
+## ConvAngle3D_D_F (Function)
+The **ConvAngle3D_D_F** *Function* is the format function for **ConvAngle3D_D**.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | The kinetic energy of the photoelectrons excited from the Fermi level (photon energy - work function) |
+| 1 | Input | **Variable** | Polar offset angle |
+| 2 | Input | **Variable** | Tilt offset angle |
+| 3 | Input | **Variable** | Polar error angle |
+| 4 | Input | **Variable** | Tilt error angle |
+| 5 | Input | **Variable** | Azimuth error angle |
+| 6 | Input | **Wave1D** | **InfoWave** for the first axis (energy) |
+| 7 | Input | **Wave1D** | **InfoWave** for the second axis (angle ```α```) |
+| 8 | Input | **Wave1D** | **InfoWave** for the third axis (angle ```β```) |
+| 9 | Output | **Wave1D** | **InfoWave** for the first axis (energy) |
+| 10 | Output | **Wave1D** | **InfoWave** for the second axis (kx) |
+| 11 | Output | **Wave1D** | **InfoWave** for the thrid axis (ky) |

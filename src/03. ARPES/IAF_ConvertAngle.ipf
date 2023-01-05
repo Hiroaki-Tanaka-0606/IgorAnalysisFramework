@@ -650,31 +650,31 @@ end
 Function/S IAFm_ConvAngle3D_M(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W (energy of photoelectron irradiated from Ef state)
+	//0th argument (input): hn-W (energy of photoelectron irradiated from Ef state)
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: phi1 (polar angle, deg)
+	//1st argument (input): phi1 (polar angle, deg)
 	String phi1Arg=StringFromList(1, argumentList)
 	
-	//2nd argument: theta0 (tilt offset, deg)
+	//2nd argument (input): theta0 (tilt offset, deg)
 	String theta0Arg=StringFromList(2, argumentList)
 	
-	//3rd argument: phi2 (polar error, deg)
+	//3rd argument (input): phi2 (polar error, deg)
 	String phi2Arg=StringFromList(3, argumentList)
 	
-	//4th argument: delta (azimuth error, deg)
+	//4th argument (input): delta (azimuth error, deg)
 	String deltaArg=StringFromList(4, argumentList)
 	
-	//5th argument: thetaInverse (inverted if greater than 0)
+	//5th argument (input): thetaInverse (inverted if greater than 0)
 	String thetaInverseArg=StringFromList(5, argumentList)
 	
-	//6th argument: alphaInverse (inverted if grater than 0)
+	//6th argument (input): alphaInverse (inverted if grater than 0)
 	String alphaInverseArg=StringFromList(6, argumentList)
 	
-	//7th coordinate3D socket (E-deg-deg)
+	//7th argument (input): coordinate3D socket (E-deg-deg)
 	String EdegSocketName=StringFromList(7,argumentList)
 	
-	//8th argument: coordinate list passed through coordinate3D socket(E-k-k)
+	//8th argument (waiting socket): coordinate list passed through coordinate3D socket(E-k-k)
 	String EkListArg=StringFromList(8,argumentList)
 	
 	NVAR Eph_Ef=$Eph_EfArg
@@ -771,33 +771,33 @@ end
 Function IAFf_ConvAngle3D_M_F(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W (energy of photoelectron irradiated from Ef state)
+	//0th argument (input): hn-W (energy of photoelectron irradiated from Ef state)
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: phi1 (polar angle, deg)
+	//1st argument (input): phi1 (polar angle, deg)
 	String phi1Arg=StringFromList(1, argumentList)
 	
-	//2nd argument: theta0 (tilt offset, deg)
+	//2nd argument (input): theta0 (tilt offset, deg)
 	String theta0Arg=StringFromList(2, argumentList)
 	
-	//3rd argument: phi2 (polar error, deg)
+	//3rd argument (input): phi2 (polar error, deg)
 	String phi2Arg=StringFromList(3, argumentList)
 	
-	//4th argument: delta (azimuth error, deg)
+	//4th argument (input): delta (azimuth error, deg)
 	String deltaArg=StringFromList(4, argumentList)
 	
-	//5th argument: thetaInverse (inverted if greater than 0)
+	//5th argument (input): thetaInverse (inverted if greater than 0)
 	String thetaInverseArg=StringFromList(5, argumentList)
 	
-	//6th argument: alphaInverse (inverted if grater than 0)
+	//6th argument (input): alphaInverse (inverted if grater than 0)
 	String alphaInverseArg=StringFromList(6, argumentList)
 	
-	//7th-9th: input waveinfo
+	//7th-9th arguments (input): input waveinfo
 	String EInfoArg=StringFromList(7, argumentList)
 	String alphaInfoArg=StringFromList(8, argumentList)
 	String thetaInfoArg=StringFromList(9, argumentList)
 	
-	//10th-12th: output waveinfo
+	//10th-12th arguments (output): output waveinfo
 	String out_EInfoArg=StringFromList(10, argumentList)
 	String out_kxInfoArg=StringFromList(11, argumentList)
 	String out_kyInfoArg=StringFromList(12, argumentList)
@@ -924,28 +924,28 @@ end
 Function/S IAFm_ConvAngle3D_D(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W (energy of photoelectron irradiated from Ef state)
+	//0th argument (input): hn-W (energy of photoelectron irradiated from Ef state)
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: phi1 (polar angle, deg)
+	//1st argument (input): phi1 (polar angle, deg)
 	String phi1Arg=StringFromList(1, argumentList)
 	
-	//2nd argument: theta1 (tilt angle, deg)
+	//2nd argument (input): theta1 (tilt angle, deg)
 	String theta1Arg=StringFromList(2, argumentList)
 	
-	//3rd argument: phi2 (polar error, deg)
+	//3rd argument (input): phi2 (polar error, deg)
 	String phi2Arg=StringFromList(3, argumentList)
 	
-	//4th argument: theta2 (tilt error, deg)
+	//4th argument (input): theta2 (tilt error, deg)
 	String theta2Arg=StringFromList(4, argumentList)
 	
-	//5th argument: delta (azimuth error, deg)
+	//5th argument (input): delta (azimuth error, deg)
 	String deltaArg=StringFromList(5, argumentList)
 		
-	//7th coordinate3D socket (E-deg-deg)
+	//7th argument (input): coordinate3D socket (E-deg-deg)
 	String EdegSocketName=StringFromList(6,argumentList)
 	
-	//8th argument: coordinate list passed through coordinate3D socket(E-k-k)
+	//8th argument (waiting socket): coordinate list passed through coordinate3D socket(E-k-k)
 	String EkListArg=StringFromList(7,argumentList)
 	
 	NVAR Eph_Ef=$Eph_EfArg
@@ -1033,30 +1033,30 @@ end
 Function IAFf_ConvAngle3D_D_F(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W (energy of photoelectron irradiated from Ef state)
+	//0th argument (input): hn-W (energy of photoelectron irradiated from Ef state)
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: phi1 (polar angle, deg)
+	//1st argument (input): phi1 (polar angle, deg)
 	String phi1Arg=StringFromList(1, argumentList)
 	
-	//2nd argument: theta1 (tilt angle, deg)
+	//2nd argument (input): theta1 (tilt angle, deg)
 	String theta1Arg=StringFromList(2, argumentList)
 	
-	//3rd argument: phi2 (polar error, deg)
+	//3rd argument (input): phi2 (polar error, deg)
 	String phi2Arg=StringFromList(3, argumentList)
 	
-	//4th argument: theta2 (tilt error, deg)
+	//4th argument (input): theta2 (tilt error, deg)
 	String theta2Arg=StringFromList(4, argumentList)
 	
-	//5th argument: delta (azimuth error, deg)
+	//5th argument (input): delta (azimuth error, deg)
 	String deltaArg=StringFromList(5, argumentList)
 	
-	//6th-8th: input waveinfo
+	//6th-8th arguments (input): input waveinfo
 	String EInfoArg=StringFromList(6, argumentList)
 	String alphaInfoArg=StringFromList(7, argumentList)
 	String thetaInfoArg=StringFromList(8, argumentList)
 	
-	//9th-11th: output waveinfo
+	//9th-11th arguments (output): output waveinfo
 	String out_EInfoArg=StringFromList(9, argumentList)
 	String out_kxInfoArg=StringFromList(10, argumentList)
 	String out_kyInfoArg=StringFromList(11, argumentList)
