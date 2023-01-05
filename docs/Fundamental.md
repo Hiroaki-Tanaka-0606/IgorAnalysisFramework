@@ -1,6 +1,7 @@
 # Fundamental *Part*s
 
 This page briefly explains the *Part*s included in the Procedure files (listed below) in ```IAF_Fundamental.ipf```.
+```IAF_Fundamental.ipf``` is automatically loaded because ```IAF.ipf``` has the ```#include "IAF_Fundamental"``` directive.
 
 - ```IAF_GaussFit.ipf```
 - ```IAF_LoadWave.ipf```

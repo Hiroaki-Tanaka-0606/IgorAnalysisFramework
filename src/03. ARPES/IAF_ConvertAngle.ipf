@@ -18,16 +18,16 @@ End
 Function/S IAFm_ConvAngle2D(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W (energy of photoelectron irradiated from Ef state)
+	//0th argument (input): hn-W (energy of photoelectron irradiated from Ef state)
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: origin of theta (deg)
+	//1st argument (input): origin of theta (deg)
 	String theta0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: coordinate2D socket (E-deg)
+	//2nd argument (input): coordinate2D socket (E-deg)
 	String EdegSocketName=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinate list passed through coordinate2D socket(E-k)
+	//3rd argument (waiting socket): coordinate list passed through coordinate2D socket(E-k)
 	String EkListArg=StringFromList(3,argumentList)
 	
 	NVAR Eph_Ef=$Eph_EfArg
@@ -82,22 +82,22 @@ End
 Function IAFf_ConvAngle2D_F(argumentList)
 	String argumentList
 	
-	//0th argument: hn-W
+	//0th argument (input): hn-W
 	String Eph_EfArg=StringFromList(0,argumentList)
 	
-	//1st argument: theta0
+	//1st argument (input): theta0
 	String theta0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: EnergyInfo
+	//2nd argument (input): EnergyInfo
 	String EnergyInfoArg=StringFromList(2,argumentList)
 	
-	//3rd argument: AngleInfo
+	//3rd argument (input): AngleInfo
 	String AngleInfoArg=StringFromList(3,argumentList)
 	
-	//4th argument: output EnergyInfo (same as the 2nd argument)
+	//4th argument (output): output EnergyInfo (same as the 2nd argument)
 	String EnergyInfo2Arg=StringFromList(4,argumentList)
 	
-	//5th argument: output MomentumInfo
+	//5th argument (output): output MomentumInfo
 	String MomentumInfoArg=StringFromList(5,argumentList)
 	
 	NVAR Eph_Ef=$Eph_EfArg
@@ -151,19 +151,19 @@ End
 Function/S IAFm_ConvEAhn(argumentList)
 	String argumentList
 	
-	//0th argument: work function W [eV]
+	//0th argument (input): work function W [eV]
 	String WArg=StringFromList(0,argumentList)
 	
-	//1st argument: inner potential V0 [eV]
+	//1st argument (input): inner potential V0 [eV]
 	String V0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: angle origin theta0 [deg]
+	//2nd argument (input): angle origin theta0 [deg]
 	String theta0Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinate3D socket (E-angle-hn)
+	//3rd argument (input): coordinate3D socket (E-angle-hn)
 	String EAhnSocketName=StringFromList(3,argumentList)
 	
-	//4th argument: given coordinate list (E-kx-kz)
+	//4th argument (waiting socket): given coordinate list (E-kx-kz)
 	String EkkListName=StringFromList(4,argumentList)
 	
 	NVAR W=$Warg
@@ -180,13 +180,6 @@ Function/S IAFm_ConvEAhn(argumentList)
 		
 	Variable i
 	Variable E2kConstant=IAFu_E2kConstant()
-
-//When E, kx, and kz are given,
-//Kph_c = sqrt(kx^2+kz^2)
-//Eph   = (hbar Kph_c)^2/2me-V0
-//hn    = Eph-E+W
-//Kph_v = sqrt(2me Eph)/hbar
-//theta = theta_0+asin(kx/Kph_v)
 
 	For(i=0;i<listSize;i+=1)
 		Variable E=input[i][0]
@@ -206,6 +199,16 @@ Function/S IAFm_ConvEAhn(argumentList)
 End
 
 
+//Module ConvEAhn2: convert Energy-kx-hn to Energy-kx-kz
+//list of (E,kx,kz) is givne through the socket
+//E: Energy (<0) with 0 being set to Ef
+//kx: momentum along the slit direction (A^-1)
+//kz: momentum perp. to the crystal surface
+//When E, kx, and kz are given,
+//Kph_c = sqrt(kx^2+kz^2)
+//Eph   = (hbar Kph_c)^2/2me-V0
+//hn    = Eph-E+W
+
 Function/S IAFm_ConvEAhn2_Definition()
 	return "5;0;0;0;0;2;Variable;Variable;Variable;Coordinate3D;Coordinate3D"
 End	
@@ -213,19 +216,19 @@ End
 Function/S IAFm_ConvEAhn2(argumentList)
 	String argumentList
 	
-	//0th argument: work function W [eV]
+	//0th argument (input): work function W [eV]
 	String WArg=StringFromList(0,argumentList)
 	
-	//1st argument: inner potential V0 [eV]
+	//1st argument (input): inner potential V0 [eV]
 	String V0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: angle origin theta0 [deg] -> not used
+	//2nd argument (input): angle origin theta0 [deg] -> not used
 	String theta0Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinate3D socket (E-kx-hn)
+	//3rd argument (input): coordinate3D socket (E-kx-hn)
 	String EAhnSocketName=StringFromList(3,argumentList)
 	
-	//4th argument: given coordinate list (E-kx-kz)
+	//4th argument (waiting socket): given coordinate list (E-kx-kz)
 	String EkkListName=StringFromList(4,argumentList)
 	
 	NVAR W=$Warg
@@ -243,13 +246,6 @@ Function/S IAFm_ConvEAhn2(argumentList)
 	Variable i
 	Variable E2kConstant=IAFu_E2kConstant()
 
-//When E, kx, and kz are given,
-//Kph_c = sqrt(kx^2+kz^2)
-//Eph   = (hbar Kph_c)^2/2me-V0
-//hn    = Eph-E+W
-//Kph_v = sqrt(2me Eph)/hbar
-//theta = theta_0+asin(kx/Kph_v)
-
 	For(i=0;i<listSize;i+=1)
 		Variable E=input[i][0]
 		Variable kx=input[i][1]
@@ -257,7 +253,6 @@ Function/S IAFm_ConvEAhn2(argumentList)
 		Variable Kph_c=sqrt(kx^2+kz^2)
 		Variable Eph=(Kph_c/E2kConstant)^2-V0
 		Variable hn=Eph-E+W
-		Variable Kph_v=sqrt(Eph)*E2kConstant
 		input[i][1]=kx
 		input[i][2]=hn
 	Endfor
@@ -266,6 +261,7 @@ Function/S IAFm_ConvEAhn2(argumentList)
 	
 End
 
+//Function ConvEAhn_F: format function for ConvEAhn
 Function/S IAFf_ConvEAhn_F_Definition()
 	return "9;0;0;0;0;0;0;1;1;1;Variable;Variable;Variable;Wave1D;Wave1D;Wave1D;Wave1D;Wave1D;Wave1D"
 End	
@@ -273,21 +269,21 @@ End
 Function IAFf_ConvEAhn_F(argumentList)
 	String argumentList
 	
-	//0th argument: work function W [eV]
+	//0th argument (input): work function W [eV]
 	String WArg=StringFromList(0,argumentList)
 	
-	//1st argument: inner potential V0 [eV]
+	//1st argument (input): inner potential V0 [eV]
 	String V0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: angle origin theta0 [deg]
+	//2nd argument (input): angle origin theta0 [deg]
 	String theta0Arg=StringFromList(2,argumentList)
 	
-	//3rd,4th,5th arguments: EnergyInfo,AngleInfo,hnInfo
+	//3rd,4th,5th arguments (output): EnergyInfo,AngleInfo,hnInfo
 	String EnergyInfoArg=StringFromList(3,argumentList)
 	String AngleInfoArg=StringFromList(4,argumentList)
 	String hnInfoArg=StringFromList(5,argumentList)
 	
-	//6th,7th,8th arguments: EnergyInfo,kxInfo,kzInfo
+	//6th,7th,8th arguments (output): EnergyInfo,kxInfo,kzInfo
 	String EnergyInfo2Arg=StringFromList(6,argumentList)
 	String kxInfoArg=StringFromList(7,argumentList)
 	String kzInfoArg=StringFromList(8,argumentList)
@@ -299,14 +295,6 @@ Function IAFf_ConvEAhn_F(argumentList)
 	Wave/D EnergyInfo=$EnergyInfoArg
 	Wave/D AngleInfo=$AngleInfoArg
 	Wave/D hnInfo=$hnInfoArg
-
-//When E, hn, and theta are given,
-//Eph=Eph_Ef+E, Eph_Ef=hn-W
-//Kph_v=sqrt(2me Eph)/hbar
-//Kph_c=sqrt(2me Eph+V0)/hbar
-//kx=Kph_v sin (theta-theta0)
-//kz=sqrt(Kph_c^2-kx^2)=sqrt(2m(Eph cos^2(theta-theta0)+V0))/hbar
-//
 
 	Variable E
 	Variable theta
@@ -384,25 +372,24 @@ Function IAFf_ConvEAhn_F(argumentList)
 	
 End
 
-
+//Module LoadkzMap: return the values (smoothing applied) at given E-angle-hn from the list of kz maps
 Function/S IAFm_LoadkzMap_Definition()
 	return "4;0;0;0;2;TextWave;Variable;Variable;Coordinate3D"
 End
 
 Function/S IAFm_LoadkzMap(argumentList)
 	String argumentList
-	//0th argument: List of kz map names, with the current folder being the relative origin
-	//kz maps are assumed to have the same EDelta, ESize, AngleInfo, but not the same EOffset
+	//0th argument (input): List of kz map names, with the current folder being the relative origin
 	String kzListArg=StringFromList(0,argumentList)
 	
-	//1st argument: smoothing size along the 1st axis (energy)
+	//1st argument (input): smoothing size along the 1st axis (energy)
 	//Also see IAF_Smoothing.ipf for rule to determine the smoothing range
 	String EWidthArg=StringFromList(1,argumentList)
 	
-	//2nd argument: smoothing size along the 2nd axis (angle)
+	//2nd argument (input): smoothing size along the 2nd axis (angle)
 	String AWidthArg=StringFromList(2,argumentList)
 	
-	//3rd argument: List of coordinates(E-angle-hn)
+	//3rd argument (waiting socket): List of coordinates(E-angle-hn)
 	String EAhnListName=StringFromList(3,argumentList)
 	
 	Wave/T kzList=$kzListArg
@@ -488,32 +475,30 @@ Function/S IAFm_LoadkzMap(argumentList)
 	return outputPath
 End
 
-
+//Function LoadkzMap_F: format function for LoadkzMap
 Function/S IAFf_LoadkzMap_F_Definition()
 	return "6;0;0;0;1;1;1;TextWave;Variable;Variable;Wave1D;Wave1D;Wave1D"
 End
 
 Function IAFf_LoadkzMap_F(argumentList)
 	String argumentList
-	
-	//0th argument: List of kz map names, with the current folder being the relative origin
-	//kz maps are assumed to have the same EDelta, ESize, AngleInfo, but not the same EOffset
+	//0th argument (input): List of kz map names, with the current folder being the relative origin
 	String kzListArg=StringFromList(0,argumentList)
 	
-	//1st argument: smoothing size along the 1st axis (energy)
+	//1st argument (input): smoothing size along the 1st axis (energy)
 	//Also see IAF_Smoothing.ipf for rule to determine the smoothing range
 	String EWidthArg=StringFromList(1,argumentList)
 	
-	//2nd argument: smoothing size along the 2nd axis (angle)
+	//2nd argument (input): smoothing size along the 2nd axis (angle)
 	String AWidthArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output EnergyInfo
+	//3rd argument (output): output EnergyInfo
 	String EInfoArg=StringFromList(3,argumentList)
 	
-	//4th argument: output AngleInfo
+	//4th argument (output): output AngleInfo
 	String AInfoArg=StringFromList(4,argumentList)
 	
-	//5th argument: output hnInfo
+	//5th argument (output): output hnInfo
 	String hnInfoArg=StringFromList(5,argumentList)
 	
 	Wave/T kzList=$kzListArg
@@ -610,7 +595,7 @@ Function IAFf_LoadkzMap_F(argumentList)
 End
 	
 
-//Module ConvPeaks: convert peak positions (Energy,hn) to (Energy,kz), where kx is given
+//Function ConvPeaks: convert peak positions (Energy,hn) to (Energy,kz), where kx is given
 //E: Energy (<0) with 0 being set to Ef
 //kx: momentum along the slit direction (A^-1)
 //kz: momentum perp. to the crystal surface
@@ -628,19 +613,19 @@ End
 Function IAFf_ConvPeaks(argumentList)
 	String argumentList
 	
-	//0th argument: work function W [eV]
+	//0th argument (input): work function W [eV]
 	String WArg=StringFromList(0,argumentList)
 	
-	//1st argument: inner potential V0 [eV]
+	//1st argument (input): inner potential V0 [eV]
 	String V0Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: list of peak positions (hn-E)
+	//2nd argument (input): list of peak positions (hn-E)
 	String Peaks_hnArg=StringFromList(2,argumentList)
 	
-	//3rd argument: kx
+	//3rd argument (input): kx
 	String kxArg=StringFromList(3,argumentList)
 	
-	//4th argument: output peak positions (E-kz)
+	//4th argument (output): output peak positions (E-kz)
 	String Peaks_kzArg=StringFromList(4,argumentList)
 	
 	NVAR W=$WArg

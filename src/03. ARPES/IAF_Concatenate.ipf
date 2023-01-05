@@ -8,29 +8,29 @@ End
 Function/S IAFm_Concat2D(argumentList)
 	String argumentList
 	
-	//0th argument: concatenation mode
+	//0th argument (input): concatenation mode
 	//0: half & half
 	//1: linearly gradual
 	String concatModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: a socket corresponding to wave A
+	//1st argument (input): a socket corresponding to wave A
 	String AName=StringFromList(1,argumentList)
 	
-	//2nd argument: a socket corresponding to wave B
+	//2nd argument (input): a socket corresponding to wave B
 	String BName=StringFromList(2,argumentList)
 	
-	//3rd argument: angleInfo
+	//3rd argument (input): angleInfo
 	String angleInfoArg=StringFromList(3,argumentList)
 	
-	//4th argument: offset of B
+	//4th argument (input): offset of B
 	String offsetArg=StringFromList(4,argumentList)
 	
-	//5th argument: calculation parameter
-	//mode 0: not used
-	//mode 1: this width from the end or the start of the waves is neglected for the gradation
+	//5th argument (input): calculation parameter
+	//if concatenation mode = 0: not used
+	//if concatenation mode = 1: this width from the end or the start of the waves is neglected for the gradation
 	String ParamArg=StringFromList(5,argumentList)
 	
-	//6th argument: coordinates wave passed through socket
+	//6th argument (waiting socket): coordinates wave passed through socket
 	String coordsArg=StringFromList(6,argumentList)
 	
 	NVAR concatMode=$concatModeArg
@@ -91,7 +91,7 @@ Function/S IAFm_Concat2D(argumentList)
 		case 0:
 			// half & half
 			if(Boffset>0)
-				// offset>0 
+				// Boffset>0 
 				// [    A  | ]
 				//       [ |  B    ]
 				// | is the border position
@@ -114,16 +114,32 @@ Function/S IAFm_Concat2D(argumentList)
 				Endfor
 				
 			else
-				// offset<0 
+				// Boffset<0 
 				//       [ |  A    ]
 				// [    B  | ]
+				borderAngle=AngleOffset+(Boffset+AngleDelta*AngleSize)/2
 				
+				For(i=0; i<NumPoints; i+=1)
+					energy_i=coordinates[i][0]
+					angle_i=coordinates[i][1]
+					if(angle_i>borderAngle)
+						socketAInput[NumPoints_A][0]=energy_i
+						socketAInput[NumPoints_A][1]=angle_i
+						indexA[NumPoints_A]=i
+						NumPoints_A+=1
+					else
+						socketBInput[NumPoints_B][0]=energy_i
+						socketBInput[NumPoints_B][1]=angle_i-Boffset
+						indexB[NumPoints_B]=i
+						NumPoints_B+=1
+					endif
+				Endfor
 			endif
 			break
 		Case 1:
 			//linearly gradual
 			if(Boffset>0)
-				// offset>0 
+				// Boffset>0 
 				// [      A  | |X]
 				//         [X| |  B      ]
 				// | is the border position (1 and 2 in this order), X is no-use area
@@ -168,10 +184,49 @@ Function/S IAFm_Concat2D(argumentList)
 				Endfor
 				
 			else
-				// offset<0 
-				//       [ |  A    ]
-				// [    B  | ]
+				// Boffset<0 
+				//       [X| |  A    ]
+				// [    B  | |X]
+				// | is the border position (1 and 2 in this order), X is no-use area
+				borderAngle2=AngleOffset+BOffset+AngleDelta*AngleSize-Param
+				borderAngle1=AngleOffset+Param
+				//print(num2str(borderAngle1)+" "+num2str(borderAngle2))
+				if(borderAngle2<borderAngle1)
+					print("Concat2D error: wrong order of borders")
+					abort
+				endif
 				
+				For(i=0; i<NumPoints; i+=1)
+					energy_i=coordinates[i][0]
+					angle_i=coordinates[i][1]
+					if(angle_i>borderAngle2)
+						//only A
+						socketAInput[NumPoints_A][0]=energy_i
+						socketAInput[NumPoints_A][1]=angle_i
+						indexA[NumPoints_A]=i
+						NumPoints_A+=1
+					elseif(angle_i<borderAngle1)
+						//only B
+						socketBInput[NumPoints_B][0]=energy_i
+						socketBInput[NumPoints_B][1]=angle_i-Boffset
+						indexB[NumPoints_B]=i
+						NumPoints_B+=1
+					else
+						//between
+						socketAInput[NumPoints_A][0]=energy_i
+						socketAInput[NumPoints_A][1]=angle_i
+						socketBInput[NumPoints_B][0]=energy_i
+						socketBInput[NumPoints_B][1]=angle_i-Boffset
+						indexA[NumPoints_A]=-1
+						indexB[NumPoints_B]=-1
+						borderAreaInfo[NumPoints_Between][0]=i
+						borderAreaInfo[NumPoints_Between][1]=NumPoints_A
+						borderAreaInfo[NumPoints_Between][2]=NumPoints_B
+						NumPoints_A+=1
+						NumPoints_B+=1
+						NumPoints_Between+=1
+					endif
+				Endfor
 			endif
 	endswitch
 	
@@ -212,15 +267,17 @@ Function/S IAFm_Concat2D(argumentList)
 		Variable intensityA=AOutput[borderAreaInfo[i][1]]
 		Variable intensityB=BOutput[borderAreaInfo[i][2]]
 		Variable borderWidth=borderAngle2-borderAngle1
-		Output[borderAreaInfo[i][0]]=intensityA*(borderAngle2-angle_i)/borderWidth+intensityB*(angle_i-borderAngle1)/borderWidth
+		if(BOffset>0)
+			Output[borderAreaInfo[i][0]]=intensityA*(borderAngle2-angle_i)/borderWidth+intensityB*(angle_i-borderAngle1)/borderWidth
+		else
+			Output[borderAreaInfo[i][0]]=intensityB*(borderAngle2-angle_i)/borderWidth+intensityA*(angle_i-borderAngle1)/borderWidth
+		endif
 	Endfor
-	
-	
-	//KillWaves socketAInput, socketBInput, indexA, indexB, Aoutput, Boutput
-	
+	KillWaves socketAInput, socketBInput, indexA, indexB, Aoutput, Boutput
 	return outputPath
 End
 
+//Function Concat2D_F: format function for the Concat2D Module
 Function/S IAFf_Concat2D_F_Definition()
 	return "5;0;0;0;1;1;Wave1D;Wave1D;Variable;Wave1D;Wave1D"
 End
@@ -228,19 +285,19 @@ End
 Function IAFf_Concat2D_F(argumentList)
 	String argumentList
 	
-	//0th argument: EnergyInfo (to be copied)
+	//0th argument (input): EnergyInfo (to be copied)
 	String EnergyInfoArg=StringFromList(0,argumentList)
 	
-	//1st argument: AngleInfo
+	//1st argument (input): AngleInfo
 	String AngleInfoArg=StringFromList(1,argumentList)
 	
-	//2nd argument: OffsetAngle
+	//2nd argument (input): OffsetAngle
 	String BOffsetArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output EnergyInfo (=0th)
+	//3rd argument (output): output EnergyInfo (=0th)
 	String EnergyInfo2Arg=StringFromList(3,argumentList)
 	
-	//4th argument: output AngleInfo
+	//4th argument (output): output AngleInfo
 	String AngleInfo2Arg=StringFromList(4,argumentList)
 	
 	Duplicate/O $EnergyInfoArg $EnergyInfo2Arg

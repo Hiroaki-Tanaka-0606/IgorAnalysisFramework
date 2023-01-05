@@ -33,12 +33,12 @@ The difference between **CallPanel** and **ReCallPanel** is that the former kill
 
 **CleanData** command remove waves, global variables, and global strings in the **Data** folder which are not listed in the diagrams.
 
-## How it works
+## How the software works
 
-See **docs/Structure.md** to see how the software construct analysis diagrams.
+See [**docs/Structure.md**](docs/Structure.md) to see how the software construct analysis diagrams.
 
-Also, **docs/GettingStarted.md** explains how to use the software with examples.
+Also, [**docs/GettingStarted.md**](docs/GettingStarted.md) explains how to use the software with examples.
 
 ## README for included functions
-- **Fundamental *Part*s**: see **docs/Fundamental.md** for README.
+- **Fundamental *Part*s**: see [**docs/Fundamental.md**](docs/Fundamental.md) for README.
 - **ARPES data analysis**: see **docs/ARPES.md** for README, **docs/ARPES.xlsx** for example diagrams.
