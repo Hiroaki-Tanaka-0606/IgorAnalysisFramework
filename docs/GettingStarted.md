@@ -241,8 +241,8 @@ In the flowchart, **Module** *Part*s are represented by the red rectangles, and 
 The roles of three **Module**s used are as follows.
 Since the raw data is a 2D wave (Kinetic energy, angle) with experimental inhomogenity, the following process gives (E-Ef, angle) map without the inhomogenity.
 - **CorrectInt_sw2D** receives a list of points described by **Index2D** form (p, q) and returns the values at these points. Here, the values are not of raw data at the corresponding points but those without the intensity inhomogenity. The removal of the intensity inhomogenity is achieved by dividing the raw data (**EkMap**) by the reference wave (**MDCRef**). Since the inhomogenity is only along the angle direction in the swept mode of ARPES measurements, the reference is 1D along the angle direction like the MDC.
-- **ConvertIndex2D** receives a list of points described by **Coordinate2D** (x, y) and returns the values at these points. The module converts the **Coordinate2D** (x, y) to **Index2D** (p, q) based on **InfoWave**s (**EInfo1** and **kInfo1**) using either of two **ConvertMode**s. One is the nearest-neighbor mode (```ConvertMode=0```), where (p, q) is the nearest point to (x, y). The other is the interpolation mode (```ConvertMode=1```), where the value at (x, y) is calcuated from the surrounding four points.
-- **CorrectEf2D** receives a list of points described by **Coordinate2D** (E-Ef, angle) and returns the values at these points. The module converts (E-Ef, angle) to (Kinetic energy, angle) based on the Fermi level information (**EfWave**). The Fermi level can slightly depends on the emission angle due to the photoelectron analyzer condition. **EfCalcMode** determines how to calculate the Fermi level at the specified angle (nearest-neighbor or interpolation), but the choice negligibly affects the analysis result.
+- **ConvertIndex2D** receives a list of points described by **Coordinate2D** (x, y) and returns the values at these points. The module converts the **Coordinate2D** (x, y) to **Index2D** (p, q) based on **InfoWave**s (**EInfo1** and **kInfo1**) using either of two **ConvertMode**s. One is the nearest mode (```ConvertMode=0```), where (p, q) is the nearest point to (x, y). The other is the interpolation mode (```ConvertMode=1```), where the value at (x, y) is calcuated from the surrounding four points.
+- **CorrectEf2D** receives a list of points described by **Coordinate2D** (E-Ef, angle) and returns the values at these points. The module converts (E-Ef, angle) to (Kinetic energy, angle) based on the Fermi level information (**EfWave**). The Fermi level can slightly depends on the emission angle due to the photoelectron analyzer condition. **EfCalcMode** determines how to calculate the Fermi level at the specified angle (nearest or interpolation), but the choice negligibly affects the analysis result.
 
 The **Make2D_Coord** *Function* makes the analysis result (**Figure 8**).
 The function makes a list of points (E-Ef, angle) based on the input **InfoWave**s (**EInfo2** or **EInfo3** and **kInfo2**) and pass the list to the **CorrectEf2D** *Module* via the **Socket**.
@@ -303,11 +303,11 @@ However, **EkMap_EfCorrected2** has 10 times more data points than the raw data 
 
 **Figure 10**: Color map of **EkMap_EfCorrected2**.
 
-So far, we have used the nearest-neighbor mode in the **ConvertIndex2D** *Module*.
+So far, we have used the nearest mode in the **ConvertIndex2D** *Module*.
 That is why **Figure 10** virtually retains the energy step of 0.1 eV.
 **Figure 11** is the color map obtained with the interpolation mode.
 The interpolation mode makes the color map more smoother, but the map loses the energy step information of the raw data.
-The EDCs of the color maps (**Figure 12**) highlight the difference between the nearest-neighbor and the interpolation modes.
+The EDCs of the color maps (**Figure 12**) highlight the difference between the nearest and the interpolation modes.
 
 ![EkMap_EfCorrected1](Images/EkMap_corrected_IP2.png)
 

@@ -8,16 +8,16 @@ End
 Function IAFf_AveragedMDC(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: normalized MDC wave
+	//3rd argument (output): normalized MDC wave
 	String mdcArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -64,13 +64,13 @@ End
 Function IAFf_MCPHistogram(argumentList)
 	String argumentList
 	
-	//0th argument: wave for MCP intensity correction
+	//0th argument (input): wave for MCP intensity correction
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: number of bins of the output histogram
+	//1st argument (input): number of bins of the output histogram
 	String numBinsArg=StringFromList(1,argumentList)
 	
-	//2nd argument: histogram
+	//2nd argument (output): histogram
 	String histoArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$waveArg
@@ -89,16 +89,16 @@ End
 Function IAFf_AveragedInt(argumentList)
 	String argumentList
 	
-	//0th argument: wave to be averaged
+	//0th argument (input): wave to be averaged
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: minimum intensity of valid range (include)
+	//1st argument (input): minimum intensity of valid range (include)
 	String minIntArg=StringFromList(1,argumentList)
 	
-	//2nd argument: maximum intensity of valid range (include)
+	//2nd argument (input): maximum intensity of valid range (include)
 	String maxIntArg=StringFromList(2,argumentList)
 	
-	//3rd argument: wave of avareged intensity
+	//3rd argument (output): wave of avareged intensity
 	String averagedWaveArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -143,13 +143,13 @@ End
 Function/S IAFm_CorrectInt_sw2D(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: indices wave passed through socket
+	//2nd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(2,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -197,16 +197,16 @@ End
 Function/S IAFm_CorrectInt_sw2t(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: threshold
+	//2nd argument (input): threshold
 	String thresholdArg=StringFromList(2,argumentList)
 	
-	//3rd argument: indices wave passed through socket
+	//3rd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(3,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -254,13 +254,13 @@ End
 Function/S IAFm_CorrectInt_fx2D(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: indices wave passed through socket
+	//2nd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(2,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -316,13 +316,13 @@ End
 Function IAFf_ConstantWave1D(argumentList)
 	String argumentList
 	
-	//0th argument: constant value
+	//0th argument (input): constant value
 	String constValueArg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo
+	//1st argument (input): InfoWave
 	String waveInfoArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output
+	//2nd argument (output): output
 	String outputArg=StringFromList(2,argumentList)
 	
 	NVAR constValue=$constValueArg
@@ -346,21 +346,21 @@ End
 Function/S IAFm_ConvertIndex2D(argumentList)
 	String argumentList
 	
-	//0th argument: convert mode
+	//0th argument (input): convert mode
 	//0: nearest point
 	//1: interpolation of surrounding 4 points
 	String convertModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for first index
+	//1st argument (input): InfoWave for first index
 	String waveInfo1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: WaveInfo for second index
+	//2nd argument (input): InfoWave for second index
 	String waveInfo2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: socket to which an indices wave is passed
+	//3rd argument (input): socket to which an indices wave is passed
 	String indicesSocketName=StringFromList(3,argumentList)
 	
-	//4th argument: coordinates wave passed through socket
+	//4th argument (waiting socket): coordinates wave passed through socket
 	String coordinatesArg=StringFromList(4,argumentList)
 	
 	NVAR convertMode=$convertModeArg
@@ -449,7 +449,7 @@ Function/S IAFm_ConvertIndex2D(argumentList)
 	return outputPath
 End
 
-//Module CorrectEf2D: set fermi energy to zero
+//Module CorrectEf2D: set the Fermi energy to zero
 Function/S IAFm_CorrectEf2D_Definition()
 	return "4;0;0;0;2;Variable;Wave1D;Coordinate2D;Coordinate2D"
 End
@@ -457,19 +457,19 @@ End
 Function/S IAFm_CorrectEf2D(argumentList)
 	String argumentList
 	
-	//0th argument: fermi edge calculation mode
+	//0th argument (input): fermi edge calculation mode
 	//0: nearest point
 	//1: interpolation of surrounding 2 points
 	//in case of out-of-range, Ef is substituted by Ef[0] or Ef[-1]
 	String calculateModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: Ef wave
+	//1st argument (input): Ef wave
 	String EfWaveArg=StringFromList(1,argumentList)
 
-	//2nd argument: socket to which an coordinates wave is passed
+	//2nd argument (input): socket to which an coordinates wave is passed
 	String coordsSocketName=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinates wave passed through socket
+	//3rd argument (waiting socket): coordinates wave passed through socket
 	String coordsArg=StringFromList(3,argumentList)
 	
 	NVAR calculateMode=$calculateModeArg
@@ -527,19 +527,19 @@ End
 Function IAFf_CorrectEf2D_F(argumentList)
 	String argumentList
 	
-	//0th argument: input WaveInfo for 1st index
+	//0th argument (input): input InfoWave for 1st index
 	String inWaveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: input WaveInfo for 2nd index
+	//1st argument (input): input InfoWave for 2nd index
 	String inWaveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: Ef wave
+	//2nd argument (input): Ef wave
 	String EfWaveArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output WaveInfo for 1st index
+	//3rd argument (output): output InfoWave for 1st index
 	String outWaveInfo1Arg=StringFromList(3,argumentList)
 	
-	//4th argument: output WaveInfo for 2nd index (same as inWaveInfo2)
+	//4th argument (output): output InfoWave for 2nd index (same as input)
 	String outWaveInfo2Arg=StringFromList(4,argumentList)
 	
 	Wave/D inWaveInfo1=$inWaveInfo1Arg
@@ -595,16 +595,16 @@ End
 Function IAFf_Make2D_Index(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index
+	//0th argument (input): WaveInfo for 1st index
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index
+	//1st argument (input): WaveInfo for 2nd index
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: socket name
+	//2nd argument (input): socket name
 	String socketName=StringFromList(2,argumentList)
 	
-	//3rd argument: output wave
+	//3rd argument (output): output wave
 	String outputArg=StringFromList(3,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -660,16 +660,16 @@ End
 Function IAFf_Make2D_Coord(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index
+	//0th argument (input): WaveInfo for 1st index
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index
+	//1st argument (input): WaveInfo for 2nd index
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: socket name
+	//2nd argument (input): socket name
 	String socketName=StringFromList(2,argumentList)
 	
-	//3rd argument: output wave
+	//3rd argument (output): output wave
 	String outputArg=StringFromList(3,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -687,7 +687,7 @@ Function IAFf_Make2D_Coord(argumentList)
 	SetScale/P x, offset1, delta1, output
 	SetScale/P y, offset2, delta2, output
 
-	//make a list of indices
+	//make a list of coordinates
 	String inputPath="::TempData:Make2D_Coord_Input"
 	Make/O/D/N=(size1*size2,2) $inputPath
 	Wave/D input=$inputPath
@@ -718,7 +718,7 @@ End
 
 
 
-//Function CompositeEhn: composite Energy-hn map at a certain k (with normalization)
+//Function CompositeEhn: composite Energy-hn map from EDCs at each hn (with normalization)
 Function/S IAFf_CompositeEhn_Definition()
 	return "4;0;0;0;1;TextWave;Variable;Variable;Wave2D"
 End
@@ -726,16 +726,16 @@ End
 Function IAFf_CompositeEhn(argumentList)
 	String argumentList
 	
-	//0th argument: EDC map list
+	//0th argument (input): EDC map list
 	String ListArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index of normalization area (include)
+	//1st argument (input): start index of normalization area (include)
 	String StartIndexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index
+	//2nd argument (input): end index
 	String EndIndexArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output
+	//3rd argument (output): output
 	String OutputArg=StringFromList(3,argumentList)
 	
 	Wave/T list=$listArg

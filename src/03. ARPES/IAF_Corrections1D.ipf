@@ -8,13 +8,13 @@ End
 Function IAFf_CorrectEf1D(argumentList)
 	String argumentList
 	
-	//0th argument: input 1D wave
+	//0th argument (input): input 1D wave
 	String inWaveArg=StringFromList(0,argumentList)
 	
-	//1st argument: Ef value
+	//1st argument (input): Ef value
 	String EfValueArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output 1D wave
+	//2nd argument (output): output 1D wave
 	String outWaveArg=StringFromList(2,argumentList)
 	
 	NVAR EfValue=$EfValueArg
@@ -25,6 +25,8 @@ Function IAFf_CorrectEf1D(argumentList)
 	SetScale/P x, (offset1-EfValue), delta1, outWave
 End
 
+
+//Function Normalize1D: normalize data points so that the average of them is 1
 Function/S IAFf_Normalize1D_Definition()
 	return "2;0;1;Wave1D;Wave1D"
 End
@@ -32,10 +34,10 @@ End
 Function	IAFf_Normalize1D(argumentList)
 	String argumentList
 	
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0, argumentList)
 	
-	//1st argument: output
+	//1st argument (output): normalized output
 	String outputArg=StringFromList(1, argumentList)
 	
 	Wave/D input=$inputArg
