@@ -9,18 +9,18 @@ End
 Function IAFf_CropWave2D(argumentList)
 	String argumentList
 	
-	//0th: input
+	//0th (input): input
 	String inputArg=StringFromList(0, argumentList)
 	
-	//1st, 2nd: 1st axis index (both included)
+	//1st, 2nd (input): 1st axis index (both included)
 	String Ax1MinArg=StringFromList(1, argumentList)
 	String Ax1MaxArg=StringFromList(2, argumentList)
 	
-	//3rd, 4th: 2nd axis indices (both included)
+	//3rd, 4th (input): 2nd axis indices (both included)
 	String Ax2MinArg=StringFromList(3, argumentList)
 	String Ax2MaxArg=StringFromList(4, argumentList)
 	
-	//5th: output
+	//5th (output): output
 	String outputArg=StringFromList(5, argumentList)
 	
 	Wave/D input=$inputArg

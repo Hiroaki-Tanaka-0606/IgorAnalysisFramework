@@ -2,17 +2,19 @@
 
 //Function FermiEdgeFit: fit the input wave by Fermi edge convolved with gaussian fluctuation
 
-//Fitting function (same as InoMacro Ver3.124 and my_gitHub/IgorMacro/01. Fundamental/FermiEdgeFitting.ipf)
+//Fitting function (same as InoMacro Ver3.124 and IgorMacro/01. Fundamental/FermiEdgeFitting.ipf in https://github.com/Hiroaki-Tanaka-0606)
 //=p[0]*convolve((1+p[1]x)/(exp(beta(p[6])*x)+1),gaussian(p[5]))+p[2]+p[3]*x
 //x=energy-p[4]
 
 //Output (6th argument): fitting parameters
-//param[0]: Scale of Intensity
-//param[1]: Slope of Intensity [/eV]
-//param[2]: Background
-//param[3]: Slope of Background [/eV]
-//param[4]: Ef [eV]
-//param[5]: sigma(FWHM) [eV]
+//p[0]: Scale of Intensity
+//p[1]: Slope of Intensity [/eV]
+//p[2]: Background
+//p[3]: Slope of Background [/eV]
+//p[4]: Ef [eV]
+//p[5]: sigma(FWHM) [eV]
+
+//p[6] is the temperature, given as the input parameter
 
 Function/S IAFf_FermiEdgeFit_Definition()
 	return "8;0;0;0;0;0;0;1;1;Wave1D;Variable;Variable;Variable;Variable;String;Wave1D;Wave1D"
@@ -21,29 +23,29 @@ End
 Function IAFf_FermiEdgeFit(argumentList)
 	String argumentList
 	
-	//0th argument: wave 
+	//0th argument (input): wave 
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: initial value of Ef [eV]
+	//1st argument (input): initial value of Ef [eV]
 	String initialEfArg=StringFromList(1,argumentList)
 	
-	//2nd argument: fitting range (min, including itself) [index]
+	//2nd argument (input): fitting range (min, including itself) [index]
 	String fitMinArg=StringFromList(2,argumentList)
 	
-	//3rd argument: fitting range (max, including itself) [index]
+	//3rd argument (input): fitting range (max, including itself) [index]
 	String fitMaxArg=StringFromList(3,argumentList)
 	
-	//4th argument: temperature [K]
+	//4th argument (input): temperature [K]
 	String temperatureArg=StringFromList(4,argumentList)
 	
-	//5th argument: holdParams 
+	//5th argument (input): holdParams 
 	// a string of 6 letters ("0" or "1"), which determines each parameter is hold constant ("1") or not ("0")
 	String holdParamsArg=StringFromList(5,argumentList)
 	
-	//6th argument: fitting parameters
+	//6th argument (output): fitting parameters
 	String paramsArg=StringFromList(6,argumentList)
 	
-	//7th argument: fitted curve
+	//7th argument (output): fitted curve
 	String fitCurveArg=StringFromList(7,argumentList)
 	
 	Wave/D input=$inputArg

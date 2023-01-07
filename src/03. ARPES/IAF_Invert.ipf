@@ -8,16 +8,16 @@ End
 Function/S IAFm_Invert2D(argumentList)
 	String argumentList
 	
-	//0th argument: invert 1st axis (1) or not (0)
+	//0th argument (input): invert 1st axis (1) or not (0)
 	String invert1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: invert 2nd axis (1) or not (0)
+	//1st argument (input): invert 2nd axis (1) or not (0)
 	String invert2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: input socket
+	//2nd argument (input): input socket
 	String inSocketName=StringFromList(2,argumentList)
 	
-	//3rd argument: list of coordinates
+	//3rd argument (waiting socket): list of coordinates
 	String coordsListArg=StringFromList(3,argumentList)
 	
 	NVAR invert1=$invert1Arg
@@ -48,22 +48,22 @@ End
 Function IAFf_Invert2D_F(argumentList)
 	String argumentList
 	
-	//0th argument: invert 1st axis (1) or not (0)
+	//0th argument (input): invert 1st axis (1) or not (0)
 	String invert1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: invert 2nd axis (1) or not (0)
+	//1st argument (input): invert 2nd axis (1) or not (0)
 	String invert2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: input waveinfo for 1st index
+	//2nd argument (input): input infowave for 1st index
 	String inWaveInfo1Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: input waveinfo for 2nd index
+	//3rd argument (input): input infowave for 2nd index
 	String inWaveInfo2Arg=StringFromList(3,argumentList)
 	
-	//4th argument: output waveinfo for 1st index
+	//4th argument (output): output infowave for 1st index
 	String outWaveInfo1Arg=StringFromList(4,argumentList)
 	
-	//5th argument: output waveinfo for 2nd index
+	//5th argument (output): output infowave for 2nd index
 	String outWaveInfo2Arg=StringFromList(5,argumentList)
 	
 	NVAR invert1=$invert1Arg

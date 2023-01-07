@@ -851,7 +851,7 @@ EStart<=p<=EEnd, 0<=q<=size2, 0<=r<=size3.
 | 5 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 45 -->
+<!-- 46 -->
 ## Make3D_Coord (Function)
 The **Make3D_Coord** makes the 3D map using the **Coordinate3D** socket.
 When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the energy index range by ```EStart, ..., EEnd``` the coordinate list sent to the socket (3rd argument) includes 
@@ -868,3 +868,218 @@ When we represent the elements of the three **InfoWave**s by ```(offset1, delta1
 | 3 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
 | 4 | Output | **Wave3D** | Generated map |
 
+# IAF_CropWave.ipf
+
+<!-- 47 -->
+## CropWave2D (Function)
+The **CropWave2D** *Function* crops the 2D wave.
+The crop range is specified by indices (minima and maxima); both edges are included in the output result.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- | 
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the 1st axis range |
+| 2 | Input | **Variable** | Maximum of the 1st axis range |
+| 3 | Input | **Variable** | Minimum of the 2nd axis range |
+| 4 | Input | **Variable** | Maximum of the 2nd axis range |
+| 5 | Output | **Wave2D** | Cropped wave |
+
+# IAF_FermiEdgeFit.ipf
+
+<!-- 48 -->
+## FermiEdgeFit (Function)
+The **FermiEdgeFit** *Function* fits the wave (assumed to be EDC) by the Fermi distribution function.
+In more detail, the fitting function is 
+```
+p[0]*convolve((1+p[1]x)/(exp(beta(p[6])*x)+1), gaussian(p[5]))+p[2]+p[3]*x
+x=energy-p[4]
+p[0]: Intensity scale
+p[1]: Intensity slope
+p[2]: Background
+p[3]: Background slope
+p[4]: Fermi edge position
+p[5]: Gaussian width (FWHM) -> energy resolution
+p[6]: Temperature (K) <- input parameter
+```
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- | 
+| 0 | Input | **Wave1D** | Wave to be fitted |
+| 1 | Input | **Variable** | Initial guess of the Fermi edge position |
+| 2 | Input | **Variable** | Minimum of the fitting range (index) |
+| 3 | Input | **Variable** | Maximum of the fitting range (index) |
+| 4 | Input | **Variable** | Temperature (Kelvin) |
+| 5 | Input | **String** | Flags specifying whether the fitting parameters are kept constant ("0") or not ("1"); the string is used as the ```/H``` flag in the ```FuncFit``` (or ```CurveFit```) function.
+| 6 | Output | **Wave1D** | Fitting parameters |
+| 7 | Output | **Wave1D** | Wave fitted to the input |
+
+# IAF_Integration.ipf
+
+<!-- 49 -->
+## Integrate1D (Function)
+The **Integrate1D** *Function* integrates several surrounding data points to remove noise.
+When the integration is performed with the width ```w```, the delta becomes ```w``` times larger than the raw data.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | Raw data |
+| 1 | Input | **Variable** | Integration width |
+| 2 | Input | **Variable** | Integration offset |
+| 3 | Output | **Wave1D** | Integrated data |
+
+# IAF_Invert.ipf
+
+<!-- 50 -->
+## Invert2D (Module)
+The **Invert2D** *Module* inverts the 1st and/or the 2nd axes of the **Coordinate2D**-type data ```(x, y)```.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Whether the 1st axis is inverted (1) or not (0) |
+| 1 | Input | **Variable** | Whether the 2nd axis is inverted (1) or not (0) |
+| 2 | Input | **Coordinate2D** | ```(x, y)``` socket |
+| 3 | Socket | **Coordinate2D** | Waiting socket |
+
+<!-- 51 -->
+## Invert2D_F (Function)
+The **Invert2D_F** *Function* is the format function for the **Invert2D** *Module*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Whether the 1st axis is inverted (1) or not (0) |
+| 1 | Input | **Variable** | Whether the 2nd axis is inverted (1) or not (0) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 3 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 4 | Output | **Wave1D** | **InfoWave** for the 1st axis |
+| 5 | Output | **Wave1D** | **InfoWave** for the 2nd axis |
+
+# IAF_Scale.ipf
+
+<!-- 52 -->
+## Scale2D (Function)
+The **Scale2D** *Function* shrinks/extends both axes equally.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Scale |
+| 2 | Output | **Wave2D** | Scaled result |
+
+<!-- 53 -->
+## Scale2DX (Function)
+The **Scale2DX** *Function* shrinks/extends the x (1st) axis.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Scale |
+| 2 | Output | **Wave2D** | Scaled result |
+
+<!-- 54 -->
+## Scale2DY (Function)
+The **Scale2DY** *Function* shrinks/extends the y (2nd) axis.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Scale |
+| 2 | Output | **Wave2D** | Scaled result |
+
+# IAF_Smoothing.ipf
+Currently the box smoothing is available.
+
+## Smoothing rule for the box smoothing
+The box smoothing replace the value at the specified point (index ```i```) by the sum (or average) of the point itself and surrounding several points.
+The following *Module*s and *Function*s follow the following rule to determine the summation range.
+- If the width ```w``` is an odd number, the summation range is ```i-(w-1)/2, ..., i, ..., i+(w-1)/2```.
+- If the width ```w``` is an even number, the summation range is ```i-w/2, ..., i, ..., i+w/2-1```.
+
+
+<!-- 55 -->
+## Smoothing2D (Module)
+The **Smoothing2D** *Module* performs the smoothing for the **Index2D** points.
+See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing).
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing type, 0 (box) is available |
+| 1 | Input | **Variable** | Smoothing width along the 1st axis |
+| 2 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 3 | Input | **Index2D** | ```(p, q)``` socket |
+| 4 | Socket | **Index2D** | Waiting socket |
+
+<!-- 56 -->
+## Smoothing2D_F (Function)
+The **Smoothing2D_F** *Function* is the format function for the **Smoothing2D** *Module*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing type, 0 (box) is available |
+| 1 | Input | **Variable** | Smoothing width along the 1st axis |
+| 2 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 3 | Input | **Wave1D** | **InfoWave** along the 1st axis |
+| 4 | Input | **Wave1D** | **InfoWave** along the 2nd axis |
+| 5 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |
+| 6 | Output | **Wave1D** | **InfoWave** along the 1st axis |
+| 7 | Output | **Wave1D** | **InfoWave** along the 2nd axis |
+
+**Figure 4** represents the difference of the no-overlap mode and the overlap mode.
+
+![Smoothing](Images/Smoothing.png)
+
+**Figure 4**: Output **InfoWave** in the no-overlap mode and the overlap mode. In the schematic, the smoothing width is set to 3.
+
+<!-- 57 -->
+## SmoothingCtrl2D (Panel)
+The **SmoothingCtrl2D** *Panel* can edit the width parameters and the overlap flag.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing width along the 1st axis |
+| 1 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 2 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |
+
+<!-- 58 -->
+## Smoothing3D (Module)
+The **Smoothing3D** *Module* performs the smoothing for the **Index3D** points.
+See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing).
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing type, 0 (box) is available |
+| 1 | Input | **Variable** | Smoothing width along the 1st axis |
+| 2 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 3 | Input | **Variable** | Smoothing width along the 3rd axis |
+| 4 | Input | **Index3D** | ```(p, q, r)``` socket |
+| 5 | Socket | **Index3D** | Waiting socket |
+
+<!-- 59 -->
+## Smoothing3D_F (Function)
+The **Smoothing3D_F** *Function* is the format function for the **Smoothing3D** *Module*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing type, 0 (box) is available |
+| 1 | Input | **Variable** | Smoothing width along the 1st axis |
+| 2 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 3 | Input | **Variable** | Smoothing width along the 3rd axis |
+| 4 | Input | **Wave1D** | **InfoWave** along the 1st axis |
+| 5 | Input | **Wave1D** | **InfoWave** along the 2nd axis |
+| 6 | Input | **Wave1D** | **InfoWave** along the 3rd axis |
+| 7 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |
+| 8 | Output | **Wave1D** | **InfoWave** along the 1st axis |
+| 9 | Output | **Wave1D** | **InfoWave** along the 2nd axis |
+| 10 | Output | **Wave1D** | **InfoWave** along the 3rd axis |
+
+See **Figure 4** for the no-overlap mode and the overlap mode.
+
+<!-- 60 -->
+## SmoothingCtrl3D (Panel)
+The **SmoothingCtrl3D** *Panel* can edit the width parameters and the overlap flag.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Smoothing width along the 1st axis |
+| 1 | Input | **Variable** | Smoothing width along the 2nd axis |
+| 2 | Input | **Variable** | Smoothing width along the 3rd axis |
+| 3 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |

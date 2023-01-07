@@ -8,24 +8,24 @@ End
 Function/S IAFm_Smoothing2D(argumentList)
 	String argumentList
 	
-	//0th argument: smoothing type
+	//0th argument (input): smoothing type
 	//0: box
 	String typeArg=StringFromList(0,argumentList)
 	
-	//1st argument: length along 1st index
+	//1st argument (input): length along 1st index
 	//length 1:     X  (only itself)
 	//length 2:    XX  (itself and smaller by 1)
 	//length 3:    XXX (itself and smaller and larger by 1)
 	//length 4:   XXXX (itself, smaller by 1, smaller by 2, larger by 1)
 	String length1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: length along 2nd index
+	//2nd argument (input): length along 2nd index
 	String length2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: index socket, to which indices wave is passed
+	//3rd argument (input): index socket, to which indices wave is passed
 	String inSocketName=StringFromList(3,argumentList)
 	
-	//4th argument: list of indices passed through a socket
+	//4th argument (waiting socket): list of indices passed through a socket
 	String indicesWaveArg=StringFromList(4,argumentList)
 	
 	NVAR type=$typeArg
@@ -120,29 +120,29 @@ End
 Function IAFf_Smoothing2D_F(argumentList)
 	String argumentList
 	
-	//0th argument: smoothing type
+	//0th argument (input): smoothing type
 	//0: box
 	String typeArg=StringFromList(0,argumentList)
 		
-	//1st argument: length along 1st index
+	//1st argument (input): length along 1st index
 	String length1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: length along 2nd index
+	//2nd argument (input): length along 2nd index
 	String length2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: WaveInfo for 1st index
+	//3rd argument (input): InfoWave for 1st index
 	String inWaveInfo1Arg=StringFromList(3,argumentList)
 	
-	//4th argument: WaveInfo for 2nd index
+	//4th argument (input): InfoWave for 2nd index
 	String inWaveInfo2Arg=StringFromList(4,argumentList)
 	
-	//5th argument: no overlap (1) or overlap (0 or otherwise)
+	//5th argument (input): no overlap (1) or overlap (0 or otherwise)
 	String noOverlapArg=StringFromList(5,argumentList)
 	
-	//6th argument: Modified WaveInfo for 1st index
+	//6th argument (output): Modified InfoWave for 1st index
 	String outWaveInfo1Arg=StringFromList(6,argumentList)
 	
-	//7th argument: Modified WaveInfo for 2nd index
+	//7th argument (output): Modified InfoWave for 2nd index
 	String outWaveInfo2Arg=StringFromList(7,argumentList)
 		
 	NVAR type=$typeArg
@@ -215,13 +215,13 @@ End
 Function IAFp_SmoothingCtrl2D(argumentList, PanelName, PanelTitle)
 	String argumentList, PanelName, PanelTitle
 	
-	//0th argument: length1
+	//0th argument (input): length1
 	String length1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: length2
+	//1st argument (input): length2
 	String length2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: noOverlap
+	//2nd argument (input): noOverlap
 	String noOverlapArg=StringFromList(2,argumentList)
 	
 		
@@ -250,7 +250,7 @@ End
 Function/S IAFm_Smoothing3D(argumentList)
 	String argumentList
 	
-	//0th argument: smoothing type
+	//0th argument (input): smoothing type
 	//0: box
 	String typeArg=StringFromList(0,argumentList)
 	
@@ -261,16 +261,16 @@ Function/S IAFm_Smoothing3D(argumentList)
 	//length 4:   XXXX (itself, smaller by 1, smaller by 2, larger by 1)
 	String length1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: length along 2nd index
+	//2nd argument (input): length along 2nd index
 	String length2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: length along 3rd index
+	//3rd argument (input): length along 3rd index
 	String length3Arg=StringFromList(3,argumentList)
 	
-	//4th argument: index socket, to which indices wave is passed
+	//4th argument (input): index socket, to which indices wave is passed
 	String inSocketName=StringFromList(4,argumentList)
 	
-	//5th argument: list of indices passed through a socket
+	//5th argument (waiting socket): list of indices passed through a socket
 	String indicesWaveArg=StringFromList(5,argumentList)
 	
 	NVAR type=$typeArg
@@ -383,38 +383,38 @@ End
 Function IAFf_Smoothing3D_F(argumentList)
 	String argumentList
 	
-	//0th argument: smoothing type
+	//0th argument (input): smoothing type
 	//0: box
 	String typeArg=StringFromList(0,argumentList)
 		
-	//1st argument: length along 1st index
+	//1st argument (input): length along 1st index
 	String length1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: length along 2nd index
+	//2nd argument (input): length along 2nd index
 	String length2Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: length along 3rd index
+	//3rd argument (input): length along 3rd index
 	String length3Arg=StringFromList(3,argumentList)
 	
-	//4th argument: WaveInfo for 1st index
+	//4th argument (input): InfoWave for 1st index
 	String inWaveInfo1Arg=StringFromList(4,argumentList)
 	
-	//5th argument: WaveInfo for 2nd index
+	//5th argument (input): InfoWave for 2nd index
 	String inWaveInfo2Arg=StringFromList(5,argumentList)
 	
-	//6th argument: WaveInfo for 2nd index
+	//6th argument (input): InfoWave for 3rd index
 	String inWaveInfo3Arg=StringFromList(6,argumentList)
 	
-	//7th argument: no overlap (1) or overlap (0 or otherwise)
+	//7th argument (input): no overlap (1) or overlap (0 or otherwise)
 	String noOverlapArg=StringFromList(7,argumentList)
 	
-	//8th argument: Modified WaveInfo for 1st index
+	//8th argument (output): Modified InfoWave for 1st index
 	String outWaveInfo1Arg=StringFromList(8,argumentList)
 	
-	//9th argument: Modified WaveInfo for 2nd index
+	//9th argument (output): Modified InfoWave for 2nd index
 	String outWaveInfo2Arg=StringFromList(9,argumentList)
 		
-	//10th argument: Modified WaveInfo for 2nd index
+	//10th argument (output): Modified InfoWave for 3rd index
 	String outWaveInfo3Arg=StringFromList(10,argumentList)
 	
 	NVAR type=$typeArg
@@ -507,16 +507,16 @@ End
 Function IAFp_SmoothingCtrl3D(argumentList, PanelName, PanelTitle)
 	String argumentList, PanelName, PanelTitle
 	
-	//0th argument: length1
+	//0th argument (input): length1
 	String length1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: length2
+	//1st argument (input): length2
 	String length2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: length3
+	//2nd argument (input): length3
 	String length3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: noOverlap
+	//3rd argument (input): noOverlap
 	String noOverlapArg=StringFromList(3,argumentList)
 	
 		

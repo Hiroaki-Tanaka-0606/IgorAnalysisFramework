@@ -8,16 +8,16 @@ End
 Function IAFf_Integrate1D(argumentList)
 	String argumentList
 	
-	//0th argument: input wave
+	//0th argument (input): input wave
 	String inWaveArg=StringFromList(0,argumentList)
 	
-	//1st argument: integration size
+	//1st argument (input): integration size
 	String intSizeArg=StringFromList(1,argumentList)
 	
-	//2nd argument: integration offset
+	//2nd argument (input): integration offset
 	String intOffsetArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output wave
+	//3rd argument (output): output wave
 	String outWaveArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$inWaveArg

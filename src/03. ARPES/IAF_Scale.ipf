@@ -1,6 +1,6 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-//function scale2d: change the scale of x and y axes
+//Function Scale2D: change the scale of x and y axes
 Function/S IAFf_Scale2D_Definition()
 	return "3;0;0;1;Wave2D;Variable;Wave2D"
 End
@@ -8,13 +8,13 @@ End
 Function IAFf_Scale2D(argumentList)
 	String argumentList
 	
-	//0th: input wave 
+	//0th (input): input wave 
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st: scaling factor
+	//1st (input): scaling factor
 	String scaleArg=StringFromList(1,argumentList)
 	
-	//2nd: output wave
+	//2nd (output): output wave
 	String outputArg=StringFromList(2,argumentList)
 	
 	Duplicate/O $inputArg $outputArg
@@ -32,7 +32,7 @@ Function IAFf_Scale2D(argumentList)
 End
 	
 
-//function scale2dx: change the scale of x axis
+//Function Scale2DX: change the scale of x axis
 Function/S IAFf_Scale2DX_Definition()
 	return "3;0;0;1;Wave2D;Variable;Wave2D"
 End
@@ -40,13 +40,13 @@ End
 Function IAFf_Scale2DX(argumentList)
 	String argumentList
 	
-	//0th: input wave 
+	//0th (input): input wave 
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st: scaling factor
+	//1st (input): scaling factor
 	String scaleArg=StringFromList(1,argumentList)
 	
-	//2nd: output wave
+	//2nd (output): output wave
 	String outputArg=StringFromList(2,argumentList)
 	
 	Duplicate/O $inputArg $outputArg
@@ -61,7 +61,7 @@ Function IAFf_Scale2DX(argumentList)
 End
 		
 	
-//function scale2dy: change the scale of y axis
+//Function Scale2DY: change the scale of y axis
 Function/S IAFf_Scale2DY_Definition()
 	return "3;0;0;1;Wave2D;Variable;Wave2D"
 End
@@ -69,13 +69,13 @@ End
 Function IAFf_Scale2DY(argumentList)
 	String argumentList
 	
-	//0th: input wave 
+	//0th (input): input wave 
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st: scaling factor
+	//1st (input): scaling factor
 	String scaleArg=StringFromList(1,argumentList)
 	
-	//2nd: output wave
+	//2nd (output): output wave
 	String outputArg=StringFromList(2,argumentList)
 	
 	Duplicate/O $inputArg $outputArg
