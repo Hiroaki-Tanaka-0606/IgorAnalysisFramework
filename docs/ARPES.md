@@ -437,7 +437,7 @@ Since the correction is performed on each data points, the socket should be **In
 
 <!-- 21 -->
 ## CorrectInt_fx2D (Module)
-The **CorrectInt_fx2D** *Module* performed the intensity correction of the data obtained by the fixed mode; therefore, the reference is given as the 2D map from the **AveragedInt** *Function*.
+The **CorrectInt_fx2D** *Module* performes the intensity correction of the data obtained by the fixed mode; therefore, the reference is given as the 2D map from the **AveragedInt** *Function*.
 The module assumes that the invalid data points has the negative reference intensity; the output data from the **AverageInt** *Function* satisfies the assumption.
 If the data point is invalid, the returned value is set to 0.
 
@@ -469,7 +469,7 @@ The module has two ways to calculate the values at ```(x, y)```.
 
 The effect of the convert mode difference on the resultant color map is desribed in [Example 3 of Getting Started](GettingStarted.md#example-3-module).
 
-The module assumes that the 3rd argument is **CorrectInt_sw2D**, **CorrectInt_sw2Dt**, **CorrectInt_fx2D**, or **Smoothing2D**.
+The module assumes that the 3rd argument is **CorrectInt_sw2D**, **CorrectInt_sw2t**, **CorrectInt_fx2D**, or **Smoothing2D**.
 In the arguments, **InfoWave**s should be those for the raw data because they are used to convert the coordinate to the index.
 They should not be the result of **Smoothing2D_F**.
 
@@ -565,4 +565,306 @@ The output is used not only for the color map of ```(E-Ef, hn)``` but for the in
 | 1 | Input | **Variable** | Minimum of the normalization range |
 | 2 | Input | **Variable** | Maximum of the normalization range |
 | 3 | Output | **Wave2D** | Generated ```(E-Ef, hn)``` map |
+
+# Corrections3D.ipf
+
+<!-- 29 -->
+## CorrectInt_fx3D (Module)
+The **CorrectInt_fx3D** *Module* performs the intensity correction for the 3D data obtained by the fixed mode.
+The 1st angle axis is along the photoelectron analyzer slit and the 2nd angle axis can be the manipulator angle or the deflector angle.
+
+As **CorrectInt_fx2D** does, the *Module* returns 0 if the data point is invalid (reference intensity is negative).
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Raw data obtained by the fixed mode |
+| 1 | Input | **Wave2D** | Normalization reference |
+| 2 | Socket | **Index3D** | Waiting socket |
+
+<!-- 30 -->
+## CorrectInt_sw3D (Module)
+The **CorrectInt_sw3D** *Module* performs the intensity correction for the 3D data obtained by the swept mode.
+The module assumes that the 1st angle axis is along the photoelectron analyzer slit.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Raw data obtained by the swept mode |
+| 1 | Input | **Wave1D** | Normalization reference |
+| 2 | Socket | **Index3D** | Waiting socket |
+
+<!-- 31 -->
+## CorrectInt_sw3t (Module)
+The **CorrectInt_sw3t** *Module* performs the intensity correction for the 3D data obtained by the swept mode.
+The module assumes that the 1st angle axis is along the photoelectron analyzer slit.
+The module has the threshold value; if the reference intensity is smaller than the threshold, the point is determined to be invalid and the value is 0.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Raw data obtained by the swept mode |
+| 1 | Input | **Wave1D** | Normalization reference |
+| 2 | Input | **Variable** | Threshold |
+| 3 | Socket | **Index3D** | Waiting socket |
+
+<!-- 32 -->
+## Read3D (Module)
+The **Read3D** *Module* returns the value of the raw data without the intensity correction.
+Since the three-dimensional data analysis is frequently heavy, you can use the module to skip the intensity correction process.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Raw data |
+| 1 | Socket | **Index3D** | Waiting socket |
+
+<!-- 33 -->
+## TotalIntensity (Function)
+The **TotalIntensity** *Function* calculates the intensity integrated in the whole area in the 2D wave.
+The output can be utilized for the normalization reference in the **SliceNormalize** *Function*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Output | **Variable** | Integrated intensity |
+
+<!-- 34 -->
+## SliceNormalize (Function)
+The **SliceNormalize** *Function* divide the 2D wave by a constant.
+The constant is obtained from the reference 1D wave and the index.
+
+The output is to be gathered into the 3D wave using the **StoreWave23D** *Function*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Wave1D** | Intensity reference wave |
+| 2 | Input | **Variable** | Index in the reference wave |
+| 3 | Output | **Wave2D** | Normalized wave |
+
+<!-- 35 -->
+## ConvertIndex3D (Module)
+The **ConvertIndex3D** *Module* receives the list or coordinates ```(x, y, z)``` and returns the values at these points.
+However, the corresponding indices ```(p, q, r)``` can be non-integer.
+The module has two ways to calculate the values at ```(x, y, z)```.
+
+- In the nearest mode (mode=0), the value at ```(x, y, z)``` is obtained as the value at the nearest point ```(p0, q0, r0), p0=round(p), q0=round(q), r0=round(r)```.
+- In the interpolation mode (mode=1), the value at ```(x, y, z)``` is obtained from the surrounding eight points ```({p0 or p0+1}, {q0 or q0+1}, {r0 or r0+1}), p0<p<p0+1, q0<q<q0+1, r0<r<r0+1```.
+
+The effect of the convert mode difference on the resultant color map is desribed in [Example 3 of Getting Started](GettingStarted.md#example-3-module) for the 2D case.
+
+The module assumes that the 3rd argument is **CorrectInt_sw3D**, **CorrectInt_sw3t**, **CorrectInt_fx3D**, **Read3D**, or **Smoothing3D**.
+In the arguments, **InfoWave**s should be those for the raw data because they are used to convert the coordinate to the index.
+They should not be the result of **Smoothing3D_F**.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Convert mode (0 or 1) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd axis |
+| 3 | Input | **Index2D** | ```(p, q, r)``` socket |
+| 4 | Socket | **Coordinate2D** | Waiting socket |
+
+<!-- 36 -->
+## CorrectEf3D (Module)
+The **CorrectEf3D** *Module* sets the Fermi energy to zero.
+The module assumes that the 2nd argument is **ConvertIndex3D** receiving ```(kinetic energy, angle, angle)``` data, and the socket of the module receives ```(E-Ef, angle, angle)``` data.
+Also the module assumes that the Fermi level depends only on the 1st axis angle and is independent of the 2nd axis angle.
+If the Fermi level depends on the both angles, you need to use the **CorrectEf3D2** *Function* instead.
+
+Although the 0th argument can specify the Fermi level calculation mode, the difference is negligible.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Fermi level calculation mode (0: nearest or 1: interpolation) |
+| 1 | Input | **Wave1D** | Fermi level at each angle along the 1st angle axis |
+| 2 | Input | **Coordinate3D** | ```(kinetic energy, angle, angle)``` socket |
+| 3 | Socket | **Coordinate3D** | Waiting socket |
+
+<!-- 36 -->
+## CorrectEf3D2 (Module)
+The **CorrectEf3D2** *Module* sets the Fermi energy to zero.
+The module assumes that the 2nd argument is **ConvertIndex3D** receiving ```(kinetic energy, angle, angle)``` data, and the socket of the module receives ```(E-Ef, angle, angle)``` data.
+Also the module assumes that the Fermi level depends on both the 1st and 2nd axis angles.
+If the Fermi level depends only on the 1st angle, you need to use the **CorrectEf3D** *Function* instead.
+
+Although the 0th argument can specify the Fermi level calculation mode, the difference is negligible.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Fermi level calculation mode (0: nearest or 1: interpolation) |
+| 1 | Input | **Wave2D** | Fermi level at each angle |
+| 2 | Input | **Coordinate3D** | ```(kinetic energy, angle, angle)``` socket |
+| 3 | Socket | **Coordinate3D** | Waiting socket |
+
+<!-- 37 -->
+## CorrectEf3D_F (Function)
+The **CorrectEf3D_F** *Function* is the format function for **CorrectEf3D** *Module*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (kinetic energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (angle) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (angle) |
+| 3 | Input | **Wave1D** | Fermi level at each angle |
+| 4 | Output | **Wave1D** | **InfoWave** for the 1st index (E-Ef) |
+| 5 | Output | **Wave1D** | **InfoWave** for the 2nd index (angle) |
+| 6 | Output | **Wave1D** | **InfoWave** for the 3rd index (angle) |
+
+<!-- 38 -->
+## CorrectEf3D2_F (Function)
+The **CorrectEf3D2_F** *Function* is the format function for **CorrectEf3D2** *Module*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (kinetic energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (angle) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (angle) |
+| 3 | Input | **Wave2D** | Fermi level at each angle |
+| 4 | Output | **Wave1D** | **InfoWave** for the 1st index (E-Ef) |
+| 5 | Output | **Wave1D** | **InfoWave** for the 2nd index (angle) |
+| 6 | Output | **Wave1D** | **InfoWave** for the 3rd index (angle) |
+
+<!-- 39 -->
+## MakeEx_Index (Function)
+The **MakeEx_Index** *Function* makes the 2D map along the energy (1st axis) and the x angle (2nd axis).
+For the y angle (3rd axis), you need to specify the range to integrate the values.
+Although three **InfoWave**s are given as the input, only the sizes are used to make the index list.
+When we represent the sizes by ```size1``` and ```size2``` and the 3rd axis range by ```yStart, ..., yEnd```, the list sent to the socket (3rd argument) includes ```(E, x, y), 0<=E<size1, 0<=x<size2, yStart<=y<=yEnd```.
+After the module receives the values at these points, it makes the 2D map ```(E, x)```, where the points with the same ```(E, x)``` index are summed up.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (x) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (y) |
+| 3 | Input | **Variable** | Minimum of the y range |
+| 4 | Input | **Variable** | Maximum of the y range |
+| 5 | Input | **Index3D** | ```(E, x, y)``` socket |
+| 6 | Output | **Wave2D** | Generated map |
+
+<!-- 40 -->
+## MakeEy_Index (Function)
+The **MakeEy_Index** *Function* makes the 2D map along the energy (1st axis) and the y angle (3rd axis).
+For the x angle (2nd axis), you need to specify the range to integrate the values.
+Although three **InfoWave**s are given as the input, only the sizes are used to make the index list.
+When we represent the sizes by ```size1``` and ```size3``` and the 2nd axis range by ```xStart, ..., xEnd```, the list sent to the socket (3rd argument) includes ```(E, x, y), 0<=E<size1, xStart<=x<=xEnd, 0<=y<size3```.
+After the module receives the values at these points, it makes the 2D map ```(E, y)```, where the points with the same ```(E, y)``` index are summed up.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (x) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (y) |
+| 3 | Input | **Variable** | Minimum of the x range |
+| 4 | Input | **Variable** | Maximum of the x range |
+| 5 | Input | **Index3D** | ```(E, x, y)``` socket |
+| 6 | Output | **Wave2D** | Generated map |
+
+<!-- 41 -->
+## Makexy_Index (Function)
+The **Makexy_Index** *Function* makes the 2D map along the x and y angles (2nd and 3rd axes).
+For the energy (1st axis), you need to specify the range to integrate the values.
+Although three **InfoWave**s are given as the input, only the sizes are used to make the index list.
+When we represent the sizes by ```size2``` and ```size3``` and the 2nd axis range by ```EStart, ..., EEnd```, the list sent to the socket (3rd argument) includes ```(E, x, y), EStart<=E<=EEnd, 0<=x<size2, 0<=y<size3```.
+After the module receives the values at these points, it makes the 2D map ```(x, y)```, where the points with the same ```(x, y)``` index are summed up.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (x) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (y) |
+| 3 | Input | **Variable** | Minimum of the E range |
+| 4 | Input | **Variable** | Maximum of the E range |
+| 5 | Input | **Index3D** | ```(E, x, y)``` socket |
+| 6 | Output | **Wave2D** | Generated map |
+
+<!-- 42 -->
+## Make3D_Index (Function)
+The **Make3D_Index** *Function* makes the 3D map.
+Although three **InfoWave**s are given as the input, only the sizes are used to make the index list.
+When we represent the sizes by ```size1```, ```size2```, and ```size3```, the list sent to the socket (3rd argument) includes ```(E, x, y), 0<=E<size1, 0<=x<size2, 0<=y<size3```.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st index (energy) |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd index (x) |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd index (y) |
+| 3 | Input | **Index3D** | ```(E, x, y)``` socket |
+| 4 | Output | **Wave3D** | Generated map |
+
+<!-- 43 -->
+## MakeEx_Coord (Function)
+The **MakeEx_Coord** makes the 2D map along the energy (1st axis) and the x angle (2nd axis) using the **Coordinate3D** socket.
+For the y angle (3rd axis), you need to specify the range to integrate the values by indices.
+When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the y index range by ```yStart, ..., yEnd``` the coordinate list sent to the socket (3rd argument) includes 
+```
+(offset1+p*delta1, offset2+q*delta2, offset3+r*delta3)
+0<=p<size1, 0<=q<size2, yStart<=r<=yEnd.
+```
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd axis |
+| 3 | Input | **Variable** | Minimum of the y range (index) |
+| 4 | Input | **Variable** | Maximum of the y range (index) |
+| 2 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
+| 3 | Output | **Wave2D** | Generated map |
+
+<!-- 44 -->
+## MakeEy_Coord (Function)
+The **MakeEy_Coord** makes the 2D map along the energy (1st axis) and the y angle (3rd axis) using the **Coordinate3D** socket.
+For the x angle (2nd axis), you need to specify the range to integrate the values by indices.
+When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the x index range by ```xStart, ..., xEnd``` the coordinate list sent to the socket (3rd argument) includes 
+```
+(offset1+p*delta1, offset2+q*delta2, offset3+r*delta3)
+0<=p<size1, xStart<=q<=xEnd, 0<=r<=size3.
+```
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd axis |
+| 3 | Input | **Variable** | Minimum of the x range (index) |
+| 4 | Input | **Variable** | Maximum of the x range (index) |
+| 5 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
+| 6 | Output | **Wave2D** | Generated map |
+
+<!-- 45 -->
+## Makexy_Coord (Function)
+The **Makexy_Coord** makes the 2D map along the x and y angles (2nd and 3rd axes) using the **Coordinate3D** socket.
+For the energy (1st axis), you need to specify the range to integrate the values by indices.
+When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the energy index range by ```EStart, ..., EEnd``` the coordinate list sent to the socket (3rd argument) includes 
+```
+(offset1+p*delta1, offset2+q*delta2, offset3+r*delta3)
+EStart<=p<=EEnd, 0<=q<=size2, 0<=r<=size3.
+```
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd axis |
+| 3 | Input | **Variable** | Minimum of the energy range (index) |
+| 4 | Input | **Variable** | Maximum of the energy range (index) |
+| 5 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
+| 6 | Output | **Wave2D** | Generated map |
+
+<!-- 45 -->
+## Make3D_Coord (Function)
+The **Make3D_Coord** makes the 3D map using the **Coordinate3D** socket.
+When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the energy index range by ```EStart, ..., EEnd``` the coordinate list sent to the socket (3rd argument) includes 
+```
+(offset1+p*delta1, offset2+q*delta2, offset3+r*delta3)
+0<=p<=size1, 0<=q<=size2, 0<=r<=size3.
+```
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the 1st axis |
+| 1 | Input | **Wave1D** | **InfoWave** for the 2nd axis |
+| 2 | Input | **Wave1D** | **InfoWave** for the 3rd axis |
+| 3 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
+| 4 | Output | **Wave3D** | Generated map |
 

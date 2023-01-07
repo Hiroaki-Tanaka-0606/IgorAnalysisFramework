@@ -1,43 +1,5 @@
 #pragma rtGlobals=3		// Use modern global access method and strict wave access.
 
-//Function ValidArea2D: determine valid area of 2D (theta_x-theta_y) map
-Function/S IAFf_ValidArea2D_Definition()
-	return "2;0;1;Wave2D;Wave2D"
-End
-
-Function IAFf_ValidArea2D(argumentList)
-	String argumentList
-	
-	//0th argument: input
-	String inputArg=StringFromList(0,argumentList)
-	
-	//1st argument: output, list of indices of valid area, [i][0]=x index, [i][1]=y index
-	String outputArg=StringFromList(1,argumentList)
-	
-	Wave/D input=$inputArg
-	Variable size1=DimSize(input,0)
-	Variable size2=DimSize(input,1)
-	Variable numPoints=size1*size2
-	
-	Make/O/D/N=(numPoints,2) $outputArg
-	Wave/D output=$outputArg
-	
-	Variable index=0
-	Variable i,j
-	For(i=0;i<size1;i+=1)
-		For(j=0;j<size2;j+=1)
-			//positive intensity -> valid, negative intensity ->invalid
-			if(input[i][j]>0)
-				output[index][0]=i
-				output[index][1]=j
-				index+=1
-			endif
-		endfor
-	endfor
-	
-	Deletepoints index, numPoints-index, output
-End
-
 //Module CorrectInt_fx3D: return intensity of fixed 3D data [i][j][k] normalized by 2D normalization reference [i][j]
 Function/S IAFm_CorrectInt_fx3D_Definition()
 	return "3;0;0;2;Wave3D;Wave2D;Index3D"
@@ -46,13 +8,13 @@ End
 Function/S IAFm_CorrectInt_fx3D(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data (fixed mode)
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): 2D normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: indices wave passed through socket
+	//2nd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(2,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -110,13 +72,13 @@ End
 Function/S IAFm_CorrectInt_sw3D(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: indices wave passed through socket
+	//2nd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(2,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -124,7 +86,7 @@ Function/S IAFm_CorrectInt_sw3D(argumentList)
 	
 	//size check
 	if(DimSize(raw,1)!=DimSize(ref,0))
-		print("CorrectInt_fx3D Warning: sizes of ref is larger than that of raw")
+		print("CorrectInt_sw3D Warning: sizes of ref is larger than that of raw")
 	Endif
 	
 	Variable size1=DimSize(raw,0)
@@ -165,16 +127,16 @@ End
 Function/S IAFm_CorrectInt_sw3t(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: normalization reference
+	//1st argument (input): normalization reference
 	String refArg=StringFromList(1,argumentList)
 	
-	//2nd argument: threshold
+	//2nd argument (input): threshold
 	String thresholdArg=StringFromList(2,argumentList)
 	
-	//3rd argument: indices wave passed through socket
+	//3rd argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(3,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -223,10 +185,10 @@ End
 Function/S IAFm_Read3D(argumentList)
 	String argumentList
 	
-	//0th argument: raw data
+	//0th argument (input): raw data
 	String rawArg=StringFromList(0,argumentList)
 	
-	//1st argument: indices wave passed through socket
+	//1st argument (waiting socket): indices wave passed through socket
 	String indicesArg=StringFromList(1,argumentList)
 	
 	Wave/D raw=$rawArg
@@ -267,10 +229,10 @@ End
 Function IAFf_TotalIntensity(argumentList)
 	String argumentList
 	
-	//0th argument: input Wave2D
+	//0th argument (input): input Wave2D
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: output total intensity
+	//1st argument (output): output total intensity
 	String totalIntArg=StringFromList(1,argumentList)
 	
 	Wave/D input=$inputArg
@@ -296,16 +258,16 @@ End
 Function IAFf_SliceNormalize(argumentList)
 	String argumentList
 	
-	//0th argument: input Wave2D
+	//0th argument (input): input Wave2D
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: intensity wave ([i] corresponds total intensity of Wave3D[][][i])
+	//1st argument (input): intensity wave ([i] corresponds total intensity of Wave3D[][][i])
 	String intWaveArg=StringFromList(1,argumentList)
 	
-	//2nd argument: index i
+	//2nd argument (input): index i
 	String indexArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output Wave2D (input[p][q]/(averaged intensity))
+	//3rd argument (output): output Wave2D (input[p][q]/(averaged intensity))
 	String outputArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$inputArg
@@ -337,24 +299,24 @@ End
 Function/S IAFm_ConvertIndex3D(argumentList)
 	String argumentList
 	
-	//0th argument: convert mode
+	//0th argument (input): convert mode
 	//0: nearest point
 	//1: interpolation of surrounding 8 points
 	String convertModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for first index
+	//1st argument (input): InfoWave for first index
 	String waveInfo1Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: WaveInfo for second index
+	//2nd argument (input): InfoWave for second index
 	String waveInfo2Arg=StringFromList(2,argumentList)
 	
-	//3nd argument: WaveInfo for third index
+	//3nd argument (input): InfoWave for third index
 	String waveInfo3Arg=StringFromList(3,argumentList)
 	
-	//4th argument: socket to which an indices wave is passed
+	//4th argument (input): socket to which an indices wave is passed
 	String indicesSocketName=StringFromList(4,argumentList)
 	
-	//5th argument: coordinates wave passed through socket
+	//5th argument (waiting socket): coordinates wave passed through socket
 	String coordinatesArg=StringFromList(5,argumentList)
 	
 	NVAR convertMode=$convertModeArg
@@ -476,7 +438,8 @@ Function/S IAFm_ConvertIndex3D(argumentList)
 	return outputPath
 End
 
-//Module CorrectEf3D: set fermi energy to zero
+//Module CorrectEf3D: set Fermi energy to zero
+//The Fermi level depends only on the 1st axis angle
 Function/S IAFm_CorrectEf3D_Definition()
 	return "4;0;0;0;2;Variable;Wave1D;Coordinate3D;Coordinate3D"
 End
@@ -484,19 +447,19 @@ End
 Function/S IAFm_CorrectEf3D(argumentList)
 	String argumentList
 	
-	//0th argument: fermi edge calculation mode
+	//0th argument (input): fermi edge calculation mode
 	//0: nearest point
 	//1: interpolation of surrounding 2 points
 	//in case of out-of-range, Ef is substituted by Ef[0] or Ef[-1]
 	String calculateModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: Ef wave
+	//1st argument (input): Ef wave along the 1st angle axis
 	String EfWaveArg=StringFromList(1,argumentList)
 
-	//2nd argument: socket to which an coordinates wave is passed
+	//2nd argument (input): socket to which an coordinates wave is passed
 	String coordsSocketName=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinates wave passed through socket
+	//3rd argument (waiting socket): coordinates wave passed through socket
 	String coordsArg=StringFromList(3,argumentList)
 	
 	NVAR calculateMode=$calculateModeArg
@@ -548,6 +511,7 @@ End
 
 
 //Module CorrectEf3D2: set fermi energy to zero
+//The Fermi level depends on both angles
 Function/S IAFm_CorrectEf3D2_Definition()
 	return "4;0;0;0;2;Variable;Wave2D;Coordinate3D;Coordinate3D"
 End
@@ -555,19 +519,19 @@ End
 Function/S IAFm_CorrectEf3D2(argumentList)
 	String argumentList
 	
-	//0th argument: fermi edge calculation mode
+	//0th argument (input): fermi edge calculation mode
 	//0: nearest point
 	//1: interpolation of surrounding 4 points
 	//in case of out-of-range, Ef is substituted by Ef[0] or Ef[-1]
 	String calculateModeArg=StringFromList(0,argumentList)
 	
-	//1st argument: two-dimensional Ef wave
+	//1st argument (input): two-dimensional Ef wave
 	String EfWaveArg=StringFromList(1,argumentList)
 
-	//2nd argument: socket to which an coordinates wave is passed
+	//2nd argument (input): socket to which an coordinates wave is passed
 	String coordsSocketName=StringFromList(2,argumentList)
 	
-	//3rd argument: coordinates wave passed through socket
+	//3rd argument (waiting socket): coordinates wave passed through socket
 	String coordsArg=StringFromList(3,argumentList)
 	
 	NVAR calculateMode=$calculateModeArg
@@ -654,25 +618,25 @@ End
 Function IAFf_CorrectEf3D_F(argumentList)
 	String argumentList
 	
-	//0th argument: input WaveInfo for 1st index
+	//0th argument (input): input InfoWave for 1st index
 	String inWaveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: input WaveInfo for 2nd index
+	//1st argument (input): input InfoWave for 2nd index
 	String inWaveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: input WaveInfo for 3rd index
+	//2nd argument (input): input InfoWave for 3rd index
 	String inWaveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: Ef wave
+	//3rd argument (input): Ef wave
 	String EfWaveArg=StringFromList(3,argumentList)
 
-	//4td argument: output WaveInfo for 1st index
+	//4td argument (output): output InfoWave for 1st index
 	String outWaveInfo1Arg=StringFromList(4,argumentList)
 	
-	//5th argument: output WaveInfo for 2nd index (same as inWaveInfo2)
+	//5th argument (output): output InfoWave for 2nd index (same as inWaveInfo2)
 	String outWaveInfo2Arg=StringFromList(5,argumentList)
 	
-	//6th argument: output WaveInfo for 3rd index (same as inWaveInfo3)
+	//6th argument (output): output InfoWave for 3rd index (same as inWaveInfo3)
 	String outWaveInfo3Arg=StringFromList(6,argumentList)
 	
 	Wave/D inWaveInfo1=$inWaveInfo1Arg
@@ -731,25 +695,25 @@ End
 Function IAFf_CorrectEf3D2_F(argumentList)
 	String argumentList
 	
-	//0th argument: input WaveInfo for 1st index
+	//0th argument (input): input WaveInfo for 1st index
 	String inWaveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: input WaveInfo for 2nd index
+	//1st argument (input): input WaveInfo for 2nd index
 	String inWaveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2nd argument: input WaveInfo for 3rd index
+	//2nd argument (input): input WaveInfo for 3rd index
 	String inWaveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: two-dimensional Ef wave
+	//3rd argument (input): two-dimensional Ef wave
 	String EfWaveArg=StringFromList(3,argumentList)
 
-	//4td argument: output WaveInfo for 1st index
+	//4td argument (output): output WaveInfo for 1st index
 	String outWaveInfo1Arg=StringFromList(4,argumentList)
 	
-	//5th argument: output WaveInfo for 2nd index (same as inWaveInfo2)
+	//5th argument (output): output WaveInfo for 2nd index (same as inWaveInfo2)
 	String outWaveInfo2Arg=StringFromList(5,argumentList)
 	
-	//6th argument: output WaveInfo for 3rd index (same as inWaveInfo3)
+	//6th argument (output): output WaveInfo for 3rd index (same as inWaveInfo3)
 	String outWaveInfo3Arg=StringFromList(6,argumentList)
 	
 	Wave/D inWaveInfo1=$inWaveInfo1Arg
@@ -812,25 +776,25 @@ End
 Function IAFf_MakeEx_Index(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: yStart index (include)
+	//3th argument (input): yStart index (include)
 	String yStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: yEnd index(include)
+	//4th argument (input): yEnd index(include)
 	String yEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -839,7 +803,7 @@ Function IAFf_MakeEx_Index(argumentList)
 	NVAR yStart=$yStartArg
 	NVAR yEnd=$yEndArg
 	If(yEnd<yStart)
-		print("MakeEk_Index Error: yStart <= yEnd must be satisfied")
+		print("MakeEx_Index Error: yStart <= yEnd must be satisfied")
 		abort
 	Endif
 	
@@ -902,25 +866,25 @@ End
 Function IAFf_MakeEy_Index(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: xStart index (include)
+	//3th argument (input): xStart index (include)
 	String xStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: xEnd index(include)
+	//4th argument (input): xEnd index(include)
 	String xEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -992,25 +956,25 @@ End
 Function IAFf_Makexy_Index(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: EStart index (include)
+	//3th argument (input): EStart index (include)
 	String EStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: EEnd index(include)
+	//4th argument (input): EEnd index(include)
 	String EEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1083,19 +1047,19 @@ End
 Function IAFf_Make3D_Index(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(3,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1160,25 +1124,25 @@ End
 Function IAFf_MakeEx_Coord(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: yStart index (include)
+	//3th argument (input): yStart index (include)
 	String yStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: yEnd index(include)
+	//4th argument (input): yEnd index(include)
 	String yEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1207,7 +1171,7 @@ Function IAFf_MakeEx_Coord(argumentList)
 	SetScale/P y, offset2, delta2, output
 
 	//make a list of indices
-	String inputPath="::TempData:MakeEx_Index_Input"
+	String inputPath="::TempData:MakeEx_Coord_Input"
 	Make/O/D/N=(size1*size2*(yEnd-yStart+1),3) $inputPath
 	Wave/D input=$inputPath
 	
@@ -1250,25 +1214,25 @@ End
 Function IAFf_MakeEy_Coord(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: xStart index (include)
+	//3th argument (input): xStart index (include)
 	String xStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: xEnd index(include)
+	//4th argument (input): xEnd index(include)
 	String xEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1297,7 +1261,7 @@ Function IAFf_MakeEy_Coord(argumentList)
 	SetScale/P y, offset3, delta3, output
 
 	//make a list of indices
-	String inputPath="::TempData:MakeEy_Index_Input"
+	String inputPath="::TempData:MakeEy_Coord_Input"
 	Make/O/D/N=(size1*size3*(xEnd-xStart+1),3) $inputPath
 	Wave/D input=$inputPath
 	
@@ -1340,25 +1304,25 @@ End
 Function IAFf_Makexy_Coord(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3th argument: EStart index (include)
+	//3th argument (input): EStart index (include)
 	String EStartArg=StringFromList(3,argumentList)
 	
-	//4th argument: EEnd index(include)
+	//4th argument (input): EEnd index(include)
 	String EEndArg=StringFromList(4,argumentList)
 	
-	//5th argument: socket name
+	//5th argument (input): socket name
 	String socketName=StringFromList(5,argumentList)
 	
-	//6rd argument: output wave
+	//6rd argument (output): output wave
 	String outputArg=StringFromList(6,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1387,7 +1351,7 @@ Function IAFf_Makexy_Coord(argumentList)
 	SetScale/P y, offset3, delta3, output
 
 	//make a list of indices
-	String inputPath="::TempData:Makexy_Index_Input"
+	String inputPath="::TempData:Makexy_Coord_Input"
 	Make/O/D/N=(size2*size3*(EEnd-EStart+1),3) $inputPath
 	Wave/D input=$inputPath
 	
@@ -1431,19 +1395,19 @@ End
 Function IAFf_Make3D_Coord(argumentList)
 	String argumentList
 	
-	//0th argument: WaveInfo for 1st index (E)
+	//0th argument (input): WaveInfo for 1st index (E)
 	String waveInfo1Arg=StringFromList(0,argumentList)
 	
-	//1st argument: WaveInfo for 2nd index (x)
+	//1st argument (input): WaveInfo for 2nd index (x)
 	String waveInfo2Arg=StringFromList(1,argumentList)
 	
-	//2rd argument: WaveInfo for 3rd index (y)
+	//2rd argument (input): WaveInfo for 3rd index (y)
 	String waveInfo3Arg=StringFromList(2,argumentList)
 	
-	//3rd argument: socket name
+	//3rd argument (input): socket name
 	String socketName=StringFromList(3,argumentList)
 	
-	//4th argument: output wave
+	//4th argument (output): output wave
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D waveInfo1=$waveInfo1Arg
@@ -1468,7 +1432,7 @@ Function IAFf_Make3D_Coord(argumentList)
 
 	//make a list of indices
 	//to reduce memory, each slice [][][k] is passed to the socket
-	String inputPath="::TempData:Make3D_Index_Input"
+	String inputPath="::TempData:Make3D_Coord_Input"
 	Make/O/D/N=(size1*size2,3) $inputPath
 	Wave/D input=$inputPath
 	
