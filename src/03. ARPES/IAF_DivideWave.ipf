@@ -8,16 +8,16 @@ End
 Function IAFf_DivideWave2D(argumentList)
 	String argumentList
 
-	//0th argument: a[][]
+	//0th argument (input): a[][]
 	String aWaveArg=StringFromList(0,argumentList)
 	
-	//1st argument: b[][]
+	//1st argument (input): b[][]
 	String bWaveArg=StringFromList(1,argumentList)
 	
-	//2nd argument: threshold for b[i][j]
+	//2nd argument (input): threshold for b[i][j]
 	String thresholdArg=StringFromList(2,argumentList)
 	
-	//3rd argument: output a[][]/b[][]
+	//3rd argument (output): output a[][]/b[][]
 	String cWaveArg=StringFromList(3,argumentList)
 	
 	Wave/D aWave=$aWaveArg
@@ -49,6 +49,39 @@ Function IAFf_DivideWave2D(argumentList)
 	
 End
 
+//Function DivideWave21DX: divide a[i][j] by b[i]
+Function/S IAFf_DivideWave21DX_Definition()
+	return "3;0;0;1;Wave2D;Wave1D;Wave2D"
+End
+
+Function IAFf_DivideWave21DX(argumentList)
+	String argumentList
+	
+	//0th argument (input): a[][]
+	String aWaveArg=StringFromList(0, argumentList)
+	
+	//1st argument (input): b[]
+	String bWaveArg=StringFromList(1, argumentList)
+	
+	//2nd argument (output): output
+	String cWaveArg=StringFromList(2, argumentList)
+	
+	Wave/D aWave=$aWaveArg
+	Wave/D bWave=$bWaveArg
+	
+	//size check
+	if(DimSize(aWave,0)!=DimSize(bWave,0))
+		print("DivideWave21DX error: size mismatch")
+		abort
+	Endif
+	
+	Duplicate/O aWave $cWaveArg
+	Wave/D cWave=$cWaveArg
+	
+	cWave[][]/=bWave[p]
+	
+End
+
 //Function DivideWave21DY: divide a[i][j] by b[j]
 Function/S IAFf_DivideWave21DY_Definition()
 	return "3;0;0;1;Wave2D;Wave1D;Wave2D"
@@ -57,13 +90,13 @@ End
 Function IAFf_DivideWave21DY(argumentList)
 	String argumentList
 	
-	//0th argument: a[][]
+	//0th argument (input): a[][]
 	String aWaveArg=StringFromList(0, argumentList)
 	
-	//1st argument: b[]
+	//1st argument (input): b[]
 	String bWaveArg=StringFromList(1, argumentList)
 	
-	//2nd argument: output
+	//2nd argument (output): output
 	String cWaveArg=StringFromList(2, argumentList)
 	
 	Wave/D aWave=$aWaveArg
@@ -90,13 +123,13 @@ End
 Function IAFf_DivideByFD(argumentList)
 	String argumentList
 	
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0, argumentList)
 	
-	//1st argument: temperature(K)
+	//1st argument (input): temperature(K)
 	String tempArg=StringFromList(1, argumentList)
 	
-	//2nd argument: output
+	//2nd argument (output): output
 	String outputArg=StringFromList(2, argumentList)
 	
 	Wave/D input=$inputArg
@@ -116,16 +149,16 @@ End
 
 Function IAFf_DivideByFDGauss(argumentList)
 	String argumentList
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0, argumentList)
 	
-	//1st argument: temperature(K)
+	//1st argument (input): temperature(K)
 	String tempArg=StringFromList(1, argumentList)
 	
-	//2nd argument: dE (eV, FWHM)
+	//2nd argument (input): dE (eV, FWHM)
 	String dEArg=StringFromList(2, argumentList)
 	
-	//3rd argument: output
+	//3rd argument (output): output
 	String outputArg=StringFromList(3, argumentList)
 	
 	Wave/D input=$inputArg

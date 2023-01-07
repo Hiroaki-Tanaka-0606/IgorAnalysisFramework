@@ -8,13 +8,13 @@ End
 Function IAFf_SecondDeriv2D_E(argumentList)
 	String argumentList
 	
-	//0th: input
+	//0th (input): input
 	String inputArg=StringFromList(0, argumentList)
 	
-	//1st: smoothing width
+	//1st (input): smoothing width
 	String widthArg=StringFromList(1, argumentList)
 	
-	//2nd: output
+	//2nd (output): output
 	String outputArg=StringFromList(2, argumentList)
 	
 	Wave/D input=$inputArg

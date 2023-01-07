@@ -13,8 +13,14 @@ You need to add the ```#include "IAF_ARPES"``` directive to load the Procedure f
 - ```IAF_FermiEdgeFit.ipf```
 - ```IAF_Integration.ipf```
 - ```IAF_Invert.ipf```
+- ```IAF_Resonant.ipf```
 - ```IAF_Scale.ipf```
 - ```IAF_Smoothing.ipf```
+
+## Further analysis
+- ```IAF_Average.ipf```
+- ```IAF_DivideWave.ipf```
+- ```IAF_SecondDeriv.ipf```
 
 See each Procedure file for the detailed description of input and output *Part*s.
 
@@ -24,7 +30,82 @@ The *Part*s are sorted in the alphabetic order.
 ## For correction
 | *Kind* | *Type* | Description | Procedure file |
 | --- | --- | --- | --- |
-| **Function** | [**CombineWave1D**](#combinewave1d-function) | Load 1D waves and combine them | ```IAF_LoadWave.ipf``` |
+| **Function** | [AveragedInt](#averagedint-function) | Normalization of the 2D wave | ```IAF_Corrections2D.ipf``` |
+| **Function** | [AveragedMDC](#averagedmdc-function) | Calculate the normalized MDC | ```IAF_Corrections2D.ipf``` |
+| **Function** | [CompositeEhn](#compositeehn-function) | Make the (E-Ef, hn) map from EDCs | ```IAF_Corrections2D.ipf``` |
+| **Module** | [Concat2D](#concat2d-module) | Combine two energy-angle maps with an offset | ```IAF_Concatenate.ipf``` |
+| **Function** | [Concat2D_F](#concat2d_f-function) | Format function for **Concat2D** | ```IAF_Concatenate.ipf``` |
+| **Function** | [ConstantWave1D](#constantwave1d-function) | Make a constant 1D wave | ```IAF_Corrections2D.ipf``` |
+| **Module** | [ConvAngle2D](#convangle2d-module) | Convert (E, theta) to (E, kx) | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [ConvAngle2D_F](#convangle2d_f-function) | Format function for **ConvAngle2D** | ```IAF_ConvertAngle.ipf``` |
+| **Module** | [ConvAngle3D_D](#convangle3d_d-module) | Convert (E, thetax, thetay) to (E, kx, ky), deflector type | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [ConvAngle3D_D_F](#convangle3d_d_f-function) | Format function for **ConvAngle3D_D** | ```IAF_ConvertAngle.ipf``` |
+| **Module** | [ConvAngle3D_M](#convangle3d_m-module) | Convert (E, thetax, thetay) to (E, kx, ky), manipulator type | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [ConvAngle3D_M_F](#convangle3d_m_f-function) | Format function for **ConvAngle3D_M** | ```IAF_ConvertAngle.ipf``` |
+| **Module** | [ConvEAhn](#conveahn-module) | Convert (E, theta, hn) to (E, kx, kz) | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [ConvEAhn_F](#conveahn_f-function) | Format function for ConvEAhn | ```IAF_ConvertAngle.ipf``` |
+| **Module** | [ConvEAhn2](#conveahn2-module) | Convert (E, kx, hn) to (E, kx, kz) | ```IAF_ConvertAngle.ipf``` |
+| **Module** | [ConvertIndex2D](#convertindex2d-module) | Convert **Index2D** to **Coordinate2D** | ```IAF_Corrections2D.ipf``` |
+| **Module** | [ConvertIndex3D](#convertindex3d-module) | Convert **Index3D** to **Coordinate3D** | ```IAF_Corrections3D.ipf``` |
+| **Function** | [ConvPeaks](#convpeaks-function) | Convert (hn, E) to (E, kz) | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [CorrectEf1D](#correctef1d-function) | Fermi level correction of the 1D wave | ```IAF_Corrections1D.ipf``` |
+| **Module** | [CorrectEf2D](#correctef2d-module) | Set the Fermi level to zero | ```IAF_Corrections2D.ipf``` |
+| **Function** | [CorrectEf2D_F](#correctef2d_f-function) | Format function for CorrectEf2D | ```IAF_Corrections2D.ipf``` |
+| **Module** | [CorrectEf3D](#correctef3d-module) | Set the Fermi level to zero (one-dimensional angle dependence) | ```IAF_Corrections3D.ipf``` |
+| **Function** | [CorrectEf3D_F](#correctef3d_f-function) | Format function for CorrectEf3D | ```IAF_Corrections3D.ipf``` |
+| **Module** | [CorrectEf3D2](#correctef3d2-module) | Set the Fermi level to zero (two-dimensional angle dependence) | ```IAF_Corrections3D.ipf``` |
+| **Function** | [CorrectEf3D2_F](#correctef3d2_f-function) | Format function for CorrectEf3D2 | ```IAF_Corrections3D.ipf``` |
+| **Module** | [CorrectInt_fx2D](#correctint_fx2d-module) | Intensity correction in the fixed mode | ```IAF_Corrections2D.ipf``` |
+| **Module** | [CorrectInt_fx3D](#correctint_fx3d-module) | Intensity correction in the fixed mode | ```IAF_Corrections3D.ipf``` |
+| **Module** | [CorrectInt_sw2D](#correctint_sw2d-module) | Intensity correction in the swept mode | ```IAF_Corrections2D.ipf``` |
+| **Module** | [CorrectInt_sw2t](#correctint_sw2t-module) | Intensity correction in the swept mode, with the threshold | ```IAF_Corrections2D.ipf``` |
+| **Module** | [CorrectInt_sw3D](#correctint_sw3d-module) | Intensity correction in the swept mode | ```IAF_Corrections3D.ipf``` |
+| **Module** | [CorrectInt_sw3t](#correctint_sw3t-module) | Intensity correction in the swept mode, with the threshold | ```IAF_Corrections3D.ipf``` |
+| **Function** | [CropWave2D](#cropwave2d-function) | Crop the 2D wave | ```IAF_CropWave.ipf``` |
+| **Function** | [FermiEdgeFit](#fermiedgefit-function) | Fit the input wave by the Fermi distribution function | ```IAF_FermiEdgeFit.ipf``` |
+| **Function** | [Integrate1D](#integrate1d-function) | Integrate surrounding several data point in the 1D wave | ```IAF_Integration.ipf``` |
+| **Module** | [Invert2D](#invert2d-module) | Invert axes of the Coordinate2D-type points | ```IAF_Invert.ipf``` |
+| **Function** | [Invert2D_F](#invert2d_f-function) | Format function for **Invert2D** | ```IAF_Invert.ipf``` |
+| **Module** | [LoadkzMap](#loadkzmap-module) | Return values from kz maps | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [LoadkzMap_F](#loadkzmap_f-function) | Format function for **LoadkzMap** | ```IAF_ConvertAngle.ipf``` |
+| **Function** | [Make2D_Coord](#make2d_coord-function) | Make the 2D map using the **Coordinate2D** socket | ```IAF_Corrections2D.ipf``` |
+| **Function** | [Make2D_Index](#make2d_index-function) | Make the 2D map using the **Index2D** socket | ```IAF_Corrections2D.ipf``` |
+| **Function** | [Make3D_Coord](#make3d_coord-function) | Make the 3D map using the **Coordinate3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [Make3D_Index](#make3d_index-function) | Make the 3D map using the **Index3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MakeEx_Coord](#makeex_coord-function) | Make the 2D map (E-x) using the **Coordinate3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MakeEx_Index](#makeex_index-function) | Make the 2D map (E-x) using the **Index3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MakeEy_Coord](#makeey_coord-function) | Make the 2D map (E-y) using the **Coordinate3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MakeEy_Index](#makeey_index-function) | Make the 2D map (E-y) using the **Index3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MakeResMap](#makeresmap-function) | Make the (E-Ef, hn) map from the XPS spectra | ```IAF_Resonant.ipf``` |
+| **Function** | [Makexy_Coord](#makexy_coord-function) | Make the 2D map (x-y) using the **Coordinate3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [Makexy_Index](#makexy_index-function) | Make the 2D map (x-y) using the **Index3D** socket | ```IAF_Corrections3D.ipf``` |
+| **Function** | [MCPHistogram](#mcphistogram-function) | Obtain the histogram of pixel intensities | ```IAF_Corrections2D.ipf``` |
+| **Function** | [Normalize1D](#normalize1d-function) | Normalization of the 1D wave | ```IAF_Corrections1D.ipf``` |
+| **Module** | [Read3D](#read3d-module) | Read raw data values without the intensity correction | ```IAF_Corrections3D.ipf``` |
+| **Function** | [Scale2D](#scale2d-function) | Extend/shrink both axes | ```IAF_Scale.ipf``` |
+| **Function** | [Scale2DX](#scale2dx-function) | Extend/shrink the x (1st) axis | ```IAF_Scale.ipf``` |
+| **Function** | [Scale2DY](#scale2dy-function) | Extend/shrink the y (2nd) axis | ```IAF_Scale.ipf``` |
+| **Function** | [SliceNormalize](#slicenormalize-function) | Divide the 2D wave by the normalization reference | ```IAF_Corrections3D.ipf``` |
+| **Module** | [Smoothing2D](#smoothing2d-module) | Smoothing for the Index2D points | ```IAF_Smoothing.ipf``` |
+| **Function** | [Smoothing2D_F](#smoothing2d_f-function) | Format function for **Smoothing2D** | ```IAF_Smoothing.ipf``` |
+| **Module** | [Smoothing3D](#smoothing3d-function) | Smoothing for the Index3D points | ```IAF_Smoothing.ipf``` |
+| **Function** | [Smoothing3D_F](#smoothing3d_f-function) | Format function for **Smoothing3D** | ```IAF_Smoothing.ipf``` |
+| **Panel** | [SmoothingCtrl2D](#smoothingctrl2d-panel) | Control the smoothing widths and the overlap flag | ```IAF_Smoothing.ipf``` |
+| **Panel** | [SmoothingCtrl3D](#smoothingctrl3d-panel) | Control the smoothing widths and the overlap flag | ```IAF_Smoothing.ipf``` |
+| **Function** | [TotalIntensity](#totalintensity-function) | Integrate the intensity in the whole area | ```IAF_Corrections3D.ipf``` |
+
+## Further analysis
+
+| *Kind* | *Type* | Description | Procedure file |
+| --- | --- | --- | --- |
+| **Function** | [Average1D](#average1d-function) | Calculate the average of the sequentially named 1D waves | ```IAF_Average.ipf``` |
+| **Function** | [Average2D](#average2d-function) | Calculate the average of the sequentially named 2D waves | ```IAF_Average.ipf``` |
+| **Function** | [DivideByFD](#dividebyfd-function) | Divide the 1D wave by the Fermi-Dirac distribution | ```IAF_DivideWave.ipf``` |
+| **Function** | [DivideByFDGauss](#dividebyfdgauss-function) | Divide the 1D wave by the convolution of FD and Gaussian | ```IAF_DivideWave.ipf``` |
+| **Function** | [DivideWave21DX](#dividewave21dx-function) | Divide the 2D wave by the 1D wave | ```IAF_DivideWave.ipf``` |
+| **Function** | [DivideWave21DY](#dividewave21dy-function) | Divide the 2D wave by the 1D wave | ```IAF_DivideWave.ipf``` |
+| **Function** | [DivideWave2D](#dividewave2d-function) | Divide the 2D wave by the 2D wave | ```IAF_DivideWave.ipf``` |
+| **Function** | [SecondDeriv2D_E](#secondderiv2d_e-function) | Calculate the second derivatie along the energy direction | ```IAF_SecondDeriv.ipf``` |
 
 # IAF_Concatenate.ipf
 
@@ -679,7 +760,7 @@ Although the 0th argument can specify the Fermi level calculation mode, the diff
 | 2 | Input | **Coordinate3D** | ```(kinetic energy, angle, angle)``` socket |
 | 3 | Socket | **Coordinate3D** | Waiting socket |
 
-<!-- 36 -->
+<!-- 37 -->
 ## CorrectEf3D2 (Module)
 The **CorrectEf3D2** *Module* sets the Fermi energy to zero.
 The module assumes that the 2nd argument is **ConvertIndex3D** receiving ```(kinetic energy, angle, angle)``` data, and the socket of the module receives ```(E-Ef, angle, angle)``` data.
@@ -695,7 +776,7 @@ Although the 0th argument can specify the Fermi level calculation mode, the diff
 | 2 | Input | **Coordinate3D** | ```(kinetic energy, angle, angle)``` socket |
 | 3 | Socket | **Coordinate3D** | Waiting socket |
 
-<!-- 37 -->
+<!-- 38 -->
 ## CorrectEf3D_F (Function)
 The **CorrectEf3D_F** *Function* is the format function for **CorrectEf3D** *Module*.
 
@@ -709,7 +790,7 @@ The **CorrectEf3D_F** *Function* is the format function for **CorrectEf3D** *Mod
 | 5 | Output | **Wave1D** | **InfoWave** for the 2nd index (angle) |
 | 6 | Output | **Wave1D** | **InfoWave** for the 3rd index (angle) |
 
-<!-- 38 -->
+<!-- 39 -->
 ## CorrectEf3D2_F (Function)
 The **CorrectEf3D2_F** *Function* is the format function for **CorrectEf3D2** *Module*.
 
@@ -723,7 +804,7 @@ The **CorrectEf3D2_F** *Function* is the format function for **CorrectEf3D2** *M
 | 5 | Output | **Wave1D** | **InfoWave** for the 2nd index (angle) |
 | 6 | Output | **Wave1D** | **InfoWave** for the 3rd index (angle) |
 
-<!-- 39 -->
+<!-- 40 -->
 ## MakeEx_Index (Function)
 The **MakeEx_Index** *Function* makes the 2D map along the energy (1st axis) and the x angle (2nd axis).
 For the y angle (3rd axis), you need to specify the range to integrate the values.
@@ -741,7 +822,7 @@ After the module receives the values at these points, it makes the 2D map ```(E,
 | 5 | Input | **Index3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 40 -->
+<!-- 41 -->
 ## MakeEy_Index (Function)
 The **MakeEy_Index** *Function* makes the 2D map along the energy (1st axis) and the y angle (3rd axis).
 For the x angle (2nd axis), you need to specify the range to integrate the values.
@@ -759,7 +840,7 @@ After the module receives the values at these points, it makes the 2D map ```(E,
 | 5 | Input | **Index3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 41 -->
+<!-- 42 -->
 ## Makexy_Index (Function)
 The **Makexy_Index** *Function* makes the 2D map along the x and y angles (2nd and 3rd axes).
 For the energy (1st axis), you need to specify the range to integrate the values.
@@ -777,7 +858,7 @@ After the module receives the values at these points, it makes the 2D map ```(x,
 | 5 | Input | **Index3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 42 -->
+<!-- 43 -->
 ## Make3D_Index (Function)
 The **Make3D_Index** *Function* makes the 3D map.
 Although three **InfoWave**s are given as the input, only the sizes are used to make the index list.
@@ -791,7 +872,7 @@ When we represent the sizes by ```size1```, ```size2```, and ```size3```, the li
 | 3 | Input | **Index3D** | ```(E, x, y)``` socket |
 | 4 | Output | **Wave3D** | Generated map |
 
-<!-- 43 -->
+<!-- 44 -->
 ## MakeEx_Coord (Function)
 The **MakeEx_Coord** makes the 2D map along the energy (1st axis) and the x angle (2nd axis) using the **Coordinate3D** socket.
 For the y angle (3rd axis), you need to specify the range to integrate the values by indices.
@@ -811,7 +892,7 @@ When we represent the elements of the three **InfoWave**s by ```(offset1, delta1
 | 2 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
 | 3 | Output | **Wave2D** | Generated map |
 
-<!-- 44 -->
+<!-- 45 -->
 ## MakeEy_Coord (Function)
 The **MakeEy_Coord** makes the 2D map along the energy (1st axis) and the y angle (3rd axis) using the **Coordinate3D** socket.
 For the x angle (2nd axis), you need to specify the range to integrate the values by indices.
@@ -831,7 +912,7 @@ When we represent the elements of the three **InfoWave**s by ```(offset1, delta1
 | 5 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 45 -->
+<!-- 46 -->
 ## Makexy_Coord (Function)
 The **Makexy_Coord** makes the 2D map along the x and y angles (2nd and 3rd axes) using the **Coordinate3D** socket.
 For the energy (1st axis), you need to specify the range to integrate the values by indices.
@@ -851,7 +932,7 @@ EStart<=p<=EEnd, 0<=q<=size2, 0<=r<=size3.
 | 5 | Input | **Coordinate3D** | ```(E, x, y)``` socket |
 | 6 | Output | **Wave2D** | Generated map |
 
-<!-- 46 -->
+<!-- 47 -->
 ## Make3D_Coord (Function)
 The **Make3D_Coord** makes the 3D map using the **Coordinate3D** socket.
 When we represent the elements of the three **InfoWave**s by ```(offset1, delta1, size1)```, ```(offset2, delta2, size2)```, and ```(offset3, delta3, size3)```, and the energy index range by ```EStart, ..., EEnd``` the coordinate list sent to the socket (3rd argument) includes 
@@ -870,7 +951,7 @@ When we represent the elements of the three **InfoWave**s by ```(offset1, delta1
 
 # IAF_CropWave.ipf
 
-<!-- 47 -->
+<!-- 48 -->
 ## CropWave2D (Function)
 The **CropWave2D** *Function* crops the 2D wave.
 The crop range is specified by indices (minima and maxima); both edges are included in the output result.
@@ -886,7 +967,7 @@ The crop range is specified by indices (minima and maxima); both edges are inclu
 
 # IAF_FermiEdgeFit.ipf
 
-<!-- 48 -->
+<!-- 49 -->
 ## FermiEdgeFit (Function)
 The **FermiEdgeFit** *Function* fits the wave (assumed to be EDC) by the Fermi distribution function.
 In more detail, the fitting function is 
@@ -915,7 +996,7 @@ p[6]: Temperature (K) <- input parameter
 
 # IAF_Integration.ipf
 
-<!-- 49 -->
+<!-- 50 -->
 ## Integrate1D (Function)
 The **Integrate1D** *Function* integrates several surrounding data points to remove noise.
 When the integration is performed with the width ```w```, the delta becomes ```w``` times larger than the raw data.
@@ -929,7 +1010,7 @@ When the integration is performed with the width ```w```, the delta becomes ```w
 
 # IAF_Invert.ipf
 
-<!-- 50 -->
+<!-- 51 -->
 ## Invert2D (Module)
 The **Invert2D** *Module* inverts the 1st and/or the 2nd axes of the **Coordinate2D**-type data ```(x, y)```.
 
@@ -940,7 +1021,7 @@ The **Invert2D** *Module* inverts the 1st and/or the 2nd axes of the **Coordinat
 | 2 | Input | **Coordinate2D** | ```(x, y)``` socket |
 | 3 | Socket | **Coordinate2D** | Waiting socket |
 
-<!-- 51 -->
+<!-- 52 -->
 ## Invert2D_F (Function)
 The **Invert2D_F** *Function* is the format function for the **Invert2D** *Module*.
 
@@ -953,9 +1034,22 @@ The **Invert2D_F** *Function* is the format function for the **Invert2D** *Modul
 | 4 | Output | **Wave1D** | **InfoWave** for the 1st axis |
 | 5 | Output | **Wave1D** | **InfoWave** for the 2nd axis |
 
+# IAF_Resonant.ipf
+<!-- 53 -->
+## MakeResMap (Function)
+The **MakeResMap** *Function* loads the list of the XPS spectra and make the ```(E-Ef, hn)``` map.
+The function assumes that the XPS spectra are without the Fermi level correction; the Fermi level correction process is included in the function.
+The axis of the EDC list (**TextWave**) should correspond to the photon energies.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **TextWave** | List of XPS spectra |
+| 1 | Input | **Wave1D** | List of The Fermi levels |
+| 2 | Output | **Wave2D** | ```(E-Ef, hn)``` map |
+
 # IAF_Scale.ipf
 
-<!-- 52 -->
+<!-- 54 -->
 ## Scale2D (Function)
 The **Scale2D** *Function* shrinks/extends both axes equally.
 
@@ -965,7 +1059,7 @@ The **Scale2D** *Function* shrinks/extends both axes equally.
 | 1 | Input | **Variable** | Scale |
 | 2 | Output | **Wave2D** | Scaled result |
 
-<!-- 53 -->
+<!-- 55 -->
 ## Scale2DX (Function)
 The **Scale2DX** *Function* shrinks/extends the x (1st) axis.
 
@@ -975,7 +1069,7 @@ The **Scale2DX** *Function* shrinks/extends the x (1st) axis.
 | 1 | Input | **Variable** | Scale |
 | 2 | Output | **Wave2D** | Scaled result |
 
-<!-- 54 -->
+<!-- 56 -->
 ## Scale2DY (Function)
 The **Scale2DY** *Function* shrinks/extends the y (2nd) axis.
 
@@ -995,7 +1089,7 @@ The following *Module*s and *Function*s follow the following rule to determine t
 - If the width ```w``` is an even number, the summation range is ```i-w/2, ..., i, ..., i+w/2-1```.
 
 
-<!-- 55 -->
+<!-- 57 -->
 ## Smoothing2D (Module)
 The **Smoothing2D** *Module* performs the smoothing for the **Index2D** points.
 See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing).
@@ -1008,7 +1102,7 @@ See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing)
 | 3 | Input | **Index2D** | ```(p, q)``` socket |
 | 4 | Socket | **Index2D** | Waiting socket |
 
-<!-- 56 -->
+<!-- 58 -->
 ## Smoothing2D_F (Function)
 The **Smoothing2D_F** *Function* is the format function for the **Smoothing2D** *Module*.
 
@@ -1029,7 +1123,7 @@ The **Smoothing2D_F** *Function* is the format function for the **Smoothing2D** 
 
 **Figure 4**: Output **InfoWave** in the no-overlap mode and the overlap mode. In the schematic, the smoothing width is set to 3.
 
-<!-- 57 -->
+<!-- 59 -->
 ## SmoothingCtrl2D (Panel)
 The **SmoothingCtrl2D** *Panel* can edit the width parameters and the overlap flag.
 
@@ -1039,7 +1133,7 @@ The **SmoothingCtrl2D** *Panel* can edit the width parameters and the overlap fl
 | 1 | Input | **Variable** | Smoothing width along the 2nd axis |
 | 2 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |
 
-<!-- 58 -->
+<!-- 60 -->
 ## Smoothing3D (Module)
 The **Smoothing3D** *Module* performs the smoothing for the **Index3D** points.
 See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing).
@@ -1053,7 +1147,7 @@ See also [the rule for the box smoothing](#smoothing-rule-for-the-box-smoothing)
 | 4 | Input | **Index3D** | ```(p, q, r)``` socket |
 | 5 | Socket | **Index3D** | Waiting socket |
 
-<!-- 59 -->
+<!-- 61 -->
 ## Smoothing3D_F (Function)
 The **Smoothing3D_F** *Function* is the format function for the **Smoothing3D** *Module*.
 
@@ -1073,7 +1167,7 @@ The **Smoothing3D_F** *Function* is the format function for the **Smoothing3D** 
 
 See **Figure 4** for the no-overlap mode and the overlap mode.
 
-<!-- 60 -->
+<!-- 62 -->
 ## SmoothingCtrl3D (Panel)
 The **SmoothingCtrl3D** *Panel* can edit the width parameters and the overlap flag.
 
@@ -1083,3 +1177,112 @@ The **SmoothingCtrl3D** *Panel* can edit the width parameters and the overlap fl
 | 1 | Input | **Variable** | Smoothing width along the 2nd axis |
 | 2 | Input | **Variable** | Smoothing width along the 3rd axis |
 | 3 | Input | **Variable** | No-overlap mode (1) or overlap mode (0) |
+
+# IAF_Average.ipf
+
+<!-- 63 -->
+## Average1D (Function)
+The **Average1D** *Function* loads the sequentially named waves and calculates the average and the standard deviation.
+When we represent the prefix (0th argument) as ```Prefix``` and the index range by ```minIndex, ..., maxIndex```, the waves loaded by the function have the paths ```Prefix+num2str(minIndex), ..., Prefix+num2str(maxIndex)```.
+The module assumes that these waves have the same size (, offset, and delta) and calculates the average and the standard deviation for each data point.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **String** | Prefix of the waves |
+| 1 | Input | **Variable** | Minimum of indices |
+| 2 | Input | **Variable** | Maximum of indices |
+| 3 | Output | **Wave1D** | Average of data |
+| 4 | Output | **Wave1D** | Standard deviation data |
+
+<!-- 64 -->
+## Average2D (Function)
+The **Average2D** *Function* loads the sequentially named waves and calculates the average and the standard deviation.
+See [Average1D](#average1d-function) for the rule of the wave paths.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **String** | Prefix of the waves |
+| 1 | Input | **Variable** | Minimum of indices |
+| 2 | Input | **Variable** | Maximum of indices |
+| 3 | Output | **Wave2D** | Average of data |
+| 4 | Output | **Wave2D** | Standard deviation data |
+
+# IAF_DivideWave.ipf
+
+<!-- 65 -->
+## DivideWave2D (Function)
+The **DivideWave2D** *Function* divides the values of the 2D wave by the corresponding values of the other 2D wave.
+To avoid the division by zero, the returned value becomes 0 if the divisor value is smaller than the threshold.
+The dividend wave and the divisor wave should have the same size.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Dividend wave ```a[][]``` |
+| 1 | Input | **Wave2D** | Divisor wave ```b[][]``` |
+| 2 | Input | **Variable** | Threshold value for the divisor |
+| 3 | Output | **Wave2D** | Division result ```a[p][q]/b[p][q]``` |
+
+<!-- 66 -->
+## DivideWave21DX (Function)
+The **DivideWave21DX** *Function* divides the values of the 2D wave by the corresponding values of the 1D wave.
+The x (1st) axis of the dividend wave and the divisor wave should have the same size.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Dividend wave ```a[][]``` |
+| 1 | Input | **Wave1D** | Divisor wave ```b[]``` |
+| 2 | Output | **Wave2D** | Division result ```a[p][q]/b[p]``` |
+
+<!-- 67 -->
+## DivideWave21DY (Function)
+The **DivideWave21DY** *Function* divides the values of the 2D wave by the corresponding values of the 1D wave.
+The y (2nd) axis of the dividend wave and the divisor wave should have the same size.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Dividend wave ```a[][]``` |
+| 1 | Input | **Wave1D** | Divisor wave ```b[]``` |
+| 2 | Output | **Wave2D** | Division result ```a[p][q]/b[q]``` |
+
+<!-- 68 -->
+## DivideByFD (Function)
+The **DivideByFD** *Function* divides the 1D wave (probably EDC) by the Fermi-Dirac distribution ```1/(exp(β(E-Ef))+1)```.
+The function assumes that the axis of the 1D wave is E-Ef.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | Target wave |
+| 1 | Input | **Variable** | Temperature (K) |
+| 2 | Output | **Wave1D** | Divided result |
+
+<!-- 69 -->
+## DivideByFDGauss (Function)
+The **DivideByFDGauss** *Function* divides the 1D wave (probably EDC) by the Fermi-Dirac distribution ```1/(exp(β(E-Ef))+1)``` convolved with the Gauss function representing the energy resolution of measurements.
+The function assumes that the axis of the 1D wave is E-Ef.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | Target wave |
+| 1 | Input | **Variable** | Temperature (K) |
+| 2 | Input | **Variable** | Gauss function width (FWHM, eV) |
+| 3 | Output | **Wave1D** | Divided result |
+
+# IAF_SecondDeriv.ipf
+
+<!-- 70 -->
+## SecondDeriv2D_E (Function)
+The **SecondDeriv2D_E** *Function* calculates the second derivative of the 2D wave along the energy (1st axis) direction.
+Since the second derivative analysis is very weak to noises, the function performs the smoothing before the derivative calculations.
+When the width parameter ```w``` is given, the smoothing calculation is performed within ```-w, ..., w```.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Smoothing width |
+| 2 | Output | **Wave2D** | Wave of (-1)*(second derivative) |
+
+
+
+
+
+

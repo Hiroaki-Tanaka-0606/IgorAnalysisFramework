@@ -9,17 +9,17 @@ End
 Function IAFf_Average1D(argumentList)
 	String argumentList
 	
-	//0th argument: prefix of wave path
+	//0th argument (input): prefix of wave path
 	String prefixArg=StringFromList(0, argumentList)
 	
-	//1st and 2nd: minimum (include) and maximum (include) number in average calculation
+	//1st and 2nd (input): minimum (include) and maximum (include) number in average calculation
 	String aveMinArg=StringFromList(1, argumentList)
 	String aveMaxArg=StringFromList(2, argumentList)
 	
-	//3rd: output Average 
+	//3rd (output): output Average 
 	String averageArg=StringFromList(3, argumentList)
 	
-	//4th: output Standard deviation
+	//4th (output): output Standard deviation
 	String stddevArg=StringFromList(4, argumentList)
 	
 	SVAR prefix=$prefixArg
@@ -56,7 +56,7 @@ Function IAFf_Average1D(argumentList)
 	endfor
 	average[]/=size
 	stddev[]/=size
-	stddev[]-=average[p]*average[p]
+	stddev[]=sqrt(stddev[p]-average[p]*average[p])
 End
 
 //Function Average2D: calculate average and stddev
@@ -67,17 +67,17 @@ End
 Function IAFf_Average2D(argumentList)
 	String argumentList
 	
-	//0th argument: prefix of wave path
+	//0th argument (input): prefix of wave path
 	String prefixArg=StringFromList(0, argumentList)
 	
-	//1st and 2nd: minimum (include) and maximum (include) number in average calculation
+	//1st and 2nd (input): minimum (include) and maximum (include) number in average calculation
 	String aveMinArg=StringFromList(1, argumentList)
 	String aveMaxArg=StringFromList(2, argumentList)
 	
-	//3rd: output Average 
+	//3rd (output): output Average 
 	String averageArg=StringFromList(3, argumentList)
 	
-	//4th: output Standard deviation
+	//4th (output): output Standard deviation
 	String stddevArg=StringFromList(4, argumentList)
 	
 	SVAR prefix=$prefixArg

@@ -8,15 +8,15 @@ End
 Function IAFf_MakeResMap(argumentList)
 	String argumentList
 	
-	//0th argument: list of EDCs
+	//0th argument (input): list of EDCs
 	//scale(offset, delta) is interpreted as hn
 	String ListArg=StringFromList(0,argumentList)
 	
-	//1st argument: list of Ef values
+	//1st argument (input): list of Ef values
 	//scale is not used
 	String EfArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output resonant map (E-hn)
+	//2nd argument (output): output resonant map (E-hn)
 	String ResMapArg=StringFromList(2,argumentList)
 	
 	Wave/T list=$ListArg
