@@ -1281,8 +1281,365 @@ When the width parameter ```w``` is given, the smoothing calculation is performe
 | 1 | Input | **Variable** | Smoothing width |
 | 2 | Output | **Wave2D** | Wave of (-1)*(second derivative) |
 
+# IAF_2DViewer.ipf
 
+<!-- 71 -->
+## 2DViewer (Tempate)
+The **2DViewer** *Template* prepares the diagram for the **2DViewer** *Panel*.
+The following table describes the arguments which are entered in the ```List of arguments``` textbox of the **LoadTemplate** menu.
+The arguments are separated by ```;``` (semicolon), as is the standard separator in Igor Pro.
 
+Before selecting **LoadTemplate**, you need to prepare *Part*s corresponding to the 1st and the 2nd arguments in the diagram.
 
+| Index | Description |
+| --- | --- |
+| 0 | Name of the **2DViewer** *Panel* |
+| 1 | **Wave2D** to show |
+| 2 | **String** *Variable* used as the label of the x (angle or momentum) axis |
 
+**Figure 5** is the example of the **2DViewer** *Panel*.
 
+- The left bottom panel is the color map of the specified 2D wave.
+- The right bottom panel is the EDC of the 2D wave at the red vertical lines.
+- The left top panel is the MDC of the 2D wave at the red horizontal lines.
+- The red lines can be controlled by the **cursor keys**.
+- The ```Center``` textboxes represent and control the position of the red lines.
+- The ```Width``` textboxes represent and control the summation widths of the EDC and MDC.
+- The ```+``` and ```-``` bottons control the summation widths of the EDC and MDC.
+- The summation ranges (index) of the EDC and MDC are represented in the ```Start``` and ```End``` boxes, although they are only to show the values. You cannot control them.
+
+![2DViewer](Images/2DViewer.png)
+
+**Figure 5**: The **2DViewer** *Panel*.
+
+<!-- 72 -->
+## EDC (Function)
+The **EDC** *Function* calculates the EDC of the 2D wave.
+The function assumes that the 1st axis is the energy and the 2nd axis is the angle or the momentum.
+The calculation range is specified by the index and both edges of the calculation range are included in the EDC spectrum.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range |
+| 2 | Input | **Variable** | Maximum of the calculation range |
+| 3 | Output | **Wave1D** | Calculated EDC |
+
+<!-- 73 -->
+## MDC (Function)
+The **MDC** *Function* calculates the MDC of the 2D wave.
+The function assumes that the 1st axis is the energy and the 2nd axis is the angle or the momentum.
+The calculation range is specified by the index and both edges of the calculation range are included in the MDC spectrum.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range |
+| 2 | Input | **Variable** | Maximum of the calculation range |
+| 3 | Output | **Wave1D** | Calculated MDC |
+
+<!-- 74 -->
+## CutLines2D (Function)
+The **CutLines2D** *Function* make the waves corresponding to the red lines in the **2DViewer** *Panel*.
+The function seems to be useful only in the **2DViewer** *Panel*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the EDC calculation range |
+| 2 | Input | **Variable** | Maximum of the EDC calculation range |
+| 3 | Input | **Variable** | Minimum of the MDC calculation range |
+| 4 | Input | **Variable** | Maximum of the MDC calculation range |
+| 5 | Input | **Wave2D** | EDC cut position |
+| 6 | Input | **Wave2D** | MDC cut position |
+
+<!-- 75 -->
+## Value2Index (Function)
+The **Value2Index** *Function* converts the range represented by the center and the width values to one represented by the minimum and maximum indices.
+After the execution, the center and width values may be changed so that the indices are integers.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **Infowave** for the target axis |
+| 1 | Input | **Variable** | Center position (coordinate) |
+| 2 | Input | **Variable** | Width (coordinate) |
+| 3 | Output | **Variable** | Minimum of the range (index) |
+| 4 | Output | **Variable** | Maximum of the range (index) |
+
+<!-- 76 -->
+## DeltaChange (Function)
+The **DeltaChange** *Function* changes the value by the plus or minus delta.
+
+After the execution, the flag (1st argument) is set to zero to avoid bugs.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave1D** | **InfoWave** for the target axis |
+| 1 | Input | **Variable** | Increase (```1```) or decrease (```-1```) flag |
+| 2 | Output | **Variable** | Value to be controlled |
+
+<!-- 77 -->
+## 2DViewer (Panel)
+The **2DViewer** *Panel* shows the color map of the 2D wave, EDC, and MDC, and controls the EDC and MDC cut configurations.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Map to show |
+| 1 | Input | **Wave1D** | EDC |
+| 2 | Input | **Wave1D** | MDC |
+| 3 | Input | **Variable** | Minimum of the EDC range |
+| 4 | Input | **Variable** | Maximum of the EDC range |
+| 5 | Input | **Variable** | Minimum of the MDC range |
+| 6 | Input | **Variable** | Maximum of the MDC range |
+| 7 | Input | **Variable** | Center of the EDC range |
+| 8 | Input | **Variable** | Width of the EDC range |
+| 9 | Input | **Variable** | Center of the MDC range |
+| 10 | Input | **Variable** | Width of the MDC range |
+| 11 | Input | **String** | x axis (angle or momentum) label |
+| 12 | Input | **Wave2D** | EDC cut position (output of **CutLines2D**) |
+| 13 | Input | **Wave2D** | MDC cut position (output of **CutLines2D**) |
+| 14 | Input | **Variable** | Increase or decrease flag of the EDC center |
+| 15 | Input | **Variable** | Increase or decrease flag of the MDC center |
+| 16 | Input | **Variable** | Increase or decrease flag of the EDC width |
+| 17 | Input | **Variable** | Increase or decrease flag of the MDC width |
+
+# IAF_3DViewer.ipf
+
+<!-- 78 -->
+## 3DViewer (Template)
+The **3DViewer** *Template* prepares the diagram for the **3DViewer** *Panel*.
+The following table describes the arguments which are entered in the ```List of arguments``` textbox of the **LoadTemplate** menu.
+The arguments are separated by ```;``` (semicolon), as is the standard separator in Igor Pro.
+
+Before selecting **LoadTemplate**, you need to prepare *Part*s corresponding to the 1st, 2nd, and 3rd arguments in the diagram.
+
+| Index | Description |
+| --- | --- |
+| 0 | Name of the **3DViewer** *Panel* |
+| 1 | **Wave3D** to show |
+| 2 | **String** *Variable* used as the label of the x (angle or momentum) axis |
+| 2 | **String** *Variable* used as the label of the y (angle or momentum) axis |
+
+**Figure 6** is the example of the **3DViewer** *Panel*.
+
+- The right top panel is the constant-energy (xy) cut.
+- The right bottom panel is the energy-x cut.
+- The left top panel is the energy-y cut.
+- The red lines represent the cut positions and can be controlled by the **cursor keys**. You need to focus on each panel by single-clicking it before using the cursor keys.
+- The ```Center``` textboxes represent and control the position of the red lines.
+- The ```Width``` textboxes represent and control the summation widths of the cuts.
+- The ```+``` and ```-``` bottons control the summation widths of the cuts.
+- The summation ranges (index) of the cuts are represented in the ```Start``` and ```End``` boxes, although they are only to show the values. You cannot control them.
+
+![3DViewer](Images/3DViewer.png)
+
+**Figure 6**: The **3DViewer** *Panel*.
+
+<!-- 79 -->
+## ExCut (Function)
+The **ExCut** *Function* calculates the energy-x cut of the 3D wave.
+The function assumes that the 1st axis is the energy and the 2nd and 3rd axes are the angles or the momenta.
+The calculation range is specified by the index and both edges of the calculation range are included in the energy-x cut.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range |
+| 2 | Input | **Variable** | Maximum of the calculation range |
+| 3 | Output | **Wave2D** | Calculated energy-x cut |
+
+<!-- 80 -->
+## EyCut (Function)
+The **EyCut** *Function* calculates the energy-y cut of the 3D wave.
+The function assumes that the 1st axis is the energy and the 2nd and 3rd axes are the angles or the momenta.
+The calculation range is specified by the index and both edges of the calculation range are included in the energy-y cut.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range |
+| 2 | Input | **Variable** | Maximum of the calculation range |
+| 3 | Output | **Wave2D** | Calculated energy-y cut |
+
+<!-- 81 -->
+## xyCut (Function)
+The **xyCut** *Function* calculates the xy (constant-energy) cut of the 3D wave.
+The function assumes that the 1st axis is the energy and the 2nd and 3rd axes are the angles or the momenta.
+The calculation range is specified by the index and both edges of the calculation range are included in the energy-y cut.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave3D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range |
+| 2 | Input | **Variable** | Maximum of the calculation range |
+| 3 | Output | **Wave2D** | Calculated constant-energy cut |
+
+<!-- 82 -->
+## CutLines3D (Function)
+The **CutLines3D** *Function* make the waves corresponding to the red lines in the **3DViewer** *Panel*.
+The function seems to be useful only in the **3DViewer** *Panel*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the xy cut calculation range |
+| 2 | Input | **Variable** | Maximum of the xy cut tcalculation range |
+| 3 | Input | **Variable** | Minimum of the Ey cut calculation range |
+| 4 | Input | **Variable** | Maximum of the Ey cut calculation range |
+| 5 | Input | **Variable** | Minimum of the Ex cut calculation range |
+| 6 | Input | **Variable** | Maximum of the Ex cut calculation range |
+| 7 | Input | **Wave2D** | Energy cut position |
+| 8 | Input | **Wave2D** | x cut position |
+| 9 | Input | **Wave2D** | y cut position |
+
+<!-- 83 -->
+## 3DViewer (Panel)
+The **3DViewer** *Panel* shows the energy-x, energy-y, and xy (constant-energy) maps of the 3D wave, and control the cut configurations.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Energy-x cut |
+| 1 | Input | **Wave2D** | Energy-y cut |
+| 2 | Input | **Wave2D** | Constant-energy cut |
+| 3 | Input | **Variable** | Minimum of the Ex cut range (along y) |
+| 4 | Input | **Variable** | Maximum of the Ex cut range (along y) |
+| 5 | Input | **Variable** | Minimum of the Ey cut range (along x) |
+| 6 | Input | **Variable** | Maximum of the Ey cut range (along x) |
+| 7 | Input | **Variable** | Minimum of the xy cut range (along E) |
+| 8 | Input | **Variable** | Maximum of the xy cut range (along E) |
+| 9 | Input | **Variable** | Center of the Ex cut range (along y) |
+| 10 | Input | **Variable** | Width of the Ex cut range (along y) |
+| 11 | Input | **Variable** | Center of the Ey cut range (along x) |
+| 12 | Input | **Variable** | Width of the Ey cut range (along x) |
+| 13 | Input | **Variable** | Center of the xy cut range (along E) |
+| 14 | Input | **Variable** | Width of the xy cut range (along E) |
+| 15 | Input | **String** | x axis (angle or momentum) label |
+| 16 | Input | **String** | y axis (angle or momentum) label |
+| 17 | Input | **Wave2D** | Energy cut position (output of **CutLines3D**) |
+| 18 | Input | **Wave2D** | x cut position (output of **CutLines3D**) |
+| 19 | Input | **Wave2D** | y cut position (output of **CutLines3D**) |
+| 20 | Input | **Variable** | Increase or decrease flag of the Ex cut center |
+| 21 | Input | **Variable** | Increase or decrease flag of the Ey cut center |
+| 22 | Input | **Variable** | Increase or decrease flag of the xy cut center |
+| 23 | Input | **Variable** | Increase or decrease flag of the Ex cut width |
+| 24 | Input | **Variable** | Increase or decrease flag of the Ey cut width |
+| 25 | Input | **Variable** | Increase or decrease flag of the xy cut width |
+
+# IAF_4DViewer.ipf
+
+<!-- 84 -->
+## 4DViewer (Template)
+The **4DViewer** *Template* prepares the diagram for the **4DViewer** *Panel*.
+The following table describes the arguments which are entered in the ```List of arguments``` textbox of the **LoadTemplate** menu.
+The arguments are separated by ```;``` (semicolon), as is the standard separator in Igor Pro.
+
+Before selecting **LoadTemplate**, you need to prepare *Part*s corresponding to the 1st, to 4th arguments in the diagram.
+
+| Index | Description |
+| --- | --- |
+| 0 | Name of the **3DViewer** *Panel* |
+| 1 | **Wave4D** to show |
+| 2 | **String** *Variable* used as the label of the 2nd (angle or momentum) axis |
+| 3 | **String** *Variable* used as the label of the 3rd (position x) axis |
+| 4 | **String** *Variable* used as the label of the 4th (position y) axis |
+
+**Figure 7** is the example of the **4DViewer** *Panel*.
+
+- The right panel is the real-space map.
+- The left panel is the energy-angle (or momentum) map.
+- The red rectangles represent the summation areas and can be moved by the **cursor keys**. You need to focus on each panel by single-clicking it before using the cursor keys.
+- The ```Center``` textboxes represent and control the position of the red rectangles.
+- The ```Width``` textboxes represent and control the summation widths of the maps.
+- The ```+``` and ```-``` bottons control the summation widths of the maps.
+- The summation ranges (index) of the maps are represented in the ```Start``` and ```End``` boxes, although they are only to show the values. You cannot control them.
+
+![3DViewer](Images/4DViewer.png)
+
+**Figure 7**: The **4DViewer** *Panel*.
+
+<!-- 85 -->
+## EAMap (Function)
+The **EAMap** *Function* calculates the energy-angle (or momentum) map of the 4D wave.
+The function assumes that the four axes are energy, angle (or momentum), real space x, and real space y, in this order.
+The calculation range is specified by the indices and both edges of the calculation range are included in the energy-angle map.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave4D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range along x (3rd axis) |
+| 2 | Input | **Variable** | Maximum of the calculation range along x (3rd axis) |
+| 3 | Input | **Variable** | Minimum of the calculation range along y (4th axis) |
+| 4 | Input | **Variable** | Maximum of the calculation range along y (4th axis) |
+| 5 | Output | **Wave2D** | Calculated real-space map |
+
+<!-- 86 -->
+## xyMap (Function)
+The **EAMap** *Function* calculates the real-space map of the 4D wave.
+The function assumes that the four axes are energy, angle (or momentum), real space x, and real space y, in this order.
+The calculation range is specified by the indices and both edges of the calculation range are included in the energy-angle map.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave4D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the calculation range along energy (1st axis) |
+| 2 | Input | **Variable** | Maximum of the calculation range along energy (1st axis) |
+| 3 | Input | **Variable** | Minimum of the calculation range along angle (2nd axis) |
+| 4 | Input | **Variable** | Maximum of the calculation range along angle (2nd axis) |
+| 5 | Output | **Wave2D** | Calculated real-space map |
+
+<!-- 87 -->
+## CutRects (Function)
+The **CutRects** *Function* make the waves corresponding to the red rectangles in the **4DViewer** *Panel*.
+The function seems to be useful only in the **4DViewer** *Panel*.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave4D** | Target wave |
+| 1 | Input | **Variable** | Minimum of the energy range in the real-space map |
+| 2 | Input | **Variable** | Maximum of the energy range in the real-space map |
+| 3 | Input | **Variable** | Minimum of the angle range in the real-space map |
+| 4 | Input | **Variable** | Maximum of the angle range in the real-space map |
+| 5 | Input | **Variable** | Minimum of the x range in the energy-momentum map |
+| 6 | Input | **Variable** | Maximum of the x range in the energy-momentum map |
+| 7 | Input | **Variable** | Minimum of the y range in the energy-momentum map |
+| 8 | Input | **Variable** | Maximum of the y range in the energy-momentum map |
+| 9 | Input | **Wave2D** | energy-angle range |
+| 10 | Input | **Wave2D** | xy range |
+
+<!-- 88 -->
+## 4DViewer (Panel)
+The **4DViewer** *Panel* shows the energy-angle and xy maps of the 3D wave, and control the cut configurations.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Energy-angle map |
+| 1 | Input | **Wave2D** | xy map |
+| 2 | Input | **Variable** | Minimum of the energy range |
+| 3 | Input | **Variable** | Maximum of the energy range |
+| 4 | Input | **Variable** | Minimum of the angle range |
+| 5 | Input | **Variable** | Maximum of the angle range |
+| 6 | Input | **Variable** | Minimum of the x range |
+| 7 | Input | **Variable** | Maximum of the x range |
+| 8 | Input | **Variable** | Minimum of the y range |
+| 9 | Input | **Variable** | Maximum of the y range |
+| 10 | Input | **Variable** | Center of the energy range |
+| 11 | Input | **Variable** | Width of the energy range |
+| 12 | Input | **Variable** | Center of the angle range |
+| 13 | Input | **Variable** | Width of the angle range |
+| 14 | Input | **Variable** | Center of the x range |
+| 15 | Input | **Variable** | Width of the x range |
+| 16 | Input | **Variable** | Center of the y range |
+| 17 | Input | **Variable** | Width of the y range |
+| 18 | Input | **String** | angle axis label |
+| 19 | Input | **String** | x axis label |
+| 20 | Input | **String** | y axis label |
+| 21 | Input | **Wave2D** | Energy-angle map position (output of **CutRect**) |
+| 22 | Input | **Wave2D** | real-space map position (output of **CutRect**) |
+| 23 | Input | **Variable** | Increase or decrease flag of the energy range center |
+| 24 | Input | **Variable** | Increase or decrease flag of the angle range center |
+| 25 | Input | **Variable** | Increase or decrease flag of the x range center |
+| 26 | Input | **Variable** | Increase or decrease flag of the y range center |
+| 27 | Input | **Variable** | Increase or decrease flag of the energy range width |
+| 28 | Input | **Variable** | Increase or decrease flag of the angle range width |
+| 29 | Input | **Variable** | Increase or decrease flag of the x range width |
+| 30 | Input | **Variable** | Increase or decrease flag of the y range width |

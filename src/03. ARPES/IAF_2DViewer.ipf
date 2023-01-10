@@ -78,16 +78,16 @@ End
 Function IAFf_EDC(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: EDC wave
+	//3rd argument (output): EDC wave
 	String edcArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -123,16 +123,16 @@ End
 Function IAFf_MDC(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: MDC wave
+	//3rd argument (output): MDC wave
 	String mdcArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -168,25 +168,25 @@ End
 Function IAFf_CutLines2D(argumentList)
 	String argumentList
 		
-	//0th argument: 2D wave
+	//0th argument (input): 2D wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: EDC start index
+	//1st argument (input): EDC start index
 	String edcStartIndexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: EDC end index
+	//2nd argument (input): EDC end index
 	String edcEndIndexArg=StringFromList(2,argumentList)
 	
-	//3rd argument: MDC start index
+	//3rd argument (input): MDC start index
 	String mdcStartIndexArg=StringFromList(3,argumentList)
 	
-	//4th argument: MDC end index
+	//4th argument (input): MDC end index
 	String mdcEndIndexArg=StringFromList(4,argumentList)
 	
-	//5th argument: EDC cut
+	//5th argument (output): EDC cut
 	String edcWaveArg=StringFromList(5,argumentList)
 	
-	//6th argument: MDC cut
+	//6th argument (output): MDC cut
 	String mdcWaveArg=StringFromList(6,argumentList)
 	
 	Wave/D input=$waveArg
@@ -231,7 +231,7 @@ Function IAFf_CutLines2D(argumentList)
 
 End
 
-//Function ValueIndex: calculate startIndex and endIndex from center and width
+//Function Value2Index: calculate startIndex and endIndex from center and width
 Function/S IAFf_Value2Index_Definition()
 	return "5;0;0;0;1;1;Wave1D;Variable;Variable;Variable;Variable;"
 End
@@ -239,17 +239,17 @@ End
 Function IAFf_Value2Index(argumentList)
 	String argumentList
 		
-	//0th argument: Wave info [offset,delta,size]
+	//0th argument (input): InfoWave [offset,delta,size]
 	String infoArg=StringFromList(0,argumentList)
 	
-	//1st argument: center (input, but possibly changed by this function)
+	//1st argument (input): center (input, but possibly changed by this function)
 	String centerArg=StringFromList(1,argumentList)
-	//2nd argument: width (input, but possibly chaned by this function)
+	//2nd argument (input): width (input, but possibly chaned by this function)
 	String widthArg=StringFromList(2,argumentList)
 	
-	//3rd argument: startIndex
+	//3rd argument (output): startIndex
 	String startIndexArg=StringFromList(3,argumentList)
-	//4tg argument: endIndex
+	//4tg argument (output): endIndex
 	String endIndexArg=StringFromList(4,argumentList)
 	
 	Wave/D info=$infoArg
@@ -360,52 +360,52 @@ End
 Function IAFp_2DViewer(argumentList,PanelName,PanelTitle)
 	String argumentList, PanelName, PanelTitle
 	
-	//0th argument: 2D wave
+	//0th argument (input): 2D wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: 1D wave (EDC)
+	//1st argument (input): 1D wave (EDC)
 	String edcArg=StringFromList(1,argumentList)
 	
-	//2nd argument: 1D wave (MDC)
+	//2nd argument (input): 1D wave (MDC)
 	String mdcArg=StringFromList(2,argumentList)
 	
-	//3rd argument: EDC start index
+	//3rd argument (input): EDC start index
 	String edcStartIndexArg=StringFromList(3,argumentList)
 	
-	//4th argument: EDC end index
+	//4th argument (input): EDC end index
 	String edcEndIndexArg=StringFromList(4,argumentList)
 	
-	//5th argument: MDC start index
+	//5th argument (input): MDC start index
 	String mdcStartIndexArg=StringFromList(5,argumentList)
 	
-	//6th argument: MDC end index
+	//6th argument (input): MDC end index
 	String mdcEndIndexArg=StringFromList(6,argumentList)
 	
-	//7th argument: EDC center
+	//7th argument (input): EDC center
 	String edcCenterArg=StringFromList(7,argumentList)
 	
-	//8th argument: EDC width
+	//8th argument (input): EDC width
 	String edcWidthArg=StringFromList(8,argumentList)
 
-	//9th argument: MDC center
+	//9th argument (input): MDC center
 	String mdcCenterArg=StringFromList(9,argumentList)
 	
-	//10th argument: MDC width
+	//10th argument (input): MDC width
 	String mdcWidthArg=StringFromList(10,argumentList)
 	
-	//11th argument: x axis label
+	//11th argument (input): x axis label
 	String xLabelArg=StringFromList(11,argumentList)
 	
-	//12th argument: EDC cut
+	//12th argument (input): EDC cut
 	String edcCutArg=StringFromList(12,argumentList)
 	
-	//13th argument: MDC cut
+	//13th argument (input): MDC cut
 	String mdcCutArg=StringFromList(13,argumentList)
 	
-	//14th argument: EDC center delta
-	//15th argument: MDC center delta
-	//16th argument: EDC width delta
-	//17th argument: MDC width delta
+	//14th argument (input): EDC center delta
+	//15th argument (input): MDC center delta
+	//16th argument (input): EDC width delta
+	//17th argument (input): MDC width delta
 	
 	Wave/D input=$waveArg
 	Wave/D edc=$edcArg

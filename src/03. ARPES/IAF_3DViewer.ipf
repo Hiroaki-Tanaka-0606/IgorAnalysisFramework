@@ -103,16 +103,16 @@ End
 Function IAFf_ExCut(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: ExCut wave
+	//3rd argument (output): ExCut wave
 	String ExArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -152,16 +152,16 @@ End
 Function IAFf_EyCut(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: EyCut wave
+	//3rd argument (output): EyCut wave
 	String EyArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -201,16 +201,16 @@ End
 Function IAFf_xyCut(argumentList)
 	String argumentList
 	
-	//0th argument: wave
+	//0th argument (input): wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: start index (include)
+	//1st argument (input): start index (include)
 	String startArg=StringFromList(1,argumentList)
 	
-	//2nd argument: end index (include)
+	//2nd argument (input): end index (include)
 	String endArg=StringFromList(2,argumentList)
 	
-	//3rd argument: xyCut wave
+	//3rd argument (output): xyCut wave
 	String xyArg=StringFromList(3,argumentList)
 	
 	Wave/D input=$waveArg
@@ -250,34 +250,34 @@ End
 Function IAFf_CutLines3D(argumentList)
 	String argumentList
 	
-	//0th argument: 3D wave
+	//0th argument (input): 3D wave
 	String waveArg=StringFromList(0,argumentList)
 	
-	//1st argument: E start index (energy axis)
+	//1st argument (input): E start index (energy axis)
 	String EStartIndexArg=StringFromList(1,argumentList)
 	
-	//2nd argument: E end index (energy axis)
+	//2nd argument (input): E end index (energy axis)
 	String EEndIndexArg=StringFromList(2,argumentList)
 	
-	//3rd argument: x start index (momentum-x axis)
+	//3rd argument (input): x start index (momentum-x axis)
 	String xStartIndexArg=StringFromList(3,argumentList)
 	
-	//4th argument: x end index (momentum-x axis)
+	//4th argument (input): x end index (momentum-x axis)
 	String xEndIndexArg=StringFromList(4,argumentList)
 	
-	//5th argument: y start index (momentum-y axis)
+	//5th argument (input): y start index (momentum-y axis)
 	String yStartIndexArg=StringFromList(5,argumentList)
 	
-	//6th argument: y end index (momentum-y axis)
+	//6th argument (input): y end index (momentum-y axis)
 	String yEndIndexArg=StringFromList(6,argumentList)
 	
-	//7th argument: E cut (appear on Ex and Ey map)
+	//7th argument (output): E cut (appear on Ex and Ey map)
 	String EWaveArg=StringFromList(7,argumentList)
 	
-	//8th argument: x cut (appear on Ex and xy map)
+	//8th argument (output): x cut (appear on Ex and xy map)
 	String xWaveArg=StringFromList(8,argumentList)
 	
-	//9th argument: y cut (appear on Ey and xy map)
+	//9th argument (output): y cut (appear on Ey and xy map)
 	String yWaveArg=StringFromList(9,argumentList)
 	
 	Wave/D input=$waveArg
@@ -348,73 +348,73 @@ End
 Function IAFp_3DViewer(argumentList,PanelName,PanelTitle)
 	String argumentList,PanelName,PanelTitle
 	
-	//0th argument: ExCut
+	//0th argument (input): ExCut
 	String ExArg=StringFromList(0,argumentList)
 	
-	//1st argument: EyCut
+	//1st argument (input): EyCut
 	String EyArg=StringFromList(1,argumentList)
 	
-	//2nd argument: xyCut
+	//2nd argument (input): xyCut
 	String xyArg=StringFromList(2,argumentList)
 	
-	//3rd argument: Ex Start Index
+	//3rd argument (input): Ex Start Index
 	String ExStartIndexArg=StringFromList(3,argumentList)
 	
-	//4th argument: Ex End Index
+	//4th argument (input): Ex End Index
 	String ExEndIndexArg=StringFromList(4,argumentList)
 	
-	//5th argument: Ey Start Index
+	//5th argument (input): Ey Start Index
 	String EyStartIndexArg=StringFromList(5,argumentList)
 	
-	//6th argument: Ey End Index
+	//6th argument (input): Ey End Index
 	String EyEndIndexArg=StringFromList(6,argumentList)
 	
-	//7th argument: xy Start Index
+	//7th argument (input): xy Start Index
 	String xyStartIndexArg=StringFromList(7,argumentList)
 	
-	//8th argument: xy End Index
+	//8th argument (input): xy End Index
 	String xyEndIndexArg=StringFromList(8,argumentList)
 	
-	//9th argument: Ex center
+	//9th argument (input): Ex center
 	String ExCenterArg=StringFromList(9,argumentList)
 	
-	//10th argument: Ex width
+	//10th argument (input): Ex width
 	String ExWidthArg=StringFromList(10,argumentList)
 	
-	//11th argument: Ey center
+	//11th argument (input): Ey center
 	String EyCenterArg=StringFromList(11,argumentList)
 	
-	//12th argument: Ey width
+	//12th argument (input): Ey width
 	String EyWidthArg=StringFromList(12,argumentList)
 	
-	//13th argument: xy center
+	//13th argument (input): xy center
 	String xyCenterArg=StringFromList(13,argumentList)
 	
-	//14th argument: xy width
+	//14th argument (input): xy width
 	String xyWidthArg=StringFromList(14,argumentList)
 	
-	//15th argument: x label
+	//15th argument (input): x label
 	String xLabelArg=StringFromList(15,argumentList)
 	
-	//16th argument: y label
+	//16th argument (input): y label
 	String yLabelArg=StringFromList(16,argumentList)
 	
-	//17th argument: E cut
+	//17th argument (input): E cut
 	String ECutArg=StringFromList(17,argumentList)
 	
-	//18th argument: x cut
+	//18th argument (input): x cut
 	String xCutArg=StringFromList(18,argumentList)
 	
-	//19th argument: y cut
+	//19th argument (input): y cut
 	String yCutArg=StringFromList(19,argumentList)
 	
-	//20th argument: Ex center delta
-	//21st argument: Ey center delta
-	//22nd argument: xy center delta
+	//20th argument (input): Ex center delta
+	//21st argument (input): Ey center delta
+	//22nd argument (input): xy center delta
 	
-	//23rd argument: Ex width delta
-	//24th argument: Ey width delta
-	//25th argument: xy width delta
+	//23rd argument (input): Ex width delta
+	//24th argument (input): Ey width delta
+	//25th argument (input): xy width delta
 	
 	Wave/D Ex=$ExArg
 	Wave/D Ey=$EyArg
