@@ -41,4 +41,4 @@ Also, [**docs/GettingStarted.md**](docs/GettingStarted.md) explains how to use t
 
 ## README for included functions
 - **Fundamental *Part*s**: see [**docs/Fundamental.md**](docs/Fundamental.md) for README.
-- **ARPES data analysis**: see **docs/ARPES.md** for README, **docs/ARPES.xlsx** for example diagrams.
+- **ARPES data analysis**: see [**docs/ARPES.md**](docs/ARPES.md) for README, **docs/ARPES.xlsx** for example diagrams.
