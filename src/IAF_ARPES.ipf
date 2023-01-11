@@ -25,5 +25,4 @@
 #include "IAF_4DViewer"
 #include "IAF_ColorTable"
 #include "IAF_SliceFigure"
-#include "IAF_Socket3DViewer"
 #include "IAF_Viewer"

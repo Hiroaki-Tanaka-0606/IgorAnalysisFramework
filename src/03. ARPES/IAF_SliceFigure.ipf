@@ -8,15 +8,15 @@ End
 Function IAFf_CalcMinOffset_E(argumentList)
 	String argumentList
 	
-	//0th argument: input wave2D
+	//0th argument (input): input wave2D
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: offset direction
+	//1st argument (input): offset direction
 	//0: input[][j+1] is above input[][j]
 	//1: input[][j] is above input[][j+1]
 	String directionArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output minimum offset
+	//2nd argument (output): output minimum offset
 	String minOffsetArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -56,19 +56,19 @@ End
 Function IAFf_OffsetFigure_E(argumentList)
 	String argumentList
 	
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: direction
+	//1st argument (input): direction
 	String directionArg=StringFromList(1,argumentList)
 	
-	//2nd argument: minimum offset
+	//2nd argument (input): minimum offset
 	String minOffsetArg=StringFromList(2,argumentList)
 	
-	//3rd argument: margin factor
+	//3rd argument (input): margin factor
 	String marginArg=StringFromList(3,argumentList)
 	
-	//4th argument: output
+	//4th argument (output): output
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D input=$inputArg
@@ -92,16 +92,16 @@ End
 Function IAFp_SliceFigure_E(argumentList, PanelName, PanelTitle)
 	String argumentList, Panelname, PanelTitle
 	
-	//0th argument: direction
+	//0th argument (input): direction
 	String directionArg=StringFromList(0,argumentList)
 	
-	//1st argument: minOffset (displayed only)
+	//1st argument (input): minOffset (displayed only)
 	String minOffsetArg=StringFromList(1,argumentList)
 	
-	//2nd argument: margin
+	//2nd argument (input): margin
 	String marginArg=StringFromList(2,argumentList)
 	
-	//3rd argument: name of map with offset
+	//3rd argument (input): name of map with offset
 	String mapArg=StringFromList(3,argumentList)
 	
 	//create a panel
@@ -229,7 +229,7 @@ End
 Function IAFf_CalcMinOffset_k(argumentList)
 	String argumentList
 	
-	//0th argument: input wave2D
+	//0th argument (input): input wave2D
 	String inputArg=StringFromList(0,argumentList)
 	
 	//1st argument: offset direction
@@ -237,7 +237,7 @@ Function IAFf_CalcMinOffset_k(argumentList)
 	//1: input[i][] is above input[i+1][]
 	String directionArg=StringFromList(1,argumentList)
 	
-	//2nd argument: output minimum offset
+	//2nd argument (input): output minimum offset
 	String minOffsetArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -277,19 +277,19 @@ End
 Function IAFf_OffsetFigure_k(argumentList)
 	String argumentList
 	
-	//0th argument: input
+	//0th argument (input): input
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: direction
+	//1st argument (input): direction
 	String directionArg=StringFromList(1,argumentList)
 	
-	//2nd argument: minimum offset
+	//2nd argument (input): minimum offset
 	String minOffsetArg=StringFromList(2,argumentList)
 	
-	//3rd argument: margin factor
+	//3rd argument (input): margin factor
 	String marginArg=StringFromList(3,argumentList)
 	
-	//4th argument: output
+	//4th argument (output): output
 	String outputArg=StringFromList(4,argumentList)
 	
 	Wave/D input=$inputArg
@@ -313,16 +313,16 @@ End
 Function IAFp_SliceFigure_k(argumentList, PanelName, PanelTitle)
 	String argumentList, Panelname, PanelTitle
 	
-	//0th argument: direction
+	//0th argument (input): direction
 	String directionArg=StringFromList(0,argumentList)
 	
-	//1st argument: minOffset (displayed only)
+	//1st argument (input): minOffset (displayed only)
 	String minOffsetArg=StringFromList(1,argumentList)
 	
-	//2nd argument: margin
+	//2nd argument (input): margin
 	String marginArg=StringFromList(2,argumentList)
 	
-	//3rd argument: name of map with offset
+	//3rd argument (input): name of map with offset
 	String mapArg=StringFromList(3,argumentList)
 	
 	//create a panel

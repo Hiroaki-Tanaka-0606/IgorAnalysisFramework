@@ -8,26 +8,26 @@ End
 Function IAFf_ColorTable(argumentList)
 	String argumentList
 	
-	//0th argument: relative gradation wave
+	//0th argument (input): relative gradation wave
 	//[][0]: relative coordinate
 	//[][1]: R
 	//[][2]: G
 	//[][3]: B
 	String relGradationArg=StringFromList(0,argumentList)
 	
-	//1st argument: intensity min
+	//1st argument (input): intensity min
 	String minIntensityArg=StringFromList(1,argumentList)
 	
-	//2nd argument: intensity max
+	//2nd argument (input): intensity max
 	String maxIntensityArg=StringFromList(2,argumentList)
 	
-	//3rd argument: gamma value
+	//3rd argument (input): gamma value
 	String gammaValueArg=StringFromList(3,argumentList)
 	
-	//4th argument: number of steps
+	//4th argument (input): number of steps
 	String numStepsArg=StringFromList(4,argumentList)
 	
-	//5th argument: output colorTable
+	//5th argument (output): output colorTable
 	String colorTableArg=StringFromList(5,argumentList)
 	
 	Wave/D relGradation=$relGradationArg
@@ -90,13 +90,13 @@ End
 Function IAFf_IntRange2D(argumentList)
 	String argumentList
 	
-	//0th argument: input 2D wave
+	//0th argument (input): input 2D wave
 	String inputArg=StringFromList(0,argumentList)
 	
-	//1st argument: min
+	//1st argument (output): min
 	String minIntensityArg=StringFromList(1,argumentList)
 	
-	//2nd argument: max
+	//2nd argument (output): max
 	String maxIntensityArg=StringFromList(2,argumentList)
 	
 	Wave/D input=$inputArg
@@ -132,22 +132,22 @@ End
 Function IAFp_ColorTableCtrl(argumentList,PanelName,PanelTitle)
 	String argumentList,PanelName,PanelTitle
 	
-	//0th argument: data min (as reference)
+	//0th argument (input): data min (as reference)
 	String dataMinArg=StringFromList(0,argumentList)
 	
-	//1st argument: data max (as reference)
+	//1st argument (input): data max (as reference)
 	String dataMaxArg=StringFromList(1,argumentList)
 	
-	//2nd argument: colortable min
+	//2nd argument (input): colortable min
 	String colorMinArg=StringFromList(2,argumentList)
 	
-	//3rd argument: colorTable max
+	//3rd argument (input): colorTable max
 	String colorMaxArg=StringFromList(3,argumentList)
 	
-	//4th argument: gamma
+	//4th argument (input): gamma
 	String gammaValueArg=StringFromList(4,argumentList)
 	
-	//5th argument: step
+	//5th argument (input): step
 	String numStepsArg=StringFromList(5,argumentList)
 	
 		

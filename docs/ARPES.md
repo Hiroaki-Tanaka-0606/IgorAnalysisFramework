@@ -22,6 +22,14 @@ You need to add the ```#include "IAF_ARPES"``` directive to load the Procedure f
 - ```IAF_DivideWave.ipf```
 - ```IAF_SecondDeriv.ipf```
 
+## View
+- ```IAF_2DViewer.ipf```
+- ```IAF_3DViewer.ipf```
+- ```IAF_4DViewer.ipf```
+- ```IAF_ColorTable.ipf```
+- ```IAF_SliceFigure.ipf```
+- [IAF_Viewer.ipf](#iaf_vieweripf) (This Procedure is a bit different from the others)
+
 See each Procedure file for the detailed description of input and output *Part*s.
 
 # List of *Part*s
@@ -106,6 +114,39 @@ The *Part*s are sorted in the alphabetic order.
 | **Function** | [DivideWave21DY](#dividewave21dy-function) | Divide the 2D wave by the 1D wave | ```IAF_DivideWave.ipf``` |
 | **Function** | [DivideWave2D](#dividewave2d-function) | Divide the 2D wave by the 2D wave | ```IAF_DivideWave.ipf``` |
 | **Function** | [SecondDeriv2D_E](#secondderiv2d_e-function) | Calculate the second derivatie along the energy direction | ```IAF_SecondDeriv.ipf``` |
+
+## View
+
+| *Kind* | *Type* | Description | Procedure file |
+| --- | --- | --- | --- |
+| **Panel** | [2DViewer](#2dviewer-panel) | Show 2D wave, EDC, and MDC | ```IAF_2DViewer.ipf``` |
+| **Template** | [2DViewer](#2dviewer-tempate) | View 2D wave, EDC and, MDC | ```IAF_2DViewer.ipf``` |
+| **Panel** | [3DViewer](#3dviewer-panel) | Show energy-x, energy-y, and xy cuts | ```IAF_3DViewer.ipf``` |
+| **Template** | [3DViewer](#3dviewer-template) | View energy-x, energy-y, and xy (constant-energy) cuts | ```IAF_3DViewer.ipf``` |
+| **Panel** | [4DViewer](#4dviewer-panel) | Show energy-angle, real-space maps | ```IAF_4DViewer.ipf``` |
+| **Template** | [4DViewer](#4dviewer-template) | View energy-angle, real-space maps | ```IAF_4DViewer.ipf``` |
+| **Function** | [CalcMinOffset_E](#calcminoffset_e-function) | Obtain the minimum offset for the EDC plot | ```IAF_SliceFigure.ipf``` |
+| **Function** | [CalcMinOffset_k](#calcminoffset_k-function) | Obtain the minimum offset for the MDC plot | ```IAF_SliceFigure.ipf``` |
+| **Function** | [ColorTable](#colortable-function) | Make the color index wave | ```IAF_ColorTable.ipf``` |
+| **Panel** | [ColorTableCtrl](#colortablectrl-panel) | Control parameters for **ColorTable** | ```IAF_ColorTable.ipf``` |
+| **Function** | [CutLines2D](#cutlines2d-function) | Visualize EDC and MDC cut positions | ```IAF_2DViewer.ipf``` |
+| **Function** | [CutLines3D](#cutlines3d-function) | Visualize cut positions | ```IAF_3DViewer.ipf``` |
+| **Function** | [CutRects](#cutrects-function) | Visualize energy-angle, real-space map positions | ```IAF_4DViewer.ipf``` |
+| **Function** | [DeltaChange](#deltachange-function) | Change the value by the plus or minus delta | ```IAF_2DViewer.ipf``` |
+| **Function** | [EAMap](#eamap-function) | Calculate the energy-angle (or momentum) map | ```IAF_4DViewer.ipf``` |
+| **Function** | [EDC](#edc-function) | Calculate the EDC | ```IAF_2DViewer.ipf``` |
+| **Function** | [ExCut](#excut-function) | Calculate the energy-x cut | ```IAF_3DViewer.ipf``` |
+| **Function** | [EyCut](#eycut-function) | Calculate the energy-y cut | ```IAF_3DViewer.ipf``` |
+| **Function** | [IntRange2D](#intrange2d-function) | Obtain the minimum and maximum of the data | ```IAF_ColorTable.ipf``` |
+| **Function** | [MDC](#mdc-function) | Calculate the MDC | ```IAF_2DViewer.ipf``` |
+| **Function** | [OffsetFigure_E](#offsetfigure_e-function) | Add the sequentially increasing offset to EDCs | ```IAF_SliceFigure.ipf``` |
+| **Function** | [OffsetFigure_k](#offsetfigure_k-function) | Add the sequentially increasing offset to MDCs | ```IAF_SliceFigure.ipf``` |
+| **Panel** | [SliceFigure_E](#slicefigure_e-panel) | Control parameters for **OffsetFigure_E** and make the EDC plot | ```IAF_SliceFigure.ipf``` |
+| **Panel** | [SliceFigure_k](#slicefigure_k-panel) | Control parameters for **OffsetFigure_k** and make the MDC plot | ```IAF_SliceFigure.ipf``` |
+| **Function** | [Value2Index](#value2index-function) | Convert the range (center, width) to the index (min, max) | ```IAF_2DViewer.ipf``` |
+| **Function** | [xyCut](#xycut-function) | Calculate the xy (constant-energy) cut | ```IAF_3DViewer.ipf``` |
+| **Function** | [xyMap](#xymap-function) | Calculate the real-space map | ```IAF_4DViewer.ipf``` |
+
 
 # IAF_Concatenate.ipf
 
@@ -1643,3 +1684,181 @@ The **4DViewer** *Panel* shows the energy-angle and xy maps of the 3D wave, and 
 | 28 | Input | **Variable** | Increase or decrease flag of the angle range width |
 | 29 | Input | **Variable** | Increase or decrease flag of the x range width |
 | 30 | Input | **Variable** | Increase or decrease flag of the y range width |
+
+# IAF_ColorTable.ipf
+
+<!-- 89 -->
+## ColorTable (Function)
+The **ColorTable** *Function* makes the color index wave, which can be used even in Igor Pro 6.
+The color index wave is two-dimensional with three columns corresponding to red, green, blue values (up to 65535).
+The 1st axis determines which color should be used to color each points.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Gradation wave |
+| 1 | Input | **Variable** | Minimum of the color scale |
+| 2 | Input | **Variable** | Maximum of the color scale |
+| 3 | Input | **Variable** | The ```γ``` value |
+| 4 | Input | **Variable** | Number of steps |
+| 5 | Output | **Wave2D** | Color index wave |
+
+The gradation wave (0th argument) consists of four columns.
+The first column represents the relative position of the color and the other three columns represent the color (RGB).
+For example, the table below corresponds to the gradation from white to blue.
+The ```γ``` value make the gradation nonlinear; the color in the relative position ```x (0<x<1)``` in the color index wave becomes one in the relative position ```x^γ``` in the gradation.
+
+**Figure 8** uses the color index wave generated by the **ColorTable** *Function*.
+
+| 0: position | 1: R | 2: G | 3: B |
+| --- | --- | --- | --- |
+| 0 | 65535 | 65535 | 65535 |
+| 0.1 | 65535 | 65535 | 65535 |
+| 0.3 | 0 | 43520 | 65535 |
+| 1 | 0 | 0 | 65535 |
+
+![ColorTable](Images/ColorTable.png)
+
+**Figure 8**: ARPES band dispersion displayed using the color index wave.
+The figure is adapted from [Hiroaki Tanaka, Shota Okazaki *et al.*, Physical Review B **105**, L121102 (2022)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.105.L121102). &copy;2022 American Physical Society
+
+<!-- 90 -->
+## IntRange2D (Function)
+The **IntRange2D** *Function* obtaines the minimum and maximum values in the 2D wave.
+These values are useful to determine the color scale range.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Output | **Variable** | Minimum value |
+| 2 | Output | **Variable** | Maximum value |
+
+<!-- 91 -->
+## ColorTableCtrl (Panel)
+The **ColorTableCtrl** *Panel* controls the parameters for the **ColorTable** *Function*.
+The function can not edit the gradation wave.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Minimum value in the data (as reference) |
+| 1 | Input | **Variable** | Maximum value in the data (as reference) |
+| 2 | Input | **Variable** | Minimum value of the color scale |
+| 3 | Input | **Variable** | Maximum value of the color scale |
+| 4 | Input | **Variable** | The ```γ``` value |
+| 5 | Input | **Variable** | Number of steps |
+
+**Figure 9** is the example of the **ColorTableCtrl** *Panel*.
+The textboxes in the first column shows the 0th and 1st arguments and can not be edited.
+
+![ColorTableCtrl](Images/ColorTableCtrl.png)
+
+**Figure 9** The **ColorTableCtrl** *Panel*.
+
+# IAF_SliceFigure.ipf
+
+<!-- 92 -->
+## CalcMinOffset_E (Function)
+The **CalcMinOffset_E** *Function* calculates the minimum offset so that EDCs are not overlapped each other.
+The function assumes that the 1st axis of the given 2D wave is energy, and the 2nd axis is momentum (, angle, or hn).
+
+The direction ```0``` means that the EDC at the smaller momentum (, angle, or hn) is below, the EDC at the larger momentum is above.
+The direction ```1``` is opposite.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Offset direction (0 or 1) |
+| 2 | Output | **Variable** | Minimum offset |
+
+<!-- 93 -->
+## OffsetFigure_E (Function)
+The **OffsetFigure_E** *Function* adds the sequentially increasing offset to each EDC.
+The function assumes that the 2nd argument is the output of the **CalcMinOffset_E** *Function*.
+The actual offset is determined by ```Offset*(1+Margin factor)```.
+
+**Figure 10** represents the analysis process by the **OffsetFigure_E** *Function*.
+The EDCs in the offset added map are aligned sequentially like **Figure 10(c)**.
+You don't need to set the appropriate offset in the ```Modify Trace Appearnce``` menu.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Offset direction (0 or 1) |
+| 2 | Input | **Variable** | Offset |
+| 3 | Input | **Variable** | Margin factor |
+| 4 | Output | **Wave2D** | Manipulated output |
+
+![OffsetFigure](Images/OffsetFigure.png)
+
+**Figure 10**: Example of the offset plot. (a) Original data of energy-hn map. (b) Offset added map generated by **OffsetFigure_E**. (c) EDC plot of (b). The arrows indicate peak positions, which are added after the analysis. Panel (c) is adapted from [Hiroaki Tanaka, Shota Okazaki *et al.*, Physical Review B **105**, L121102 (2022)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.105.L121102). &copy;2022 American Physical Society
+
+<!-- 94 -->
+## SliceFigure_E (Panel)
+The **SliceFigure_E** *Panel* controls the parameters for the **OffsetFigure_E** *Function* and make the EDC plot.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Offset direction |
+| 1 | Input | **Variable** | Minimum offset (as reference) |
+| 2 | Input | **Variable** | Margin factor |
+| 3 | Input | **Wave2D** | Offset added map |
+
+**Figure 11** is the example of the **SliceFigure_E** *Panel*.
+When you click the ```Draw a Graph``` panel, another panel displaying all EDCs will appear.
+Even after displaying EDCs, you can control the margin and/or direction paramters.
+
+![SliceFigure_E](Images/SliceFigure_E.png)
+
+**Figure 11** The **SliceFigure_E** *Panel*.
+
+<!-- 95 -->
+## CalcMinOffset_k (Function)
+The **CalcMinOffset_k** *Function* calculates the minimum offset so that MDCs are not overlapped each other.
+The function assumes that the 1st axis of the given 2D wave is energy, and the 2nd axis is momentum (, angle, or hn).
+
+The direction ```0``` means that the MDC at the smaller momentum (, angle, or hn) is below, the MDC at the larger momentum is above.
+The direction ```1``` is opposite.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Offset direction (0 or 1) |
+| 2 | Output | **Variable** | Minimum offset |
+
+<!-- 96 -->
+## OffsetFigure_k (Function)
+The **OffsetFigure_k** *Function* adds the sequentially increasing offset to each MDC.
+The function assumes that the 2nd argument is the output of the **CalcMinOffset_k** *Function*.
+The actual offset is determined by ```Offset*(1+Margin factor)```.
+
+**Figure 10** is useful to understand the analysis process
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Wave2D** | Target wave |
+| 1 | Input | **Variable** | Offset direction (0 or 1) |
+| 2 | Input | **Variable** | Offset |
+| 3 | Input | **Variable** | Margin factor |
+| 4 | Output | **Wave2D** | Manipulated output |
+
+<!-- 97 -->
+## SliceFigure_k (Panel)
+The **SliceFigure_k** *Panel* controls the parameters for the **OffsetFigure_k** *Function* and make the MDC plot.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | **Variable** | Offset direction |
+| 1 | Input | **Variable** | Minimum offset (as reference) |
+| 2 | Input | **Variable** | Margin factor |
+| 3 | Input | **Wave2D** | Offset added map |
+
+The **SliceFigure_k** *Panel* is almost similar to the **SliceFigure_E** *Panel* (**Figure 11**).
+
+# IAF_Viewer.ipf
+
+The Procedure file makes two submenus ```View it``` and ```Update it``` in the newly created ```IAF_Viewer``` menu.
+
+When you select a wave in the Data Browser and select ```View it```, the software makes the ```Viewer0``` folder (if alreay exists ```Viewer1```, ```Viewer2```, ...) and construct the diagram to see the target wave by the ```2DViewer```, ```3DViewer```, or ```4DViewer``` *Template*.
+
+When you select the ```Update it``` menu with the focus on the viewer panel, the software reloads the wave from the specified path to update the contents.
+
+These functions are useful in the *in situ* analysis just to check the dispersion.
