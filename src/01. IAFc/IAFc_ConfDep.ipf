@@ -38,7 +38,7 @@ Function IAFc_ConfigureNames()
 				Endif
 				nameList=AddListItem(Diagram_i[j][2],nameList)
 			Else
-				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\"\n", j, DiagramWaveName, Kind_ij, Type_ij
+				Printf "Skip row %d of Diagram Wave \"%s\" (Kind: \"%s\", Type: \"%s\")\n", j, DiagramWaveName, Kind_ij, Type_ij
 			Endif
 		Endfor
 	Endfor
