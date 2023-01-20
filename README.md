@@ -3,7 +3,7 @@
 ## Notation guide
 - **bold phrases** represent important keywords.
 - *italic phrases* represent software-specific terms.
-- ```code-like phrases``` represent words appearing on Igor Pro windows.
+- ```code-like phrases``` represent words appearing on Igor Pro windows and equations.
 
 ## Description
 IgorAnalysisFramework is software running on [Igor Pro](https://www.wavemetrics.com/).
