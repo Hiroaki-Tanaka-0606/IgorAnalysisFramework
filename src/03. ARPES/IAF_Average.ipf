@@ -28,6 +28,7 @@ Function IAFf_Average1D(argumentList)
 	
 	//copy the 0th 
 	String zeroth=prefix+num2str(aveMin)
+	//print(zeroth)
 	Wave/D zerothW=$zeroth
 	Duplicate/O zerothW $averageArg
 	Duplicate/O zerothW $stddevArg
@@ -49,13 +50,14 @@ Function IAFf_Average1D(argumentList)
 		Wave/D input=$wavepath
 		if(dimsize(input, 0)!=size)
 			print("Average error: size mismatch")
+			print(num2str(dimsize(input, 0))+" / "+num2str(size))
 			return 0
 		endif
 		average[]+=input[p]
 		stddev[]+=input[p]*input[p]
 	endfor
-	average[]/=size
-	stddev[]/=size
+	average[]/=(aveMax-aveMin+1)
+	stddev[]/=(aveMax-aveMin+1)
 	stddev[]=sqrt(stddev[p]-average[p]*average[p])
 End
 

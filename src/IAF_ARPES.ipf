@@ -18,6 +18,7 @@
 #include "IAF_Average"
 #include "IAF_DivideWave"
 #include "IAF_SecondDeriv"
+#include "IAF_Shirley"
 
 //Viewer
 #include "IAF_2DViewer"
