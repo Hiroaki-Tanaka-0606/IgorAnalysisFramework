@@ -19,6 +19,7 @@
 #include "IAF_DivideWave"
 #include "IAF_SecondDeriv"
 #include "IAF_Shirley"
+#include "IAF_Asymmetry"
 
 //Viewer
 #include "IAF_2DViewer"
