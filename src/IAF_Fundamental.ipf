@@ -6,3 +6,4 @@
 #include "IAF_PolyFit"
 #include "IAF_Sequence"
 #include "IAF_ExtractPeaks"
+#include "IAF_Offset"
