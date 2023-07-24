@@ -20,9 +20,11 @@ Since the real analysis is very complicated, we recommend you check [ARPES.xlsx]
 - ```IAF_Smoothing.ipf```
 
 ## Further analysis
+- ```IAF_Asymmetry.ipf```
 - ```IAF_Average.ipf```
 - ```IAF_DivideWave.ipf```
 - ```IAF_SecondDeriv.ipf```
+- ```IAF_Shirley.ipf```
 
 ## View
 - ```IAF_2DViewer.ipf```
@@ -108,6 +110,8 @@ The *Part*s are sorted in alphabetic order.
 
 | *Kind* | *Type* | Description | Procedure file |
 | --- | --- | --- | --- |
+| *Function* | [Asymmetry2DX](#asymmetry2dx-function) | Calculate intensity asymmetry | ```IAF_Asymmetry.ipf``` |
+| *Function* | [Asymmetry2DY](#asymmetry2dy-function) | Calculate intensity asymmetry | ```IAF_Asymmetry.ipf``` |
 | *Function* | [Average1D](#average1d-function) | Calculate the average of the sequentially named 1D waves | ```IAF_Average.ipf``` |
 | *Function* | [Average2D](#average2d-function) | Calculate the average of the sequentially named 2D waves | ```IAF_Average.ipf``` |
 | *Function* | [DivideByFD](#dividebyfd-function) | Divide the 1D wave by the Fermi-Dirac distribution | ```IAF_DivideWave.ipf``` |
@@ -116,6 +120,8 @@ The *Part*s are sorted in alphabetic order.
 | *Function* | [DivideWave21DY](#dividewave21dy-function) | Divide the 2D wave by the 1D wave | ```IAF_DivideWave.ipf``` |
 | *Function* | [DivideWave2D](#dividewave2d-function) | Divide the 2D wave by the 2D wave | ```IAF_DivideWave.ipf``` |
 | *Function* | [SecondDeriv2D_E](#secondderiv2d_e-function) | Calculate the second derivatie along the energy direction | ```IAF_SecondDeriv.ipf``` |
+| *Function* | [SubtractShirley](#subtractshirley-function) | Subtract the Shirley background from the XPS spectrum | ```IAF_Shirley.ipf``` |
+
 
 ## View
 
@@ -1220,6 +1226,23 @@ The *SmoothingCtrl3D* *Panel* can edit the width parameters and the overlap flag
 | 2 | Input | *Variable* | Smoothing width along the 3rd axis |
 | 3 | Input | *Variable* | No-overlap mode (1) or overlap mode (0) |
 
+# IAF_Asymmetry.ipf
+## Asymmetry2DX (Function)
+The *Asymmetry2DX Function* calculates the intensity asymmetry between two points with inverted indices along x. When ```Size``` represents the number of points along x, the *Function* calculates the asymmetry by ```Asym = (input[p][q]-input[Size-p-1][q])/(input[p][q]+input[Size-p-1][q])```.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave2D* | Input |
+| 1 | Output | *Wave2D* | Asymmetry values |
+
+## Asymmetry2DY (Function)
+The *Asymmetry2DY Function* calculates the intensity asymmetry between two points with inverted indices along y. When ```Size``` represents the number of points along y, the *Function* calculates the asymmetry by ```Asym = (input[p][q]-input[p][Size-q-1])/(input[p][q]+input[p][Size-q-1])```.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave2D* | Input |
+| 1 | Output | *Wave2D* | Asymmetry values |
+
 # IAF_Average.ipf
 
 <!-- 63 -->
@@ -1323,6 +1346,24 @@ When the width parameter ```w``` is given, the smoothing calculation is performe
 | 1 | Input | *Variable* | Smoothing width |
 | 2 | Output | *Wave2D* | Wave of (-1)*(second derivative) |
 
+# IAF_Shirley.ipf
+## SubtractShirley (Function)
+The *SubtractShirley* *Function* computes the Shirley background [[Phyical Review B **5**, 4709 (1972)]](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.5.4709). 
+
+**Figure 5** is the example of the Shirley background.
+
+| Index | In/Out/Sock | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave1D* | Input XPS spectrum |
+| 1 | Input | *Variable* | Lower end position |
+| 2 | Input | *Variable* | Upper end position |
+| 3 | Output | *Wave1D* | Shirley background spectrum |
+| 2 | Output | *Wave1D* | XPS spectrum without background |
+
+![Shirley_background](Images/Ti2p_spectrum.png)
+
+**Figure 5**: The Raw spectrum and Shirley background. The dashed vertical lines reprsent the lower and upper end positions, given as the input.
+
 # IAF_2DViewer.ipf
 
 <!-- 71 -->
@@ -1339,7 +1380,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 | 1 | *Wave2D* to show |
 | 2 | *String* used as the label of the x (angle or momentum) axis |
 
-**Figure 5** is the example of the *2DViewer* *Panel*.
+**Figure 6** is the example of the *2DViewer* *Panel*.
 
 - The left bottom panel is the color map of the specified 2D wave.
 - The right bottom panel is the EDC of the 2D wave at the red vertical lines.
@@ -1352,7 +1393,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 
 ![2DViewer](Images/2DViewer.png)
 
-**Figure 5**: The *2DViewer* *Panel*.
+**Figure 6**: The *2DViewer* *Panel*.
 
 <!-- 72 -->
 ## EDC (Function)
@@ -1462,7 +1503,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 | 2 | *String* used as the label of the x (angle or momentum) axis |
 | 2 | *String* used as the label of the y (angle or momentum) axis |
 
-**Figure 6** is the example of the *3DViewer* *Panel*.
+**Figure 7** is the example of the *3DViewer* *Panel*.
 
 - The right top panel is the constant-energy (xy) cut.
 - The right bottom panel is the energy-x cut.
@@ -1475,7 +1516,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 
 ![3DViewer](Images/3DViewer.png)
 
-**Figure 6**: The *3DViewer* *Panel*.
+**Figure 7**: The *3DViewer* *Panel*.
 
 <!-- 79 -->
 ## ExCut (Function)
@@ -1585,7 +1626,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 | 3 | *String* used as the label of the 3rd (position x) axis |
 | 4 | *String* used as the label of the 4th (position y) axis |
 
-**Figure 7** is the example of the *4DViewer* *Panel*.
+**Figure 8** is the example of the *4DViewer* *Panel*.
 
 - The right panel is the real-space map.
 - The left panel is the energy-angle (or momentum) map.
@@ -1597,7 +1638,7 @@ Before selecting ```LoadTemplate```, you need to prepare *Part*s corresponding t
 
 ![3DViewer](Images/4DViewer.png)
 
-**Figure 7**: The *4DViewer* *Panel*.
+**Figure 8**: The *4DViewer* *Panel*.
 
 <!-- 85 -->
 ## EAMap (Function)
@@ -1708,7 +1749,7 @@ The first column represents the relative position of the color and the other thr
 For example, the table below corresponds to the gradation from white to blue.
 The ```γ``` value make the gradation nonlinear; the color in the relative position ```x (0<x<1)``` in the color index wave becomes one in the relative position ```x^γ``` in the gradation.
 
-**Figure 8** uses the color index wave generated by the *ColorTable* *Function*.
+**Figure 9** uses the color index wave generated by the *ColorTable* *Function*.
 
 | 0: position | 1: R | 2: G | 3: B |
 | --- | --- | --- | --- |
@@ -1719,7 +1760,7 @@ The ```γ``` value make the gradation nonlinear; the color in the relative posit
 
 ![ColorTable](Images/ColorTable.png)
 
-**Figure 8**: ARPES band dispersion displayed using the color index wave.
+**Figure 9**: ARPES band dispersion displayed using the color index wave.
 The figure is adapted from [Hiroaki Tanaka, Shota Okazaki *et al.*, Physical Review B **105**, L121102 (2022)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.105.L121102). &copy;2022 American Physical Society
 
 <!-- 90 -->
@@ -1747,12 +1788,12 @@ The function can not edit the gradation wave.
 | 4 | Input | *Variable* | The ```γ``` value |
 | 5 | Input | *Variable* | Number of steps |
 
-**Figure 9** is the example of the *ColorTableCtrl* *Panel*.
+**Figure 10** is the example of the *ColorTableCtrl* *Panel*.
 The textboxes in the first column shows the 0th and 1st arguments but can not be edited.
 
 ![ColorTableCtrl](Images/ColorTableCtrl.png)
 
-**Figure 9** The *ColorTableCtrl* *Panel*.
+**Figure 10** The *ColorTableCtrl* *Panel*.
 
 # IAF_SliceFigure.ipf
 
@@ -1776,8 +1817,8 @@ The *OffsetFigure_E* *Function* adds the sequentially increasing offset to each 
 The function assumes that the 2nd argument is the output of the *CalcMinOffset_E* *Function*.
 The actual offset is determined by ```Offset*(1+Margin factor)```.
 
-**Figure 10** represents the analysis process by the *OffsetFigure_E* *Function*.
-The EDCs in the offset added map are aligned sequentially like **Figure 10(c)**.
+**Figure 11** represents the analysis process by the *OffsetFigure_E* *Function*.
+The EDCs in the offset added map are aligned sequentially like **Figure 11(c)**.
 You don't need to set the appropriate offset in the ```Modify Trace Appearnce``` menu.
 
 | Index | In/Out/Sock | *Type* | Role |
@@ -1790,7 +1831,7 @@ You don't need to set the appropriate offset in the ```Modify Trace Appearnce```
 
 ![OffsetFigure](Images/OffsetFigure.png)
 
-**Figure 10**: Example of the offset plot. (a) Original data of energy-hn map. (b) Offset added map generated by *OffsetFigure_E*. (c) EDC plot of (b). The arrows indicate peak positions, which are added after the analysis. Panel (c) is adapted from [Hiroaki Tanaka, Shota Okazaki *et al.*, Physical Review B **105**, L121102 (2022)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.105.L121102). &copy;2022 American Physical Society
+**Figure 11**: Example of the offset plot. (a) Original data of energy-hn map. (b) Offset added map generated by *OffsetFigure_E*. (c) EDC plot of (b). The arrows indicate peak positions, which are added after the analysis. Panel (c) is adapted from [Hiroaki Tanaka, Shota Okazaki *et al.*, Physical Review B **105**, L121102 (2022)](https://journals.aps.org/prb/abstract/10.1103/PhysRevB.105.L121102). &copy;2022 American Physical Society
 
 <!-- 94 -->
 ## SliceFigure_E (Panel)
@@ -1803,13 +1844,13 @@ The *SliceFigure_E* *Panel* controls the parameters for the *OffsetFigure_E* *Fu
 | 2 | Input | *Variable* | Margin factor |
 | 3 | Input | *Wave2D* | Offset added map |
 
-**Figure 11** is the example of the *SliceFigure_E* *Panel*.
+**Figure 12** is the example of the *SliceFigure_E* *Panel*.
 When you click the ```Draw a Graph``` panel, another panel displaying all EDCs will appear.
 Even after displaying EDCs, you can control the margin and/or direction paramters.
 
 ![SliceFigure_E](Images/SliceFigure_E.png)
 
-**Figure 11** The *SliceFigure_E* *Panel*.
+**Figure 12** The *SliceFigure_E* *Panel*.
 
 <!-- 95 -->
 ## CalcMinOffset_k (Function)
@@ -1831,7 +1872,7 @@ The *OffsetFigure_k* *Function* adds the sequentially increasing offset to each 
 The function assumes that the 2nd argument is the output of the *CalcMinOffset_k* *Function*.
 The actual offset is determined by ```Offset*(1+Margin factor)```.
 
-**Figure 10** is useful to understand the analysis process
+**Figure 11** is useful to understand the analysis process
 
 | Index | In/Out/Sock | *Type* | Role |
 | --- | --- | --- | --- |
@@ -1852,7 +1893,7 @@ The *SliceFigure_k* *Panel* controls the parameters for the *OffsetFigure_k* *Fu
 | 2 | Input | *Variable* | Margin factor |
 | 3 | Input | *Wave2D* | Offset added map |
 
-The *SliceFigure_k* *Panel* is almost similar to the *SliceFigure_E* *Panel* (**Figure 11**).
+The *SliceFigure_k* *Panel* is almost similar to the *SliceFigure_E* *Panel* (**Figure 12**).
 
 # IAF_Viewer.ipf
 

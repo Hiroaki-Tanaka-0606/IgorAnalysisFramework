@@ -3,8 +3,10 @@
 This page briefly explains the *Part*s included in the Procedure files (listed below) in ```IAF_Fundamental.ipf```.
 ```IAF_Fundamental.ipf``` is automatically loaded because ```IAF.ipf``` has the ```#include "IAF_Fundamental"``` directive.
 
+- ```IAF_ExtractPeaks.ipf```
 - ```IAF_GaussFit.ipf```
 - ```IAF_LoadWave.ipf```
+- ```IAF_Offset.ipf```
 - ```IAF_PolyFit.ipf```
 - ```IAF_Sequence.ipf```
 
@@ -18,6 +20,8 @@ The *Part*s are sorted in alphabetic order.
 | *Function* | [**CombineWave1D**](#combinewave1d-function) | Load the 1D waves and combine them | ```IAF_LoadWave.ipf``` |
 | *Function* | [**CombineWave2D**](#combinewave2d-function) | Load the 2D waves and combine them | ```IAF_LoadWave.ipf``` |
 | *Function* | [**CombineWave3D**](#combinewave3d-function) | Load the 3D waves and combine them | ```IAF_LoadWave.ipf``` |
+| *Function* | [**ExtractPeaks2DX**](#extractpeaks2dx-function) | Extract maxima from the 2D map slices | ```IAF_ExtractPeaks.ipf``` |
+| *Function* | [**ExtractPeaks2DY**](#extractpeaks2dy-function) | Extract maxima from the 2D map slices | ```IAF_ExtractPeaks.ipf``` |
 | *Function* | [**ExtractString**](#extractstring-function) | Extract the string from the 1D text wave | ```IAF_Sequence.ipf``` |
 | *Function* | [**ExtractVariable**](#extractvariable-function) | Extract the variable from the 1D wave | ```IAF_Sequence.ipf``` |
 | *Function* | [**ExtractWave1DX**](#extractwave1dx-function) | Extract the 1D wave from the 2D wave | ```IAF_Sequence.ipf``` |
@@ -30,6 +34,7 @@ The *Part*s are sorted in alphabetic order.
 | *Function* | [**LoadWave3D**](#loadwave3d-function) | Load the 3D wave | ```IAF_LoadWave.ipf``` |
 | *Function* | [**LoadWave4D**](#loadwave4d-function) | Load the 4D wave | ```IAF_LoadWave.ipf``` |
 | *Function* | [**Mod**](#mod-function) | Calculate the remainder | ```IAF_Sequence.ipf``` |
+| *Function* | [**Offset2D**](#offset2d-function) | Add offset to axes | ```IAF_Offset.ipf``` |
 | *Function* | [**PolyCurve**](#polycurve-function) | Calculate the polynomial function | ```IAF_PolyFit.ipf``` |
 | *Function* | [**PolyFit**](#polyfit-function) | Fit the wave with a polynomial | ```IAF_PolyFit.ipf``` |
 | *Function* | [**PolyFit2**](#polyfit2-function) | Fit the wave with a polynomial | ```IAF_PolyFit.ipf``` |
@@ -49,6 +54,23 @@ The *Part*s are sorted in alphabetic order.
 | *Function* | [**WaveInfo3D**](#waveinfo3d-function) | Export the InfoWave from Wave3D | ```IAF_LoadWave.ipf``` |
 | *Function* | [**WaveInfo4D**](#waveinfo4d-function) | Export the InfoWave from Wave4D | ```IAF_LoadWave.ipf``` |
 | *Function* | [**WaveInfoText**](#waveinfotext-function) | Export the InfoWave from TextWave | ```IAF_LoadWave.ipf``` |
+
+# IAF_ExtractPeaks.ipf
+## ExtractPeaks2DX (Function)
+The *ExtractPeaks2DX Function* determines maximum positions from the 2D map slices along the x direction. The obtained maximum positions correspond to the x axis values of the original 2D map.
+
+| Index | Input/Output | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave2D* | Input wave |
+| 1 | Output | *Wave1D* | Maximum positions listed along the y direction |
+
+## ExtractPeaks2DY (Function)
+The *ExtractPeaks2DY Function* determines maximum positions from the 2D map slices along the y direction. The obtained maximum positions correspond to the y axis values of the original 2D map.
+
+| Index | Input/Output | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave2D* | Input wave |
+| 1 | Output | *Wave1D* | Maximum positions listed along the x direction |
 
 # IAF_GaussFit.ipf
 
@@ -257,6 +279,19 @@ The functions raises an error if the 3D waves does not have the same number of p
 | --- | --- | --- | --- |
 | 0 | Input | *TextWave* | List of paths |
 | 1 | Output | *Wave3D* | Combined result |
+
+# IAF_Offset.ipf
+## Offset2D (Function)
+The "Offset2D Function* adds offsets to 2D map axes.
+
+| Index | Input/Output | *Type* | Role |
+| --- | --- | --- | --- |
+| 0 | Input | *Wave2D* | Input |
+| 1 | Input | *Variable* | Offset along the x axis |
+| 2 | Input | *Variable* | Offset along the y axis |
+| 3 | Output | *Wave2D* | Output with offsets |
+
+# IAF_PolyFit.ipf
 
 <!-- 18 -->
 ## PolyFit (Function)

@@ -23,3 +23,26 @@ Function IAFf_Asymmetry2DX(argumentList)
 	
 	out[][]=(in[p][q]-in[xSize-p-1][q])/(in[p][q]+in[xSize-p-1][q])
 end
+
+Function/S IAFf_Asymmetry2DY_Definition()
+	return "2;0;1;Wave2D;Wave2D"
+End
+
+Function IAFf_Asymmetry2DY(argumentList)
+	String argumentList
+	
+	// 0th argument: input
+	String inArg=stringfromlist(0, argumentList)
+	
+	// 1st argument: output
+	String outArg=stringfromlist(1, argumentList)
+	
+	wave/d in=$inArg
+	
+	variable ySize=dimsize(in, 1)
+	
+	duplicate/o in $outArg
+	wave/d out=$outArg
+	
+	out[][]=(in[p][q]-in[p][ySize-q-1])/(in[p][q]+in[p][ySize-q-1])
+end
